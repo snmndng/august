@@ -3,7 +3,7 @@ const withPWA = require('next-pwa');
 
 const nextConfig = {
   images: {
-    domains: ['res.cloudinary.com', 'localhost'],
+    domains: ['res.cloudinary.com', 'localhost', '127.0.0.1'],
     formats: ['image/webp', 'image/avif'],
   },
   async headers() {
@@ -26,6 +26,10 @@ const nextConfig = {
         ],
       },
     ];
+  },
+  // Configure for Replit
+  experimental: {
+    serverComponentsExternalPackages: ['prisma', '@prisma/client'],
   },
 };
 
