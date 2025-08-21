@@ -1,5 +1,45 @@
 node_modules
 # Keep environment variables out of version control
 .env
+.env.local
+.env.production
+.env.development
 
+# Build outputs
+.next/
+out/
+dist/
+build/
+
+# Logs
+*.log
+debug.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Prisma
 /generated/prisma
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
