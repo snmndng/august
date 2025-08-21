@@ -1,4 +1,4 @@
-// File: /home/runner/workspace/app/api/products/route.ts
+// File: /home/portgas/luxiorMall/app/api/products/route.ts
 import * as entry from '../../../../../app/api/products/route.js'
 import type { NextRequest } from 'next/server.js'
 
