@@ -28,9 +28,7 @@ const nextConfig = {
     ];
   },
   // Configure for Replit
-  experimental: {
-    serverComponentsExternalPackages: ['prisma', '@prisma/client'],
-  },
+  serverExternalPackages: ['prisma', '@prisma/client'],
 };
 
 const config = withPWA({
