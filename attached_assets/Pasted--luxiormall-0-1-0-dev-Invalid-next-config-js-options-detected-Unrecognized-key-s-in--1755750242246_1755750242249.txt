@@ -1,0 +1,45 @@
+> luxiormall@0.1.0 dev
+ ⚠ Invalid next.config.js options detected: 
+ ⚠     Unrecognized key(s) in object: 'serverComponentsExternalPackages' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ ⚠ `experimental.serverComponentsExternalPackages` has been moved to `serverExternalPackages`. Please update your next.config.js file accordingly.
+   ▲ Next.js 15.5.0
+   - Local:        http://localhost:5000
+   - Network:      http://0.0.0.0:5000
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · serverComponentsExternalPackages
+
+ ✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+> [PWA] PWA support is disabled
+> [PWA] PWA support is disabled
+ ✓ Ready in 2.2s
+ ○ Compiling / ...
+ ✓ Compiled / in 14s (878 modules)
+ ⨯ TypeError: Invalid URL
+    at eval (lib/supabase.ts:17:17)
+    at (ssr)/./lib/supabase.ts (.next/server/app/page.js:436:1)
+    at eval (webpack-internal:///(ssr)/./contexts/AuthContext.tsx:16:71)
+    at (ssr)/./contexts/AuthContext.tsx (.next/server/app/page.js:403:1)
+    at eval (webpack-internal:///(ssr)/./components/providers.tsx:7:79)
+    at (ssr)/./components/providers.tsx (.next/server/app/page.js:392:1)
+  15 | // Create Supabase client with TypeScript types
+  16 | export const supabase = hasEnvVars 
+> 17 |   ? createClient<Database>(supabaseUrl, supabaseAnonKey, {
+     |                 ^
+  18 |       auth: {
+  19 |         autoRefreshToken: true,
+  20 |         persistSession: true, {
+  code: 'ERR_INVALID_URL',
+  input: 'your_supabase_project_url_here/',
+  digest: '3810923675'
+}
+ GET / 500 in 15174ms
+ ✓ Compiled in 1494ms (364 modules)
+ ⚠ Cross origin request detected from cfa4d907-5f38-4c3b-a6c5-db33a8f730e7-00-qzfpe2vl24j8.riker.replit.dev to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
