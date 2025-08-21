@@ -1,16 +1,13 @@
 import { NextResponse } from 'next/server';
 import { ProductsService } from '@/lib/services/products';
+import { demoCategories } from '@/lib/demo-data';
 
 export async function GET() {
   try {
     const categories = await ProductsService.getAllCategories();
-    
-    return NextResponse.json({ categories });
+    return NextResponse.json(categories);
   } catch (error) {
-    console.error('Error fetching categories:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch categories' },
-      { status: 500 }
-    );
+    console.warn('Database not available, using demo data:', error);
+    return NextResponse.json(demoCategories);
   }
 }

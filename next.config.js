@@ -6,6 +6,8 @@ const nextConfig = {
     domains: ['res.cloudinary.com', 'localhost', '127.0.0.1'],
     formats: ['image/webp', 'image/avif'],
   },
+  // Allow cross-origin requests from Replit dev environment
+  allowedDevOrigins: ['*.replit.dev'],
   async headers() {
     return [
       {
@@ -29,6 +31,9 @@ const nextConfig = {
   },
   // Configure for Replit
   serverExternalPackages: ['prisma', '@prisma/client'],
+  experimental: {
+    // Remove deprecated serverComponentsExternalPackages
+  },
 };
 
 const config = withPWA({

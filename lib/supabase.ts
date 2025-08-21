@@ -4,17 +4,27 @@ import { Database } from '@/types/supabase';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+// Validate URL format
+const isValidUrl = (url: string) => {
+  try {
+    new URL(url);
+    return url.startsWith('https://') && url.includes('.supabase.co');
+  } catch {
+    return false;
+  }
+};
+
 // Check if we're in a browser environment and have the required variables
 const isClient = typeof window !== 'undefined';
-const hasEnvVars = supabaseUrl && supabaseAnonKey;
+const hasValidEnvVars = supabaseUrl && supabaseAnonKey && isValidUrl(supabaseUrl);
 
-if (isClient && !hasEnvVars) {
-  console.warn('Missing Supabase environment variables');
+if (!hasValidEnvVars) {
+  console.warn('Missing or invalid Supabase environment variables. Please check your .env.local file.');
 }
 
 // Create Supabase client with TypeScript types
-export const supabase = hasEnvVars 
-  ? createClient<Database>(supabaseUrl, supabaseAnonKey, {
+export const supabase = hasValidEnvVars 
+  ? createClient<Database>(supabaseUrl!, supabaseAnonKey!, {
       auth: {
         autoRefreshToken: true,
         persistSession: true,
@@ -31,7 +41,7 @@ export const supabase = hasEnvVars
 // Helper function to get user session
 export const getCurrentUser = async () => {
   if (!supabase) {
-    console.warn('Supabase client not initialized - missing environment variables');
+    console.warn('Supabase client not initialized - missing or invalid environment variables');
     return null;
   }
   
