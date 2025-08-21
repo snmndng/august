@@ -31,9 +31,6 @@ const nextConfig = {
   },
   // Configure for Replit
   serverExternalPackages: ['prisma', '@prisma/client'],
-  experimental: {
-    // Remove deprecated serverComponentsExternalPackages
-  },
 };
 
 const config = withPWA({

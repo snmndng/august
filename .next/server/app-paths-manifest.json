@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "/api/categories/route": "app/api/categories/route.js",
   "/_not-found/page": "app/_not-found/page.js",
   "/api/products/route": "app/api/products/route.js",
@@ -21,4 +22,9 @@
   "/page": "app/page.js",
   "/checkout/page": "app/checkout/page.js",
   "/products/page": "app/products/page.js"
+=======
+  "/api/products/route": "app/api/products/route.js",
+  "/products/page": "app/products/page.js",
+  "/checkout/page": "app/checkout/page.js"
+>>>>>>> 910fe82318df4e89753bce56d20a4a67e9f3cba5
 }
