@@ -1,25 +1,30 @@
 import { createClient } from '@supabase/supabase-js';
 import { Database } from '@/types/supabase';
 
+// Validate required environment variables
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-// Validate URL format
-const isValidUrl = (url: string) => {
+// Check if URL is valid
+const isValidUrl = (url: string | undefined): boolean => {
+  if (!url) return false;
   try {
     new URL(url);
-    return url.startsWith('https://') && url.includes('.supabase.co');
+    return url.includes('supabase.co') && 
+           !url.includes('your_supabase_project_url_here') &&
+           !url.includes('placeholder');
   } catch {
     return false;
   }
 };
 
-// Check if we're in a browser environment and have the required variables
-const isClient = typeof window !== 'undefined';
-const hasValidEnvVars = supabaseUrl && supabaseAnonKey && isValidUrl(supabaseUrl);
+const hasValidEnvVars = supabaseUrl && 
+  supabaseAnonKey && 
+  isValidUrl(supabaseUrl) &&
+  !supabaseAnonKey.includes('your_actual');
 
 if (!hasValidEnvVars) {
-  console.warn('Missing or invalid Supabase environment variables. Please check your .env.local file.');
+  console.warn('Missing or invalid Supabase environment variables. Using demo mode.');
 }
 
 // Create Supabase client with TypeScript types
@@ -44,7 +49,7 @@ export const getCurrentUser = async () => {
     console.warn('Supabase client not initialized - missing or invalid environment variables');
     return null;
   }
-  
+
   try {
     const { data: { user }, error } = await supabase.auth.getUser();
     if (error) throw error;

@@ -64,6 +64,8 @@ git clone https://github.com/yourusername/luxiormall.git
 cd luxiormall
 ```
 
+> **Note**: This app runs in demo mode by default. For full functionality, you'll need to set up your own Supabase database.
+
 ### 2. Install Dependencies
 
 ```bash
