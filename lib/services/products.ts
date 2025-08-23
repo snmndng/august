@@ -1,6 +1,10 @@
 import { prisma } from '@/lib/prisma';
 import { Product, Category } from '@/types';
 
+export type ProductWithDetails = Product & {
+  category: Category | null;
+};
+
 export class ProductsService {
   static async getAllProducts() {
     try {
