@@ -26,7 +26,6 @@ pnpm-debug.log*
 # Runtime data
 pids
 *.pid
-*.seed
 *.pid.lock
 
 # Coverage
@@ -49,3 +48,8 @@ Thumbs.db
 
 # Next.js type definitions
 next-env.d.ts
+
+# PWA files (auto-generated)
+/public/sw.js
+/public/workbox-*.js
+sw.js
