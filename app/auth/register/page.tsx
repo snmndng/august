@@ -1,8 +1,11 @@
+
 'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { User, Mail, Lock, Eye, EyeOff, Phone } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -16,16 +19,49 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
+  const { signUp } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // TODO: Implement actual registration logic
-    setTimeout(() => {
+    setError(null);
+    setSuccess(null);
+
+    // Validation
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
       setIsLoading(false);
-      alert('Registration functionality coming soon!');
-    }, 1000);
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      setIsLoading(false);
+      return;
+    }
+
+    const result = await signUp(
+      formData.email,
+      formData.password,
+      formData.firstName,
+      formData.lastName,
+      formData.phone
+    );
+
+    if (result.success) {
+      setSuccess('Account created successfully! Please check your email to verify your account.');
+      setTimeout(() => {
+        router.push('/auth/login');
+      }, 3000);
+    } else {
+      setError(result.error || 'Registration failed. Please try again.');
+    }
+
+    setIsLoading(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,6 +88,18 @@ export default function RegisterPage() {
         </div>
 
         <div className="bg-white rounded-2xl shadow-soft p-8">
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-300 text-red-700 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="mb-4 p-3 bg-green-100 border border-green-300 text-green-700 rounded-lg text-sm">
+              {success}
+            </div>
+          )}
+
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -125,7 +173,6 @@ export default function RegisterPage() {
                   name="phone"
                   type="tel"
                   autoComplete="tel"
-                  required
                   value={formData.phone}
                   onChange={handleChange}
                   className="input-field pl-10"
