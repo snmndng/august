@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
         totalPages = Math.ceil(total / limit);
       } catch (dbError) {
         console.warn('Database not available, using demo data:', dbError);
-        products = demoProducts.filter(p => p.category === categoryId);
+        products = demoProducts.filter(p => p.category?.id === categoryId);
         total = products.length;
         totalPages = Math.ceil(total / limit);
       }

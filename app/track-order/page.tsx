@@ -199,7 +199,7 @@ export default function TrackOrderPage() {
           <div className="text-center mt-16">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Need Help?</h2>
             <p className="text-gray-600 mb-6">
-              Can't find your order or have questions about tracking?
+              Can&apos;t find your order or have questions about tracking?
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a

@@ -145,7 +145,7 @@ export default function SizeGuidePage() {
                   <li>• Use a flexible measuring tape</li>
                   <li>• Don't pull the tape too tight</li>
                   <li>• Measure over light clothing</li>
-                  <li>• When in doubt, size up</li>
+                  <li>• If you&apos;re between sizes, we recommend sizing up.</li>
                 </ul>
               </div>
               <div>

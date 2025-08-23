@@ -23,7 +23,7 @@ export default function TermsPage() {
                 <p><strong>Last updated:</strong> January 2024</p>
                 
                 <h3>1. Acceptance of Terms</h3>
-                <p>By accessing and using LuxiorMall, you accept and agree to be bound by the terms and provision of this agreement.</p>
+                <p>By accessing and using LuxiorMall&apos;s website, you accept and agree to be bound by the terms and provision of this agreement.</p>
                 
                 <h3>2. Use License</h3>
                 <p>Permission is granted to temporarily download one copy of the materials on LuxiorMall for personal, non-commercial transitory viewing only.</p>

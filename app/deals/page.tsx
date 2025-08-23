@@ -42,7 +42,7 @@ export default function DealsPage() {
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">🔥 Hot Deals</h1>
             <p className="text-xl text-white/90 max-w-2xl mx-auto">
-              Limited time offers on premium products. Don't miss out on these amazing deals!
+              Don&apos;t miss out on these amazing limited-time offers!
             </p>
           </div>
         </div>

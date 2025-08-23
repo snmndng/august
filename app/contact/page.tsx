@@ -34,7 +34,7 @@ export default function ContactPage() {
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">Contact Us</h1>
             <p className="text-xl text-gray-200 max-w-2xl mx-auto">
-              Get in touch with our team. We're here to help with any questions or concerns.
+              Get in touch with our team. We&apos;re here to help with any questions or concerns.
             </p>
           </div>
         </div>
@@ -117,8 +117,7 @@ export default function ContactPage() {
               <div>
                 <h2 className="text-3xl font-bold text-gray-900 mb-6">Get in Touch</h2>
                 <p className="text-lg text-gray-600 mb-8">
-                  We're here to help and answer any questions you might have. 
-                  We look forward to hearing from you.
+                  We&apos;d love to hear from you! Get in touch with us.
                 </p>
               </div>
 
@@ -141,7 +140,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">Email</h3>
                     <p className="text-gray-600">info@luxiormall.com</p>
-                    <p className="text-gray-500 text-sm">We'll respond within 24 hours</p>
+                    <p className="text-gray-500 text-sm">We&apos;ll respond within 24 hours</p>
                   </div>
                 </div>
 

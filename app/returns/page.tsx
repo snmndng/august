@@ -32,13 +32,13 @@ export default function ReturnsPage() {
     {
       category: "Electronics",
       timeframe: "30 days",
-      condition: "Must be in original packaging with all accessories",
+      condition: "Items must be in &quot;new&quot; condition with all original tags and packaging.",
       notes: "No physical damage, must be fully functional"
     },
     {
       category: "Fashion & Apparel",
       timeframe: "30 days",
-      condition: "Unworn, unwashed, with original tags attached",
+      condition: "Items must be in &quot;new&quot; condition with all original tags and packaging.",
       notes: "No signs of wear, stains, or alterations"
     },
     {
@@ -140,7 +140,7 @@ export default function ReturnsPage() {
               <div>
                 <h3 className="text-lg font-semibold mb-4">Refund Information</h3>
                 <ul className="space-y-2 text-white/90">
-                  <li>• Refunds are processed within 5-7 business days</li>
+                  <li>• We&apos;ll process your return within 5-7 business days</li>
                   <li>• Original payment method will be credited</li>
                   <li>• Return shipping costs are customer's responsibility</li>
                   <li>• Restocking fees may apply to certain items</li>

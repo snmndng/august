@@ -43,7 +43,7 @@ export function WhyChooseUs(): JSX.Element {
           Why Choose LuxiorMall?
         </h2>
         <p className="text-xl text-white/90 max-w-3xl mx-auto">
-          We're committed to providing the best shopping experience with premium products, 
+          We&apos;re committed to providing the best shopping experience with premium products, 
           secure payments, and exceptional service.
         </p>
       </div>

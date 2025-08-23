@@ -25,8 +25,8 @@ export default function AboutPage() {
                 e-commerce platforms in the region.
               </p>
               <p className="text-lg text-gray-600 mb-6">
-                We believe that quality should be accessible to everyone, and that's why 
-                we've partnered with top brands and suppliers to offer you the best products 
+                We believe that quality should be accessible to everyone, and that&apos;s why 
+                we&apos;ve partnered with top brands and suppliers to offer you the best products 
                 at competitive prices.
               </p>
               <p className="text-lg text-gray-600">
@@ -84,13 +84,13 @@ export default function AboutPage() {
               <p className="text-gray-600">
                 To democratize access to premium products by providing a seamless, 
                 secure, and convenient shopping experience for all Kenyans, while 
-                supporting local businesses and contributing to the country's digital economy.
+                supporting local businesses and contributing to the country&apos;s digital economy.
               </p>
             </div>
             <div className="bg-white rounded-2xl p-8 shadow-soft">
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Vision</h3>
               <p className="text-gray-600">
-                To become East Africa's leading e-commerce platform, known for 
+                To become East Africa&apos;s leading e-commerce platform, known for 
                 quality, reliability, and innovation, while empowering millions 
                 of customers to access world-class products and services.
               </p>

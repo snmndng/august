@@ -1,4 +1,4 @@
-import { Truck, MapPin, Clock, Package, Shield } from 'lucide-react';
+import { Truck, MapPin, Shield } from 'lucide-react';
 
 export default function ShippingPage() {
   const shippingZones = [
@@ -37,7 +37,7 @@ export default function ShippingPage() {
       cost: "From KES 500"
     },
     {
-      icon: Package,
+      icon: Shield,
       title: "Express Delivery",
       description: "Priority handling and faster delivery",
       timeframe: "1-2 business days",
@@ -132,14 +132,14 @@ export default function ShippingPage() {
                   <li>• Orders are processed within 24 hours</li>
                   <li>• Orders placed after 2 PM are processed the next business day</li>
                   <li>• Weekend orders are processed on Monday</li>
-                  <li>• You'll receive tracking information via email and SMS</li>
+                  <li>• We&apos;ll send you tracking information once your order ships.</li>
                 </ul>
               </div>
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">Delivery Information</h3>
                 <ul className="space-y-2 text-gray-600">
                   <li>• Delivery is available Monday to Saturday</li>
-                  <li>• We'll contact you before delivery to confirm</li>
+                  <li>• We&apos;ll contact you if there are any issues with delivery.</li>
                   <li>• Someone must be present to receive the package</li>
                   <li>• ID verification may be required for high-value items</li>
                 </ul>
