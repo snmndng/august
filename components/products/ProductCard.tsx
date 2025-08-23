@@ -68,8 +68,8 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
       <div className="relative aspect-[4/5] overflow-hidden rounded-t-3xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
         {product.images && product.images.length > 0 && product.images[0] ? (
           <img
-            src={product.images[0].imageUrl}
-            alt={product.images[0].altText || product.name}
+            src={product.images[0].image_url}
+            alt={product.images[0].alt_text || product.name}
             className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
           />
         ) : (
