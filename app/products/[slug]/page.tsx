@@ -5,6 +5,7 @@ import { ProductDetail } from '@/components/products/ProductDetail';
 import { RelatedProducts } from '@/components/products/RelatedProducts';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { ProductsService } from '@/lib/services/products';
+import { serializeProduct } from '@/lib/serializers';
 
 interface ProductPageProps {
   params: {
@@ -14,7 +15,8 @@ interface ProductPageProps {
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   try {
-    const product = await ProductsService.getProductBySlug(params.slug);
+    const { slug } = await params;
+    const product = await ProductsService.getProductBySlug(slug);
     
     if (!product) {
       return {
@@ -46,6 +48,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       },
     };
   } catch (error) {
+    console.error('Error generating metadata:', error);
     return {
       title: 'Product - LuxiorMall',
       description: 'Browse our premium products',
@@ -55,7 +58,8 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
 export default async function ProductPage({ params }: ProductPageProps): Promise<JSX.Element> {
   try {
-    const product = await ProductsService.getProductBySlug(params.slug);
+    const { slug } = await params;
+    const product = await ProductsService.getProductBySlug(slug);
     
     if (!product) {
       notFound();
@@ -74,7 +78,7 @@ export default async function ProductPage({ params }: ProductPageProps): Promise
       },
       offers: {
         '@type': 'Offer',
-        price: product.price,
+        price: parseFloat(product.price.toString()), // Ensure price is a number
         priceCurrency: 'KES',
         availability: product.stockQuantity > 0 
           ? 'https://schema.org/InStock' 
@@ -86,10 +90,12 @@ export default async function ProductPage({ params }: ProductPageProps): Promise
       },
       aggregateRating: {
         '@type': 'AggregateRating',
-        ratingValue: '4.5',
-        reviewCount: '127',
+        ratingValue: '4.5', // Placeholder, ideally from product data
+        reviewCount: '127', // Placeholder, ideally from product data
       },
     };
+    
+    const serializedProduct = serializeProduct(product);
 
     return (
       <>
@@ -122,7 +128,7 @@ export default async function ProductPage({ params }: ProductPageProps): Promise
 
             {/* Product Detail */}
             <Suspense fallback={<LoadingSpinner />}>
-              <ProductDetail product={product} />
+              <ProductDetail product={serializedProduct} />
             </Suspense>
 
             {/* Related Products */}

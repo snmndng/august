@@ -293,7 +293,7 @@
 }
 
 .badge-featured {
-  @apply badge-modern bg-luxior-info text-white;
+  @apply badge-modern bg-blue-500 text-white;
 }
 
 .badge-bestseller {

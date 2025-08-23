@@ -22,7 +22,7 @@ export class ProductsService {
     try {
       return await prisma.product.findMany({
         where: {
-          featured: true,
+          isFeatured: true,
         },
         include: {
           category: true,
@@ -193,6 +193,49 @@ export class ProductsService {
       });
     } catch (error) {
       console.error('Error fetching related products:', error);
+      throw error;
+    }
+  }
+
+  static async getProductsWithPagination(page = 1, limit = 12) {
+    try {
+      const skip = (page - 1) * limit;
+
+      const [products, total] = await Promise.all([
+        prisma.product.findMany({
+          include: {
+            category: true,
+          },
+          skip,
+          take: limit,
+          orderBy: {
+            createdAt: 'desc',
+          },
+        }),
+        prisma.product.count(),
+      ]);
+
+      return {
+        products,
+        total,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+      };
+    } catch (error) {
+      console.error('Error fetching products with pagination:', error);
+      throw error;
+    }
+  }
+
+  static async getCategoryBySlug(slug: string) {
+    try {
+      return await prisma.category.findUnique({
+        where: {
+          slug: slug,
+        },
+      });
+    } catch (error) {
+      console.error('Error fetching category by slug:', error);
       throw error;
     }
   }
