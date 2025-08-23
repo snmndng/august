@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Menu, X, Sun, Moon, Monitor } from 'lucide-react';
 import { SearchBar } from '@/components/common/SearchBar';
-import { UserMenu } from '@/components/common/UserMenu';
+import UserMenu from '@/components/common/UserMenu';
 import { MobileMenu } from '@/components/layout/MobileMenu';
 import { CartIcon } from '@/components/common/CartIcon';
 

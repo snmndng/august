@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -78,7 +77,7 @@ export default function UserMenu() {
               </p>
               <p className="text-xs text-gray-500">{user.email}</p>
             </div>
-            
+
             <Link
               href="/dashboard"
               className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
@@ -87,7 +86,7 @@ export default function UserMenu() {
               <User size={16} className="mr-3" />
               Dashboard
             </Link>
-            
+
             <Link
               href="/orders"
               className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
@@ -96,7 +95,7 @@ export default function UserMenu() {
               <ShoppingBag size={16} className="mr-3" />
               My Orders
             </Link>
-            
+
             <Link
               href="/wishlist"
               className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
@@ -105,7 +104,7 @@ export default function UserMenu() {
               <Heart size={16} className="mr-3" />
               Wishlist
             </Link>
-            
+
             <Link
               href="/settings"
               className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
@@ -114,7 +113,7 @@ export default function UserMenu() {
               <Settings size={16} className="mr-3" />
               Settings
             </Link>
-            
+
             <div className="border-t border-gray-100 mt-1 pt-1">
               <button
                 onClick={handleSignOut}
