@@ -1,4 +1,4 @@
-import { Truck, MapPin, Shield } from 'lucide-react';
+import { Truck, MapPin, Shield, Clock } from 'lucide-react';
 
 export default function ShippingPage() {
   const shippingZones = [
