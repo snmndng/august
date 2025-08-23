@@ -150,7 +150,6 @@ export interface ProductReview {
   user_id: string;
   order_id?: string;
   rating: number;
-  title?: string;
   comment?: string;
   is_verified_purchase: boolean;
   is_approved: boolean;
@@ -433,5 +432,3 @@ export interface WhatsAppMessage {
   productId?: string;
   productName?: string;
 }
-
-

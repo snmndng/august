@@ -58,7 +58,7 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
   };
 
   const handleAddToCart = async () => {
-    if (product.stockQuantity === 0) return;
+    if (product.stock_quantity === 0) return;
     
     setIsAddingToCart(true);
     try {
@@ -160,9 +160,9 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
 
         {/* Stock Status */}
         <div className="flex items-center gap-2">
-          {product.stockQuantity > 0 ? (
+          {product.stock_quantity > 0 ? (
             <span className="text-luxior-success font-medium">
-              ✓ In Stock ({product.stockQuantity} available)
+              ✓ In Stock ({product.stock_quantity} available)
             </span>
           ) : (
             <span className="text-luxior-error font-medium">✗ Out of Stock</span>
@@ -170,7 +170,7 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
         </div>
 
         {/* Quantity Selector */}
-        {product.stockQuantity > 0 && (
+        {product.stock_quantity > 0 && (
           <div className="flex items-center gap-4">
             <label className="font-medium">Quantity:</label>
             <div className="flex items-center border border-border rounded-lg">
@@ -183,9 +183,9 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
               </button>
               <span className="px-4 py-2 border-x border-border">{quantity}</span>
               <button
-                onClick={() => setQuantity(Math.min(product.stockQuantity, quantity + 1))}
+                onClick={() => setQuantity(Math.min(product.stock_quantity, quantity + 1))}
                 className="px-3 py-2 text-foreground hover:bg-luxior-accent dark:hover:bg-luxior-black"
-                disabled={quantity >= product.stockQuantity}
+                disabled={quantity >= product.stock_quantity}
               >
                 +
               </button>
@@ -195,7 +195,7 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
 
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-3">
-          {product.stockQuantity > 0 ? (
+          {product.stock_quantity > 0 ? (
             <button
               onClick={handleAddToCart}
               disabled={isAddingToCart}
@@ -287,16 +287,16 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
                <span className="text-gray-500">Category:</span>
                <span className="ml-2 text-gray-900">Category ID: {product.categoryId}</span>
              </div>
-             {product.weightKg && (
+             {product.weight_kg && (
                <div>
                  <span className="text-gray-500">Weight:</span>
-                 <span className="ml-2 text-gray-900">{getNumericValue(product.weightKg)} kg</span>
+                 <span className="ml-2 text-gray-900">{getNumericValue(product.weight_kg)} kg</span>
                </div>
              )}
-             {product.dimensionsCm && (
+             {product.dimensions_cm && (
                <div>
                  <span className="text-gray-500">Dimensions:</span>
-                 <span className="ml-2 text-gray-900">{getNumericValue(product.dimensionsCm)}</span>
+                 <span className="ml-2 text-gray-900">{getNumericValue(product.dimensions_cm)}</span>
                </div>
              )}
           </div>

@@ -172,20 +172,20 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
             <span className="text-2xl font-bold text-gray-900 dark:text-white">
               {formatPrice(product.price)}
             </span>
-            {product.comparePrice && product.comparePrice > product.price && (
+            {product.compare_price && product.compare_price > product.price && (
               <span className="text-lg text-gray-400 line-through">
-                {formatPrice(product.comparePrice)}
+                {formatPrice(product.compare_price)}
               </span>
             )}
           </div>
           
           {/* Stock Status */}
           <div className="flex items-center gap-2">
-            {product.stockQuantity > 0 ? (
+            {product.stock_quantity > 0 ? (
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-luxior-success rounded-full"></div>
                 <span className="text-sm text-luxior-success font-medium">
-                  In Stock {product.stockQuantity < 10 && `(${product.stockQuantity} left)`}
+                  In Stock {product.stock_quantity < 10 && `(${product.stock_quantity} left)`}
                 </span>
               </div>
             ) : (

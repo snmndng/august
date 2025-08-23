@@ -103,7 +103,7 @@ export function CartSidebar(): JSX.Element | null {
                           onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
                           className="p-1 text-gray-500 hover:text-luxior-deep-orange transition-colors dark:hover:text-luxior-orange"
                           aria-label="Increase quantity"
-                          disabled={item.quantity >= item.product.stockQuantity}
+                          disabled={item.quantity >= item.product.stock_quantity}
                         >
                           <Plus size={16} />
                         </button>
