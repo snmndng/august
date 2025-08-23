@@ -27,9 +27,10 @@ export async function GET(request: NextRequest) {
     } else if (searchQuery) {
       // Search products
       try {
-        products = await ProductsService.searchProducts(searchQuery);
-        total = products.length;
-        totalPages = Math.ceil(total / limit);
+        const result = await ProductsService.searchProducts(searchQuery, page, limit);
+        products = result.products;
+        total = result.total;
+        totalPages = result.totalPages;
       } catch (dbError) {
         console.warn('Database not available, using demo data:', dbError);
         products = demoProducts.filter(p =>
@@ -57,9 +58,10 @@ export async function GET(request: NextRequest) {
       }
 
       try {
-        products = await ProductsService.getProductsByCategory(categoryId);
-        total = products.length;
-        totalPages = Math.ceil(total / limit);
+        const result = await ProductsService.getProductsByCategory(categoryId, page, limit);
+        products = result.products;
+        total = result.total;
+        totalPages = result.totalPages;
       } catch (dbError) {
         console.warn('Database not available, using demo data:', dbError);
         products = demoProducts.filter(p => p.category?.id === categoryId);
