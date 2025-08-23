@@ -77,7 +77,7 @@ export function FeaturedProducts(): JSX.Element {
                     {product.name}
                   </h3>
                   <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                    {product.shortDescription || product.description}
+                    {product.short_description || product.description}
                   </p>
                   <div className="flex items-center justify-center">
                     <span className="text-lg font-bold text-luxior-deep-orange">
