@@ -212,6 +212,99 @@
   animation: float 3s ease-in-out infinite;
 }
 
+/* Modern product card animations */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 121, 0, 0.2); }
+  50% { box-shadow: 0 0 30px rgba(255, 121, 0, 0.4); }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+.product-card-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 2s ease-in-out infinite;
+}
+
+/* Enhanced card styles */
+.card-modern {
+  @apply bg-white dark:bg-gray-900 rounded-3xl shadow-soft hover:shadow-strong transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 dark:border-gray-800;
+}
+
+.card-glass-modern {
+  @apply bg-white/20 backdrop-blur-xl border border-white/30 rounded-3xl shadow-2xl;
+}
+
+.btn-modern {
+  @apply relative overflow-hidden font-semibold py-3 px-6 rounded-2xl transition-all duration-300 transform hover:scale-105 active:scale-95;
+}
+
+.btn-primary-modern {
+  @apply btn-modern bg-gradient-to-r from-luxior-deep-orange to-luxior-orange text-white shadow-lg hover:shadow-2xl;
+}
+
+.btn-secondary-modern {
+  @apply btn-modern bg-white text-luxior-deep-orange border-2 border-luxior-deep-orange hover:bg-luxior-deep-orange hover:text-white shadow-lg;
+}
+
+/* Image overlay effects */
+.image-overlay-gradient {
+  @apply absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300;
+}
+
+/* Badge styles */
+.badge-modern {
+  @apply px-3 py-1 text-xs font-bold rounded-full shadow-lg backdrop-blur-sm;
+}
+
+.badge-discount {
+  @apply badge-modern bg-luxior-error text-white;
+}
+
+.badge-featured {
+  @apply badge-modern bg-luxior-info text-white;
+}
+
+.badge-bestseller {
+  @apply badge-modern bg-luxior-orange text-white;
+}
+
+/* Text effects */
+.text-gradient-modern {
+  @apply bg-gradient-to-r from-luxior-deep-orange via-luxior-orange to-luxior-peach bg-clip-text text-transparent;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

@@ -1,8 +1,9 @@
+
 'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Heart, ShoppingCart, Eye } from 'lucide-react';
+import { Heart, ShoppingCart, Eye, Star, ArrowRight } from 'lucide-react';
 import type { ProductWithDetails } from '@/lib/services/products';
 import { useCart } from '@/contexts/CartContext';
 
@@ -14,6 +15,7 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
   const { addItem } = useCart();
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const formatPrice = (price: number | string | any): string => {
     let numericPrice: number;
@@ -52,31 +54,47 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
     // TODO: Implement wishlist functionality
   };
 
+  const discountPercentage = product.comparePrice && product.comparePrice > product.price
+    ? Math.round(((parseFloat(product.comparePrice.toString()) - parseFloat(product.price.toString())) / parseFloat(product.comparePrice.toString())) * 100)
+    : 0;
+
   return (
-    <div className="bg-background text-foreground rounded-lg shadow-soft hover:shadow-medium transition-shadow duration-300 group dark:bg-luxior-black dark:text-luxior-white">
-      {/* Product Image */}
-      <div className="relative aspect-square overflow-hidden rounded-t-lg">
+    <div 
+      className="group relative bg-white dark:bg-gray-900 rounded-3xl shadow-soft hover:shadow-strong transition-all duration-500 overflow-hidden border border-gray-100 dark:border-gray-800 hover:border-luxior-orange/20 dark:hover:border-luxior-orange/30"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Product Image Container */}
+      <div className="relative aspect-[4/5] overflow-hidden rounded-t-3xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
         {product.images && product.images.length > 0 && product.images[0] ? (
           <img
             src={product.images[0].imageUrl}
             alt={product.images[0].altText || product.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
           />
         ) : (
-          <div className="absolute inset-0 bg-luxior-accent flex items-center justify-center dark:bg-luxior-black">
-            <span className="text-gray-400 text-sm dark:text-gray-500">No Image</span>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center p-8">
+              <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 mx-auto">
+                <ShoppingCart className="w-8 h-8 text-gray-400 dark:text-gray-500" />
+              </div>
+              <span className="text-gray-400 dark:text-gray-500 text-sm font-medium">No Image Available</span>
+            </div>
           </div>
         )}
         
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        
         {/* Quick Actions Overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-          <div className="flex gap-2">
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+          <div className="flex items-center gap-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
             <button
               onClick={handleWishlist}
-              className={`p-2 rounded-full transition-colors ${
+              className={`p-3 rounded-2xl backdrop-blur-md transition-all duration-300 shadow-lg hover:scale-110 ${
                 isWishlisted 
-                  ? 'bg-luxior-error text-white' 
-                  : 'bg-background text-foreground hover:bg-luxior-accent dark:bg-luxior-black dark:text-luxior-white dark:hover:bg-luxior-accent'
+                  ? 'bg-luxior-error text-white shadow-luxior-error/25' 
+                  : 'bg-white/90 text-gray-700 hover:bg-white hover:text-luxior-error shadow-black/10'
               }`}
               title={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
             >
@@ -84,7 +102,7 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
             </button>
             <Link
               href={`/products/${product.slug}`}
-              className="p-2 rounded-full bg-background text-foreground hover:bg-luxior-accent transition-colors dark:bg-luxior-black dark:text-luxior-white dark:hover:bg-luxior-accent"
+              className="p-3 rounded-2xl bg-luxior-deep-orange text-white transition-all duration-300 shadow-lg hover:scale-110 hover:bg-luxior-orange shadow-luxior-deep-orange/25"
               title="View product"
             >
               <Eye size={18} />
@@ -93,81 +111,124 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
         </div>
 
         {/* Badges */}
-        <div className="absolute top-2 left-2 flex flex-col gap-1">
+        <div className="absolute top-4 left-4 flex flex-col gap-2">
+          {discountPercentage > 0 && (
+            <span className="px-3 py-1 bg-luxior-error text-white text-xs font-bold rounded-full shadow-lg">
+              -{discountPercentage}%
+            </span>
+          )}
           {product.isFeatured && (
-            <span className="px-2 py-1 bg-luxior-info text-white text-xs rounded-full">
+            <span className="px-3 py-1 bg-luxior-info text-white text-xs font-medium rounded-full shadow-lg">
               Featured
             </span>
           )}
           {product.isBestseller && (
-            <span className="px-2 py-1 bg-luxior-orange text-white text-xs rounded-full">
+            <span className="px-3 py-1 bg-luxior-orange text-white text-xs font-medium rounded-full shadow-lg">
               Best Seller
             </span>
           )}
         </div>
+
+        {/* Wishlist Button (top right) */}
+        <button
+          onClick={handleWishlist}
+          className={`absolute top-4 right-4 p-2 rounded-xl backdrop-blur-md transition-all duration-300 opacity-0 group-hover:opacity-100 ${
+            isWishlisted 
+              ? 'bg-luxior-error text-white' 
+              : 'bg-white/80 text-gray-700 hover:bg-white hover:text-luxior-error'
+          }`}
+        >
+          <Heart size={16} fill={isWishlisted ? 'currentColor' : 'none'} />
+        </button>
       </div>
 
       {/* Product Info */}
-      <div className="p-4">
-        {/* Category */}
-        {product.category && (
-          <div className="text-sm text-gray-500 mb-2 dark:text-gray-400">
-            {product.category.name}
+      <div className="p-6 space-y-4">
+        {/* Category & Rating */}
+        <div className="flex items-center justify-between">
+          {product.category && (
+            <span className="text-xs font-medium text-luxior-orange bg-luxior-orange/10 px-2 py-1 rounded-lg">
+              {product.category.name}
+            </span>
+          )}
+          <div className="flex items-center gap-1">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} size={12} className="text-yellow-400 fill-current" />
+            ))}
+            <span className="text-xs text-gray-500 ml-1">(4.5)</span>
           </div>
-        )}
+        </div>
 
         {/* Product Name */}
-        <Link href={`/products/${product.slug}`}>
-          <h3 className="font-semibold mb-2 hover:text-luxior-deep-orange transition-colors line-clamp-2">
+        <Link href={`/products/${product.slug}`} className="block">
+          <h3 className="font-bold text-lg text-gray-900 dark:text-white hover:text-luxior-deep-orange dark:hover:text-luxior-orange transition-colors duration-200 line-clamp-2 leading-tight">
             {product.name}
           </h3>
         </Link>
 
         {/* Price */}
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-xl font-bold">
-            {formatPrice(product.price)}
-          </span>
-          {product.comparePrice && product.comparePrice > product.price && (
-            <span className="text-sm text-gray-500 line-through dark:text-gray-400">
-              {formatPrice(product.comparePrice)}
+        <div className="space-y-2">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl font-bold text-gray-900 dark:text-white">
+              {formatPrice(product.price)}
             </span>
-          )}
-        </div>
-
-        {/* Stock Status */}
-        <div className="mb-4">
-          {product.stockQuantity > 0 ? (
-            <span className="text-sm text-luxior-success">
-              In Stock ({product.stockQuantity} available)
-            </span>
-          ) : (
-            <span className="text-sm text-luxior-error">Out of Stock</span>
-          )}
-        </div>
-
-        {/* Actions */}
-        <div className="flex gap-2">
-          <button
-            onClick={handleAddToCart}
-            disabled={product.stockQuantity === 0 || isAddingToCart}
-            className={`btn-primary flex-1 flex items-center justify-center gap-2 py-2 text-lg ${
-              product.stockQuantity === 0 ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-          >
-            {isAddingToCart ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Adding...
-              </>
-            ) : (
-              <>
-                <ShoppingCart size={16} />
-                Add to Cart
-              </>
+            {product.comparePrice && product.comparePrice > product.price && (
+              <span className="text-lg text-gray-400 line-through">
+                {formatPrice(product.comparePrice)}
+              </span>
             )}
-          </button>
+          </div>
+          
+          {/* Stock Status */}
+          <div className="flex items-center gap-2">
+            {product.stockQuantity > 0 ? (
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-luxior-success rounded-full"></div>
+                <span className="text-sm text-luxior-success font-medium">
+                  In Stock {product.stockQuantity < 10 && `(${product.stockQuantity} left)`}
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-luxior-error rounded-full"></div>
+                <span className="text-sm text-luxior-error font-medium">Out of Stock</span>
+              </div>
+            )}
+          </div>
         </div>
+
+        {/* Action Button */}
+        <button
+          onClick={handleAddToCart}
+          disabled={product.stockQuantity === 0 || isAddingToCart}
+          className={`w-full py-3 px-6 rounded-2xl font-semibold transition-all duration-300 transform flex items-center justify-center gap-2 ${
+            product.stockQuantity === 0 
+              ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
+              : isAddingToCart
+                ? 'bg-luxior-orange text-white scale-95'
+                : 'bg-luxior-deep-orange text-white hover:bg-luxior-orange hover:scale-105 hover:shadow-lg active:scale-95'
+          }`}
+        >
+          {isAddingToCart ? (
+            <>
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              Adding...
+            </>
+          ) : product.stockQuantity === 0 ? (
+            'Out of Stock'
+          ) : (
+            <>
+              <ShoppingCart size={18} />
+              Add to Cart
+              <ArrowRight size={16} className={`transition-transform duration-200 ${isHovered ? 'translate-x-1' : ''}`} />
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* Animated border on hover */}
+      <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-luxior-deep-orange via-luxior-orange to-luxior-peach opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none" style={{padding: '1px'}}>
+        <div className="w-full h-full bg-white dark:bg-gray-900 rounded-3xl"></div>
       </div>
     </div>
   );
