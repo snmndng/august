@@ -5,6 +5,24 @@ import Link from 'next/link';
 import type { ProductWithDetails } from '@/lib/services/products';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 
+// Helper function to format price
+const formatPrice = (price: number | string | undefined): string => {
+  if (price === undefined) return 'N/A';
+  try {
+    const numericPrice = typeof price === 'string' ? parseFloat(price) : price;
+    if (isNaN(numericPrice)) return 'N/A';
+    return numericPrice.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD', // Assuming USD, adjust if necessary
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  } catch (error) {
+    console.error("Error formatting price:", error);
+    return 'N/A';
+  }
+};
+
 export function FeaturedProducts(): JSX.Element {
   const [products, setProducts] = useState<ProductWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
@@ -79,10 +97,15 @@ export function FeaturedProducts(): JSX.Element {
                   <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                     {product.short_description || product.description}
                   </p>
-                  <div className="flex items-center justify-center">
-                    <span className="text-lg font-bold text-luxior-deep-orange">
-                      KSh {typeof product.price === 'string' ? parseFloat(product.price).toLocaleString() : product.price.toLocaleString()}
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl font-bold text-gray-900">
+                      {formatPrice(product.price)}
                     </span>
+                    {product.compare_price && (
+                      <span className="text-lg text-gray-400 line-through">
+                        {formatPrice(product.compare_price)}
+                      </span>
+                    )}
                   </div>
                   <div className="mt-3 text-sm text-gray-500">
                     {product.stock_quantity > 0 ? (

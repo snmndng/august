@@ -117,12 +117,12 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
               -{discountPercentage}%
             </span>
           )}
-          {product.isFeatured && (
+          {product.is_featured && (
             <span className="px-3 py-1 bg-luxior-info text-white text-xs font-medium rounded-full shadow-lg">
               Featured
             </span>
           )}
-          {product.isBestseller && (
+          {product.is_bestseller && (
             <span className="px-3 py-1 bg-luxior-orange text-white text-xs font-medium rounded-full shadow-lg">
               Best Seller
             </span>

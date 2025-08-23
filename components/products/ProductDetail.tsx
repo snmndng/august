@@ -59,7 +59,7 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
 
   const handleAddToCart = async () => {
     if (product.stock_quantity === 0) return;
-    
+
     setIsAddingToCart(true);
     try {
       addItem(product, quantity);
@@ -146,13 +146,13 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
           <span className="text-3xl font-bold">
             {formatPrice(product.price)}
           </span>
-          {product.comparePrice && product.comparePrice > product.price && (
+          {product.compare_price && product.compare_price > product.price && (
             <>
               <span className="text-xl text-gray-500 line-through dark:text-gray-400">
-                {formatPrice(product.comparePrice)}
+                {formatPrice(product.compare_price)}
               </span>
               <span className="px-2 py-1 bg-luxior-error/10 text-luxior-error text-sm font-medium rounded">
-                {Math.round(((getProductPrice(product.comparePrice) - getProductPrice(product.price)) / getProductPrice(product.comparePrice)) * 100)}% OFF
+                {Math.round(((getProductPrice(product.compare_price) - getProductPrice(product.price)) / getProductPrice(product.compare_price)) * 100)}% OFF
               </span>
             </>
           )}
@@ -199,7 +199,7 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
             <button
               onClick={handleAddToCart}
               disabled={isAddingToCart}
-              className="btn-primary flex-1 flex items-center justify-center gap-2 py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className={`btn-primary flex-1 flex items-center justify-center gap-2 py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               {isAddingToCart ? (
                 <>
