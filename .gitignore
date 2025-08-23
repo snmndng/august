@@ -1,11 +1,14 @@
 # Node.js dependencies
 /node_modules
 
-# Build outputs
-/.next
-/out
-/dist
-/build
+# Build outputs (Next.js)
+.next/
+out/
+dist/
+build/
+
+# Prisma (generated client)
+generated/
 
 # Environment variables
 .env
@@ -27,7 +30,7 @@ pids
 *.pid.lock
 
 # Coverage
-/coverage
+coverage/
 
 # OS generated files
 .DS_Store
@@ -44,5 +47,5 @@ Thumbs.db
 # Replit
 .replit
 
-# Next.js
+# Next.js type definitions
 next-env.d.ts
