@@ -1,0 +1,83 @@
+rtgas/package.json
+npm error errno -2
+npm error enoent Could not read package.json: Error: ENOENT: no such file or directory, open '/home/portgas/package.json'
+npm error enoent This is related to npm not being able to find a file.
+npm error enoent
+npm error A complete log of this run can be found in: /home/portgas/.npm/_logs/2025-08-23T15_21_56_579Z-debug-0.log
+
+╭─ ~ ─────────────────────────────────────────────────────────────────────────────────────── 254 ✘  at 18:21:56 ─╮
+╰─ git pull                                                                                                          ─╯
+fatal: not a git repository (or any of the parent directories): .git
+
+╭─ ~ ─────────────────────────────────────────────────────────────────────────────────────── 128 ✘  at 18:22:03 ─╮
+╰─ cd luxiorMall                                                                                                     ─╯
+
+╭─ ~/luxiorMall  on buildingfix !1 ──────────────────────────────────────────────────────────── ✔  at 18:22:09 ─╮
+╰─ git checkout main                                                                                                 ─╯
+error: Your local changes to the following files would be overwritten by checkout:
+        public/sw.js
+Please commit your changes or stash them before you switch branches.
+Aborting
+
+╭─ ~/luxiorMall  on buildingfix !1 ────────────────────────────────────────────────────────── 1 ✘  at 18:22:17 ─╮
+╰─ git checkout -b main                                                                                              ─╯
+fatal: a branch named 'main' already exists
+
+╭─ ~/luxiorMall  on buildingfix !1 ──────────────────────────────────────────────────────── 128 ✘  at 18:22:23 ─╮
+╰─ ls                                                                                                                ─╯
+PRISMA_SETUP.md  app              debug.log    next-env.d.ts      package.json       public    tailwind.config.ts
+Plan.md          attached_assets  env.example  next.config.js     postcss.config.js  scripts   tsconfig.json
+README.md        components       generated    node_modules       postcss.config.ts  services  tsconfig.tsbuildinfo
+SETUP.md         contexts         lib          package-lock.json  prisma             supabase  types
+
+╭─ ~/luxiorMall  on buildingfix !1 ──────────────────────────────────────────────────────────── ✔  at 18:22:36 ─╮
+╰─ git stash                                                                                                         ─╯
+Saved working directory and index state WIP on buildingfix: b8833dd testing if push will be possible
+
+╭─ ~/luxiorMall  on buildingfix *1 ──────────────────────────────────────────────────────────── ✔  at 18:22:43 ─╮
+╰─ git checkout -b main                                                                                              ─╯
+fatal: a branch named 'main' already exists
+
+╭─ ~/luxiorMall  on buildingfix *1 ──────────────────────────────────────────────────────── 128 ✘  at 18:22:47 ─╮
+╰─ git checkout main                                                                                                 ─╯
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+
+╭─ ~/luxiorMall  on main *1 ─────────────────────────────────────────────────────────────────── ✔  at 18:22:50 ─╮
+╰─ git pull                                                                                                          ─╯
+Already up to date.
+
+╭─ ~/luxiorMall  on main *1 ─────────────────────────────────────────────────────────────────── ✔  at 18:22:57 ─╮
+╰─ npm run build                                                                                                     ─╯
+
+> luxiormall@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.0
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: /home/portgas/luxiorMall/node_modules/next-pwa/register.js
+> [PWA] Service worker: /home/portgas/luxiorMall/public/sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+ ✓ Compiled successfully in 8.6s
+   Linting and checking validity of types  .Failed to compile.
+
+./app/api/products/route.ts:65:45
+Type error: This comparison appears to be unintentional because the types '{ id: string; name: string; slug: string; description: string; image_url: string; parent_id: null; is_active: boolean; sort_order: number; created_at: string; updated_at: string; } | undefined' and 'string' have no overlap.
+
+  63 |       } catch (dbError) {
+  64 |         console.warn('Database not available, using demo data:', dbError);
+> 65 |         products = demoProducts.filter(p => p.category === categoryId);
+     |                                             ^
+  66 |         total = products.length;
+  67 |         totalPages = Math.ceil(total / limit);
+  68 |       }
+Next.js build worker exited with code: 1 and signal: null
+
+╭─ ~/luxiorMall  on main *1 !1 ─────────────────────────────────────────────────── 1 ✘  took 20s  at 18:23:25 ─╮
+╰─                                            
