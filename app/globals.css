@@ -289,7 +289,7 @@
 }
 
 .badge-discount {
-  @apply badge-modern bg-luxior-error text-white;
+  @apply badge-modern bg-red-500 text-white;
 }
 
 .badge-featured {
