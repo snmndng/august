@@ -1,30 +1,24 @@
 {
-<<<<<<< HEAD
-  "/api/categories/route": "app/api/categories/route.js",
   "/_not-found/page": "app/_not-found/page.js",
-  "/api/products/route": "app/api/products/route.js",
+  "/api/categories/route": "app/api/categories/route.js",
   "/api/products/[slug]/route": "app/api/products/[slug]/route.js",
+  "/api/products/route": "app/api/products/route.js",
   "/about/page": "app/about/page.js",
-  "/categories/page": "app/categories/page.js",
+  "/auth/login/page": "app/auth/login/page.js",
+  "/auth/register/page": "app/auth/register/page.js",
   "/contact/page": "app/contact/page.js",
-  "/deals/page": "app/deals/page.js",
-  "/help/page": "app/help/page.js",
-  "/cookies/page": "app/cookies/page.js",
+  "/categories/page": "app/categories/page.js",
   "/privacy/page": "app/privacy/page.js",
-  "/products/[slug]/page": "app/products/[slug]/page.js",
   "/returns/page": "app/returns/page.js",
-  "/size-guide/page": "app/size-guide/page.js",
+  "/cookies/page": "app/cookies/page.js",
+  "/deals/page": "app/deals/page.js",
+  "/products/[slug]/page": "app/products/[slug]/page.js",
   "/shipping/page": "app/shipping/page.js",
   "/terms/page": "app/terms/page.js",
-  "/auth/login/page": "app/auth/login/page.js",
+  "/size-guide/page": "app/size-guide/page.js",
+  "/help/page": "app/help/page.js",
   "/track-order/page": "app/track-order/page.js",
-  "/auth/register/page": "app/auth/register/page.js",
   "/page": "app/page.js",
   "/checkout/page": "app/checkout/page.js",
   "/products/page": "app/products/page.js"
-=======
-  "/api/products/route": "app/api/products/route.js",
-  "/products/page": "app/products/page.js",
-  "/checkout/page": "app/checkout/page.js"
->>>>>>> 910fe82318df4e89753bce56d20a4a67e9f3cba5
 }
