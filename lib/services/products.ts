@@ -1,7 +1,8 @@
 import { prisma } from '@/lib/prisma';
-import { Product, Category } from '@/types';
+import { Product, Category, ProductImage, AppUser } from '@/types';
 
 export type ProductWithDetails = Product & {
+  images?: ProductImage[];
   category: Category | null;
 };
 
@@ -11,6 +12,7 @@ export class ProductsService {
       return await prisma.product.findMany({
         include: {
           category: true,
+          images: true,
         },
         orderBy: {
           createdAt: 'desc',
@@ -30,6 +32,7 @@ export class ProductsService {
         },
         include: {
           category: true,
+          images: true,
         },
         take: 8,
         orderBy: {
@@ -50,6 +53,7 @@ export class ProductsService {
         },
         include: {
           category: true,
+          images: true,
         },
       });
     } catch (error) {
@@ -89,6 +93,7 @@ export class ProductsService {
           },
           include: {
             category: true,
+            images: true,
           },
           skip,
           take: limit,
@@ -139,6 +144,7 @@ export class ProductsService {
           },
           include: {
             category: true,
+            images: true,
           },
           skip,
           take: limit,
@@ -189,6 +195,7 @@ export class ProductsService {
         },
         include: {
           category: true,
+          images: true,
         },
         take: limit,
         orderBy: {
@@ -209,6 +216,7 @@ export class ProductsService {
         prisma.product.findMany({
           include: {
             category: true,
+            images: true,
           },
           skip,
           take: limit,

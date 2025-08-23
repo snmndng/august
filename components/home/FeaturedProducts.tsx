@@ -67,8 +67,8 @@ export function FeaturedProducts(): JSX.Element {
             <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
               {product.images && product.images.length > 0 && product.images[0] ? (
                 <img
-                  src={product.images[0].imageUrl}
-                  alt={product.images[0].altText || product.name}
+                  src={product.images[0].image_url}
+                  alt={product.images[0].alt_text || product.name}
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -85,8 +85,8 @@ export function FeaturedProducts(): JSX.Element {
                     </span>
                   </div>
                   <div className="mt-3 text-sm text-gray-500">
-                    {product.stockQuantity > 0 ? (
-                      <span className="text-green-600">In Stock ({product.stockQuantity})</span>
+                    {product.stock_quantity > 0 ? (
+                      <span className="text-green-600">In Stock ({product.stock_quantity})</span>
                     ) : (
                       <span className="text-red-600">Out of Stock</span>
                     )}
