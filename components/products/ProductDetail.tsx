@@ -285,7 +285,7 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
             </div>
                          <div>
                <span className="text-gray-500">Category:</span>
-               <span className="ml-2 text-gray-900">Category ID: {product.categoryId}</span>
+               <span className="ml-2 text-gray-900">{product.category?.name || 'Uncategorized'}</span>
              </div>
              {product.weight_kg && (
                <div>

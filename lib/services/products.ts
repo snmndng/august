@@ -28,7 +28,7 @@ export class ProductsService {
     try {
       return await prisma.product.findMany({
         where: {
-          isFeatured: true,
+          is_featured: true,
         },
         include: {
           category: true,
