@@ -17,6 +17,7 @@ const config: Config = {
           peach: '#ffd2aa',
           orange: '#ffa555',
           'deep-orange': '#ff7900',
+          info: '#3b82f6',
         },
         gray: {
           50: '#f9fafb',
