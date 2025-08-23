@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
-import { Phone, MapPin, CreditCard, Lock, Shield, Package, CheckCircle } from 'lucide-react';
+import { Phone, MapPin, Lock, Shield, Package, CheckCircle } from 'lucide-react';
 
 export function CheckoutForm(): JSX.Element {
   const { state, clearCart } = useCart();
