@@ -1,0 +1,132 @@
+
+╭─ ~/luxiorMall  on main !1 ───────────────────────────────────────────────────────── ✔  took 4s  at 01:44:36 ─╮
+╰─ npm run build                                                                                                     ─╯
+
+> luxiormall@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.0
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: /home/portgas/luxiorMall/node_modules/next-pwa/register.js
+> [PWA] Service worker: /home/portgas/luxiorMall/public/sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+<w> [webpack.cache.PackFileCacheStrategy] Skipped not serializable cache item 'Compilation/modules|/home/portgas/luxiorMall/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[10].use[2]!/home/portgas/luxiorMall/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[10].use[3]!/home/portgas/luxiorMall/app/globals.css': No serializer registered for PostCSSSyntaxError
+<w> while serializing webpack/lib/cache/PackFileCacheStrategy.PackContentItems -> webpack/lib/NormalModule -> webpack/lib/ModuleBuildError -> PostCSSSyntaxError
+Failed to compile.
+
+./app/globals.css:292:3
+Syntax error: /home/portgas/luxiorMall/app/globals.css The `bg-luxior-error` class does not exist. If `bg-luxior-error` is a custom class, make sure it is defined within a `@layer` directive.
+
+  290 |
+  291 | .badge-discount {
+> 292 |   @apply badge-modern bg-luxior-error text-white;
+      |   ^
+  293 | }
+  294 |
+
+./app/globals.css
+Syntax error: /home/portgas/luxiorMall/app/globals.css The `bg-luxior-error` class does not exist. If `bg-luxior-error` is a custom class, make sure it is defined within a `@layer` directive. (292:3)
+
+  290 |
+  291 | .badge-discount {
+> 292 |   @apply badge-modern bg-luxior-error text-white;
+      |   ^
+  293 | }
+  294 |
+
+    at tryRunOrWebpackError (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:316119)
+    at __webpack_require_module__ (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:131532)
+    at __nested_webpack_require_161494__ (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:130967)
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:131824
+    at symbolIterator (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:14444)
+    at done (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:14824)
+    at Hook.eval [as callAsync] (eval at create (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:14:9224), <anonymous>:15:1)
+    at Hook.CALL_ASYNC_DELEGATE [as _callAsync] (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:14:6378)
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:130687
+    at symbolIterator (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:14402)
+    at timesSync (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:5027)
+    at Object.eachLimit (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:14208)
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:130247
+    at symbolIterator (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:14444)
+    at timesSync (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:5027)
+    at Object.eachLimit (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:14208)
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:129985
+    at symbolIterator (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:14444)
+    at done (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:14824)
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:129496
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:110331
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:315955
+    at _done (eval at create (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:14:9224), <anonymous>:9:1)
+    at Hook.eval [as callAsync] (eval at create (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:14:9224), <anonymous>:39:22)
+    at Cache.store (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:16215)
+    at ItemCacheFacade.store (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:17460)
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:110318
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:16152
+    at Array.<anonymous> (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:551693)
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:16144
+    at eval (eval at create (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:14:9224), <anonymous>:27:1)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+-- inner error --
+Syntax error: /home/portgas/luxiorMall/app/globals.css The `bg-luxior-error` class does not exist. If `bg-luxior-error` is a custom class, make sure it is defined within a `@layer` directive. (292:3)
+
+  290 |
+  291 | .badge-discount {
+> 292 |   @apply badge-modern bg-luxior-error text-white;
+      |   ^
+  293 | }
+  294 |
+
+    at Object.<anonymous> (/home/portgas/luxiorMall/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[10].use[2]!/home/portgas/luxiorMall/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[10].use[3]!/home/portgas/luxiorMall/app/globals.css:1:7)
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:962717
+    at Hook.eval [as call] (eval at create (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:14:9002), <anonymous>:7:1)
+    at Hook.CALL_DELEGATE [as _call] (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:14:6272)
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:131565
+    at tryRunOrWebpackError (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:316073)
+    at __webpack_require_module__ (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:131532)
+    at __nested_webpack_require_161494__ (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:130967)
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:131824
+    at symbolIterator (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:14444)
+    at done (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:14824)
+    at Hook.eval [as callAsync] (eval at create (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:14:9224), <anonymous>:15:1)
+    at Hook.CALL_ASYNC_DELEGATE [as _callAsync] (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:14:6378)
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:130687
+    at symbolIterator (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:14402)
+    at timesSync (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:5027)
+    at Object.eachLimit (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:14208)
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:130247
+    at symbolIterator (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:14444)
+    at timesSync (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:5027)
+    at Object.eachLimit (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:14208)
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:129985
+    at symbolIterator (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:14444)
+    at done (/home/portgas/luxiorMall/node_modules/next/dist/compiled/neo-async/async.js:1:14824)
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:129496
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:110331
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:315955
+    at _done (eval at create (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:14:9224), <anonymous>:9:1)
+    at Hook.eval [as callAsync] (eval at create (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:14:9224), <anonymous>:39:22)
+    at Cache.store (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:16215)
+    at ItemCacheFacade.store (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:17460)
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:110318
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:16152
+    at Array.<anonymous> (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:551693)
+    at /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:29:16144
+    at eval (eval at create (/home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js:14:9224), <anonymous>:27:1)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+Generated code for /home/portgas/luxiorMall/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[10].use[2]!/home/portgas/luxiorMall/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[10].use[3]!/home/portgas/luxiorMall/app/globals.css
+
+Import trace for requested module:
+./app/globals.css
+
+
+> Build failed because of webpack errors
+
+╭─ ~/luxiorMall  on main !1 ────────────────────────────────────────────────────── 1 ✘  took 14s  at 01:44:58 ─╮
+╰─                                       

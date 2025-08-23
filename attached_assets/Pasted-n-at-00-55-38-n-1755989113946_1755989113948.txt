@@ -1,0 +1,502 @@
+n ────────────────────────────────────────────────────────────────────── ✔  at 00:55:38 ─╮
+╰─ npm run dev                                                                                                       ─╯
+
+> luxiormall@0.1.0 dev
+> next dev -H 0.0.0.0 -p 5000
+
+   ▲ Next.js 15.5.0
+   - Local:        http://localhost:5000
+   - Network:      http://0.0.0.0:5000
+   - Environments: .env.local, .env
+
+ ✓ Starting...
+SyntaxError: Expected property name or '}' in JSON at position 116870 (line 3152 column 1)
+    at JSON.parse (<anonymous>)
+> [PWA] PWA support is disabled
+> [PWA] PWA support is disabled
+ ✓ Ready in 6.3s
+ ○ Compiling / ...
+ ✓ Compiled / in 8.2s (878 modules)
+ ✓ Compiled in 1561ms (364 modules)
+ GET / 200 in 9985ms
+
+Could not open layout.tsx in the editor.
+The editor process exited with an error: Terminal editors can only be used on macOS.
+
+To set up the editor integration, add something like REACT_EDITOR=atom to the .env.local file in your project folder and restart the development server.
+
+
+Could not open layout.tsx in the editor.
+The editor process exited with an error: Terminal editors can only be used on macOS.
+
+To set up the editor integration, add something like REACT_EDITOR=atom to the .env.local file in your project folder and restart the development server.
+
+   Reload env: .env.local
+ ✓ Compiled in 1232ms (864 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET / 200 in 1012ms
+ ○ Compiling /api/products ...
+ ⚠ ./app/api/categories/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/categories/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+Database not available, using demo data: TypeError: Cannot read properties of undefined (reading 'getFeaturedProducts')
+    at GET (app/api/products/route.ts:20:40)
+  18 |     if (featured) {
+  19 |       try {
+> 20 |         const featuredProducts = await ProductsService.getFeaturedProducts();
+     |                                        ^
+  21 |         return NextResponse.json(featuredProducts);
+  22 |       } catch (dbError) {
+  23 |         console.warn('Database not available, using demo data:', dbError);
+ GET /api/products?featured=true 200 in 3026ms
+Database not available, using demo data: TypeError: Cannot read properties of undefined (reading 'getAllCategories')
+    at GET (app/api/categories/route.ts:7:30)
+   5 | export async function GET() {
+   6 |   try {
+>  7 |     const categories = await ProductsService.getAllCategories();
+     |                              ^
+   8 |     return NextResponse.json(categories);
+   9 |   } catch (error) {
+  10 |     console.warn('Database not available, using demo data:', error);
+ GET /api/categories 200 in 3164ms
+ ⚠ ./app/api/categories/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/categories/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+ ⚠ ./app/api/categories/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/categories/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+ ⨯ [Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json',
+  page: '/products'
+}
+ ⚠ ./app/api/categories/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/categories/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+ ⚠ ./app/api/categories/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/categories/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+
+./app/api/products/route.ts
+Attempted import error: 'ProductsService' is not exported from '@/lib/services/products' (imported as 'ProductsService').
+
+Import trace for requested module:
+./app/api/products/route.ts
+ ⨯ [Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json',
+  page: '/checkout'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json',
+  page: '/products'
+}
+[Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json',
+  page: '/checkout'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json',
+  page: '/checkout'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json'
+}
+ GET /products 500 in 34277ms
+ GET /products 500 in 1583ms
+ GET /checkout 500 in 30044ms
+ GET /checkout 500 in 1584ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json',
+  page: '/checkout'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json'
+}
+ GET /checkout 500 in 6604ms
+ GET /checkout 500 in 449ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json',
+  page: '/checkout'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json',
+  page: '/checkout'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/home/portgas/luxiorMall/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/portgas/luxiorMall/.next/routes-manifest.json'
+}
+ GET /checkout 500 in 2764ms
+ GET /checkout 500 in 690ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, lstat '/home/portgas/luxiorMall/.next/server/vendor-chunks/goober.js'
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/goober' in /home/portgas/luxiorMall/.next/server for build dependencies doesn't lead to expected result '/home/portgas/luxiorMall/.next/server/vendor-chunks/goober.js', but to 'Error: Can't resolve './vendor-chunks/goober' in '/home/portgas/luxiorMall/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/goober (expected /home/portgas/luxiorMall/.next/server/vendor-chunks/goober.js)
+<w>  at file dependencies /home/portgas/luxiorMall/.next/server/webpack-runtime.js
+<w>  at file /home/portgas/luxiorMall/.next/server/webpack-runtime.js
+<w>  at file dependencies /home/portgas/luxiorMall/.next/server/pages/_error.js
+<w>  at file /home/portgas/luxiorMall/.next/server/pages/_error.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/server/require.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/server/require.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/server/load-components.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/build/utils.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/build/swc/options.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/build/swc/options.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/build/swc/index.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/build/swc/index.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/build/load-entrypoint.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/build/load-entrypoint.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/webpack-lib.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/webpack-lib.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next-pwa/build-fallback-worker.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next-pwa/build-fallback-worker.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next-pwa/index.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next-pwa/index.js
+<w>  at file dependencies /home/portgas/luxiorMall/next.config.js
+<w>  at file /home/portgas/luxiorMall/next.config.js
+<w>  at resolve commonjs /home/portgas/luxiorMall/next.config.js
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/react-hot-toast' in /home/portgas/luxiorMall/.next/server for build dependencies doesn't lead to expected result '/home/portgas/luxiorMall/.next/server/vendor-chunks/react-hot-toast.js', but to 'Error: Can't resolve './vendor-chunks/react-hot-toast' in '/home/portgas/luxiorMall/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/react-hot-toast (expected /home/portgas/luxiorMall/.next/server/vendor-chunks/react-hot-toast.js)
+<w>  at file dependencies /home/portgas/luxiorMall/.next/server/webpack-runtime.js
+<w>  at file /home/portgas/luxiorMall/.next/server/webpack-runtime.js
+<w>  at file dependencies /home/portgas/luxiorMall/.next/server/pages/_error.js
+<w>  at file /home/portgas/luxiorMall/.next/server/pages/_error.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/server/require.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/server/require.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/server/load-components.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/build/utils.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/build/swc/options.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/build/swc/options.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/build/swc/index.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/build/swc/index.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/build/load-entrypoint.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/build/load-entrypoint.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/webpack-lib.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/webpack-lib.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next-pwa/build-fallback-worker.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next-pwa/build-fallback-worker.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next-pwa/index.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next-pwa/index.js
+<w>  at file dependencies /home/portgas/luxiorMall/next.config.js
+<w>  at file /home/portgas/luxiorMall/next.config.js
+<w>  at resolve commonjs /home/portgas/luxiorMall/next.config.js
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/goober' in /home/portgas/luxiorMall/.next/server for build dependencies doesn't lead to expected result '/home/portgas/luxiorMall/.next/server/vendor-chunks/goober.js', but to 'Error: Can't resolve './vendor-chunks/goober' in '/home/portgas/luxiorMall/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/goober (expected /home/portgas/luxiorMall/.next/server/vendor-chunks/goober.js)
+<w>  at file dependencies /home/portgas/luxiorMall/.next/server/webpack-runtime.js
+<w>  at file /home/portgas/luxiorMall/.next/server/webpack-runtime.js
+<w>  at file dependencies /home/portgas/luxiorMall/.next/server/app/checkout/page.js
+<w>  at file /home/portgas/luxiorMall/.next/server/app/checkout/page.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/server/require.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/server/require.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/server/load-components.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/build/utils.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/webpack-lib.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/webpack-lib.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next-pwa/build-fallback-worker.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next-pwa/build-fallback-worker.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next-pwa/index.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next-pwa/index.js
+<w>  at file dependencies /home/portgas/luxiorMall/next.config.js
+<w>  at file /home/portgas/luxiorMall/next.config.js
+<w>  at resolve commonjs /home/portgas/luxiorMall/next.config.js
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, lstat '/home/portgas/luxiorMall/.next/server/vendor-chunks/goober.js'
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/react-hot-toast' in /home/portgas/luxiorMall/.next/server for build dependencies doesn't lead to expected result '/home/portgas/luxiorMall/.next/server/vendor-chunks/react-hot-toast.js', but to 'Error: Can't resolve './vendor-chunks/react-hot-toast' in '/home/portgas/luxiorMall/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/react-hot-toast (expected /home/portgas/luxiorMall/.next/server/vendor-chunks/react-hot-toast.js)
+<w>  at file dependencies /home/portgas/luxiorMall/.next/server/webpack-runtime.js
+<w>  at file /home/portgas/luxiorMall/.next/server/webpack-runtime.js
+<w>  at file dependencies /home/portgas/luxiorMall/.next/server/app/checkout/page.js
+<w>  at file /home/portgas/luxiorMall/.next/server/app/checkout/page.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/server/require.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/server/require.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/server/load-components.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/build/utils.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/webpack-lib.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next/dist/compiled/webpack/webpack-lib.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next-pwa/build-fallback-worker.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next-pwa/build-fallback-worker.js
+<w>  at file dependencies /home/portgas/luxiorMall/node_modules/next-pwa/index.js
+<w>  at file /home/portgas/luxiorMall/node_modules/next-pwa/index.js
+<w>  at file dependencies /home/portgas/luxiorMall/next.config.js
+<w>  at file /home/portgas/luxiorMall/next.config.js
+<w>  at resolve commonjs /home/portgas/luxiorMall/next.config.js
+
+╭─ ~/luxiorMall  on main ───────────────────────────────────────────────────── 1 ✘  took 48m 14s  at 01:43:56 ─╮
+╰─                                                                                                                   ─╯
