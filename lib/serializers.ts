@@ -1,12 +1,12 @@
-
 import { Decimal } from '@prisma/client/runtime/library';
 
 export function serializeProduct(product: any) {
   return {
     ...product,
-    price: product.price ? Number(product.price) : 0,
-    comparePrice: product.comparePrice ? Number(product.comparePrice) : null,
-    costPrice: product.costPrice ? Number(product.costPrice) : null,
+    price: product.price ? parseFloat(product.price.toString()) : 0,
+    comparePrice: product.comparePrice ? parseFloat(product.comparePrice.toString()) : null,
+    costPrice: product.costPrice ? parseFloat(product.costPrice.toString()) : null,
+    category: product.category || null,
     weightKg: product.weightKg ? Number(product.weightKg) : null,
     createdAt: product.createdAt?.toISOString(),
     updatedAt: product.updatedAt?.toISOString(),
