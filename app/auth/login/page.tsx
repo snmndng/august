@@ -1,8 +1,11 @@
+
 'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -11,16 +14,25 @@ export default function LoginPage() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const { signIn } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError(null);
+
+    const result = await signIn(formData.email, formData.password);
     
-    // TODO: Implement actual login logic
-    setTimeout(() => {
-      setIsLoading(false);
-      alert('Login functionality coming soon!');
-    }, 1000);
+    if (result.success) {
+      router.push('/dashboard');
+    } else {
+      setError(result.error || 'Login failed. Please try again.');
+    }
+    
+    setIsLoading(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +59,12 @@ export default function LoginPage() {
         </div>
 
         <div className="bg-white rounded-2xl shadow-soft p-8">
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-300 text-red-700 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="form-label">Email address</label>

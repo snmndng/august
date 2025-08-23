@@ -80,6 +80,14 @@ export function Header(): JSX.Element {
             >
               About
             </Link>
+            {isAuthenticated && (
+              <Link 
+                href="/admin" 
+                className="text-gray-700 hover:text-luxior-deep-orange transition-colors duration-200 font-medium"
+              >
+                Admin
+              </Link>
+            )}
           </nav>
 
           {/* Search Bar */}
