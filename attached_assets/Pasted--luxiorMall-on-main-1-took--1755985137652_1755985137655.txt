@@ -1,0 +1,153 @@
+
+╭─ ~/luxiorMall  on main ?1 ──────────────────────────────────────────────────────── ✔  took 45s  at 00:36:09 ─╮
+╰─ npm start                                                                                                         ─╯
+
+> luxiormall@0.1.0 start
+> next start
+
+   ▲ Next.js 15.5.0
+   - Local:        http://localhost:3000
+   - Network:      http://10.255.255.254:3000
+
+ ✓ Starting...
+ ✓ Ready in 1744ms
+Error fetching categories: Error [PrismaClientInitializationError]:
+Invalid `prisma.category.findMany()` invocation:
+
+
+Error querying the database: FATAL: Tenant or user not found
+    at async f.getAllCategories (.next/server/app/api/categories/route.js:1:11551)
+    at async x (.next/server/app/api/categories/route.js:1:1091)
+    at async k (.next/server/app/api/categories/route.js:1:3858) {
+  clientVersion: '6.14.0',
+  errorCode: undefined,
+  retryable: undefined
+}
+Error fetching featured products: Error [PrismaClientInitializationError]:
+Invalid `prisma.product.findMany()` invocation:
+
+
+Error querying the database: FATAL: Tenant or user not found
+    at async f.getFeaturedProducts (.next/server/app/api/categories/route.js:1:9715)
+    at async x (.next/server/app/api/products/route.js:1:1394)
+    at async k (.next/server/app/api/products/route.js:1:5943) {
+  clientVersion: '6.14.0',
+  errorCode: undefined,
+  retryable: undefined
+}
+Database not available, using demo data: Error: Failed to fetch categories
+    at f.getAllCategories (.next/server/app/api/categories/route.js:1:11687)
+    at async x (.next/server/app/api/categories/route.js:1:1091)
+    at async k (.next/server/app/api/categories/route.js:1:3858)
+    at async g (.next/server/app/api/categories/route.js:1:4861)
+    at async D (.next/server/app/api/categories/route.js:1:5983)
+Database not available, using demo data: Error: Failed to fetch featured products
+    at f.getFeaturedProducts (.next/server/app/api/categories/route.js:1:9947)
+    at async x (.next/server/app/api/products/route.js:1:1394)
+    at async k (.next/server/app/api/products/route.js:1:5943)
+    at async g (.next/server/app/api/products/route.js:1:6946)
+    at async D (.next/server/app/api/products/route.js:1:8068)
+Error fetching products with pagination: Error [PrismaClientInitializationError]:
+Invalid `prisma.product.findMany()` invocation:
+
+
+Error querying the database: FATAL: Tenant or user not found
+    at async f.getProductsWithPagination (.next/server/app/api/categories/route.js:1:12020)
+    at async x (.next/server/app/api/products/route.js:1:2302)
+    at async k (.next/server/app/api/products/route.js:1:5943) {
+  clientVersion: '6.14.0',
+  errorCode: undefined,
+  retryable: undefined
+}
+Database not available, using demo data: Error: Failed to fetch products
+    at f.getProductsWithPagination (.next/server/app/api/categories/route.js:1:12373)
+    at async x (.next/server/app/api/products/route.js:1:2302)
+    at async k (.next/server/app/api/products/route.js:1:5943)
+    at async g (.next/server/app/api/products/route.js:1:6946)
+    at async D (.next/server/app/api/products/route.js:1:8068)
+Error fetching product: Error [PrismaClientInitializationError]:
+Invalid `prisma.product.findUnique()` invocation:
+
+
+Error querying the database: FATAL: Tenant or user not found
+    at async f.getProductBySlug (.next/server/app/api/categories/route.js:1:10365)
+    at async l (.next/server/app/products/[slug]/page.js:2:16622) {
+  clientVersion: '6.14.0',
+  errorCode: undefined,
+  retryable: undefined
+}
+Error fetching product: Error [PrismaClientInitializationError]:
+Invalid `prisma.product.findUnique()` invocation:
+
+
+Error querying the database: FATAL: Tenant or user not found
+    at async f.getProductBySlug (.next/server/app/api/categories/route.js:1:10365)
+    at async Module.k (.next/server/app/products/[slug]/page.js:2:15923) {
+  clientVersion: '6.14.0',
+  errorCode: undefined,
+  retryable: undefined
+}
+Error fetching product: Error [PrismaClientInitializationError]:
+Invalid `prisma.product.findUnique()` invocation:
+
+
+Error querying the database: FATAL: Tenant or user not found
+    at async f.getProductBySlug (.next/server/app/api/categories/route.js:1:10365)
+    at async l (.next/server/app/products/[slug]/page.js:2:16622) {
+  clientVersion: '6.14.0',
+  errorCode: undefined,
+  retryable: undefined
+}
+Error fetching product: Error [PrismaClientInitializationError]:
+Invalid `prisma.product.findUnique()` invocation:
+
+
+Error querying the database: FATAL: Tenant or user not found
+    at async f.getProductBySlug (.next/server/app/api/categories/route.js:1:10365)
+    at async Module.k (.next/server/app/products/[slug]/page.js:2:15923) {
+  clientVersion: '6.14.0',
+  errorCode: undefined,
+  retryable: undefined
+}
+Error loading product: Error: Failed to fetch product
+    at f.getProductBySlug (.next/server/app/api/categories/route.js:1:10696)
+    at async l (.next/server/app/products/[slug]/page.js:2:16622)
+Error loading product: Error: Failed to fetch product
+    at f.getProductBySlug (.next/server/app/api/categories/route.js:1:10696)
+    at async l (.next/server/app/products/[slug]/page.js:2:16622)
+Error fetching categories: Error [PrismaClientInitializationError]:
+Invalid `prisma.category.findMany()` invocation:
+
+
+Error querying the database: FATAL: Tenant or user not found
+    at async f.getAllCategories (.next/server/app/api/categories/route.js:1:11551)
+    at async x (.next/server/app/api/categories/route.js:1:1091)
+    at async k (.next/server/app/api/categories/route.js:1:3858) {
+  clientVersion: '6.14.0',
+  errorCode: undefined,
+  retryable: undefined
+}
+Error fetching featured products: Error [PrismaClientInitializationError]:
+Invalid `prisma.product.findMany()` invocation:
+
+
+Error querying the database: FATAL: Tenant or user not found
+    at async f.getFeaturedProducts (.next/server/app/api/categories/route.js:1:9715)
+    at async x (.next/server/app/api/products/route.js:1:1394)
+    at async k (.next/server/app/api/products/route.js:1:5943) {
+  clientVersion: '6.14.0',
+  errorCode: undefined,
+  retryable: undefined
+}
+Database not available, using demo data: Error: Failed to fetch categories
+    at f.getAllCategories (.next/server/app/api/categories/route.js:1:11687)
+    at async x (.next/server/app/api/categories/route.js:1:1091)
+    at async k (.next/server/app/api/categories/route.js:1:3858)
+    at async g (.next/server/app/api/categories/route.js:1:4861)
+    at async D (.next/server/app/api/categories/route.js:1:5983)
+Database not available, using demo data: Error: Failed to fetch featured products
+    at f.getFeaturedProducts (.next/server/app/api/categories/route.js:1:9947)
+    at async x (.next/server/app/api/products/route.js:1:1394)
+    at async k (.next/server/app/api/products/route.js:1:5943)
+    at async g (.next/server/app/api/products/route.js:1:6946)
+    at async D (.next/server/app/api/products/route.js:1:8068)
