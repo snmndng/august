@@ -81,7 +81,7 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
     if (navigator.share) {
       navigator.share({
         title: product.name,
-        text: product.shortDescription || product.description || `Check out ${product.name} at LuxiorMall`,
+        text: product.short_description || product.description || `Check out ${product.name} at LuxiorMall`,
         url: window.location.href,
       });
     } else {
@@ -138,7 +138,7 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
         {/* Product Header */}
         <div>
           <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400">{product.shortDescription}</p>
+          <p className="text-lg text-gray-600 dark:text-gray-400">{product.short_description}</p>
         </div>
 
         {/* Price */}
