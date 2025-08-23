@@ -54,8 +54,8 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
     // TODO: Implement wishlist functionality
   };
 
-  const discountPercentage = product.comparePrice && product.comparePrice > product.price
-    ? Math.round(((parseFloat(product.comparePrice.toString()) - parseFloat(product.price.toString())) / parseFloat(product.comparePrice.toString())) * 100)
+  const discountPercentage = product.compare_price && product.compare_price > product.price
+    ? Math.round(((parseFloat(product.compare_price.toString()) - parseFloat(product.price.toString())) / parseFloat(product.compare_price.toString())) * 100)
     : 0;
 
   return (
@@ -200,9 +200,9 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
         {/* Action Button */}
         <button
           onClick={handleAddToCart}
-          disabled={product.stockQuantity === 0 || isAddingToCart}
+          disabled={product.stock_quantity === 0 || isAddingToCart}
           className={`w-full py-3 px-6 rounded-2xl font-semibold transition-all duration-300 transform flex items-center justify-center gap-2 ${
-            product.stockQuantity === 0 
+            product.stock_quantity === 0 
               ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
               : isAddingToCart
                 ? 'bg-luxior-orange text-white scale-95'
@@ -214,7 +214,7 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               Adding...
             </>
-          ) : product.stockQuantity === 0 ? (
+          ) : product.stock_quantity === 0 ? (
             'Out of Stock'
           ) : (
             <>
