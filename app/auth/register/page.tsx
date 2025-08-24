@@ -3,7 +3,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { User, Mail, Lock, Eye, EyeOff, Phone } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -23,7 +22,6 @@ export default function RegisterPage() {
   const [success, setSuccess] = useState<string | null>(null);
 
   const { signUp } = useAuth();
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
