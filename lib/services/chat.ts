@@ -275,27 +275,6 @@ class ChatService {
     }
   }
 
-  // Update agent availability (for agents/admins)
-  async updateAgentAvailability(isAvailable: boolean, statusMessage?: string): Promise<boolean> {
-    if (!supabase) return false;
-
-    try {
-      const { error } = await supabase
-        .from('agent_availability')
-        .upsert({
-          is_available: isAvailable,
-          status_message: statusMessage,
-          last_seen: new Date().toISOString(),
-        });
-
-      if (error) throw error;
-      return true;
-    } catch (error) {
-      console.error('Error updating agent availability:', error);
-      return false;
-    }
-  }
-
   // Assign agent to chat room (for agents/admins)
   async assignAgentToRoom(roomId: string, agentId: string): Promise<boolean> {
     if (!supabase) return false;
