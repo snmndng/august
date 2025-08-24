@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js';
-import { Database } from '@/types/supabase';
 
 // Validate required environment variables
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -123,5 +122,4 @@ export const getUserRole = async (userId: string): Promise<string | null> => {
 };
 
 // Export types for use in components
-export type { Database } from '@/types/supabase';
 export type { AppUser, UserRole } from '@/types';
