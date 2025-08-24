@@ -1,4 +1,3 @@
-
 import { supabase } from '@/lib/supabase';
 import type { RealtimeChannel } from '@supabase/supabase-js';
 
@@ -32,18 +31,57 @@ export interface ChatMessage {
 
 export interface AgentAvailability {
   id: string;
-  agent_id: string;
+  user_id: string;
   is_available: boolean;
   status_message?: string;
-  last_seen: string;
-  agent?: {
-    first_name: string;
-    last_name: string;
-  };
+  updated_at: string;
 }
 
 class ChatService {
   private channels: Map<string, RealtimeChannel> = new Map();
+
+  // Get agent availability
+  async getAgentAvailability(): Promise<AgentAvailability[]> {
+    if (!supabase) {
+      throw new Error('Supabase client not initialized');
+    }
+
+    const { data, error } = await supabase
+      .from('agent_availability')
+      .select('*')
+      .eq('is_available', true);
+
+    if (error) {
+      throw error;
+    }
+
+    return data || [];
+  },
+
+  // Update agent availability
+  async updateAgentAvailability(isAvailable: boolean, statusMessage?: string): Promise<void> {
+    if (!supabase) {
+      throw new Error('Supabase client not initialized');
+    }
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      throw new Error('User not authenticated');
+    }
+
+    const { error } = await supabase
+      .from('agent_availability')
+      .upsert({
+        user_id: user.id,
+        is_available: isAvailable,
+        status_message: statusMessage,
+        updated_at: new Date().toISOString(),
+      });
+
+    if (error) {
+      throw error;
+    }
+  },
 
   // Create a new chat room
   async createChatRoom(subject?: string, priority: 'low' | 'normal' | 'high' | 'urgent' = 'normal'): Promise<ChatRoom | null> {
@@ -147,7 +185,7 @@ class ChatService {
     if (!supabase) return null;
 
     const channelName = `room-${roomId}`;
-    
+
     // Remove existing subscription if any
     if (this.channels.has(channelName)) {
       this.channels.get(channelName)?.unsubscribe();
@@ -190,7 +228,7 @@ class ChatService {
     if (!supabase) return null;
 
     const channelName = `room-updates-${roomId}`;
-    
+
     // Remove existing subscription if any
     if (this.channels.has(channelName)) {
       this.channels.get(channelName)?.unsubscribe();
@@ -275,7 +313,7 @@ class ChatService {
 
       // Send system message
       await this.sendMessage(roomId, 'Agent has joined the chat', 'system');
-      
+
       return true;
     } catch (error) {
       console.error('Error assigning agent:', error);
@@ -300,7 +338,7 @@ class ChatService {
 
       // Send system message
       await this.sendMessage(roomId, 'Chat has been closed', 'system');
-      
+
       return true;
     } catch (error) {
       console.error('Error closing chat room:', error);

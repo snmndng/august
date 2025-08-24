@@ -2,17 +2,17 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
-import { Providers } from '@/components/providers'
-import { Header } from '@/components/layout/Header'
-import { Footer } from '@/components/layout/Footer'
-import { CartSidebar } from '@/components/cart/CartSidebar'
-import { ChatWidget } from '@/components/chat/ChatWidget'
-import { WhatsAppButton } from '@/components/common/WhatsAppButton'
+import Providers from '@/components/providers'
+import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
+import CartSidebar from '@/components/cart/CartSidebar'
+import ChatWidget from '@/components/chat/ChatWidget'
+import WhatsAppButton from '@/components/common/WhatsAppButton'
 
 export const metadata: Metadata = {
-  title: 'LuxiorMall - Premium Electronics & Fashion',
-  description: 'Discover premium electronics, fashion, and lifestyle products at LuxiorMall. Quality guaranteed, fast delivery, exceptional service.',
-  keywords: 'electronics, fashion, premium, luxury, online shopping, Kenya',
+  title: 'LuxiorMall - Premium Shopping Experience',
+  description: 'Discover premium products and exceptional shopping experience at LuxiorMall. From electronics to fashion, find everything you need with fast delivery across Kenya.',
+  keywords: 'online shopping, ecommerce, electronics, fashion, Kenya, premium products, LuxiorMall',
   authors: [{ name: 'LuxiorMall Team' }],
   creator: 'LuxiorMall',
   publisher: 'LuxiorMall',
@@ -21,29 +21,31 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL('https://luxiormall.com'),
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
-    title: 'LuxiorMall - Premium Electronics & Fashion',
-    description: 'Discover premium electronics, fashion, and lifestyle products at LuxiorMall.',
-    url: '/',
+    title: 'LuxiorMall - Premium Shopping Experience',
+    description: 'Discover premium products and exceptional shopping experience at LuxiorMall.',
+    url: 'https://luxiormall.com',
     siteName: 'LuxiorMall',
-    locale: 'en_US',
+    locale: 'en_KE',
     type: 'website',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/api/og?title=LuxiorMall',
         width: 1200,
         height: 630,
-        alt: 'LuxiorMall - Premium Electronics & Fashion',
+        alt: 'LuxiorMall - Premium Shopping Experience',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'LuxiorMall - Premium Electronics & Fashion',
-    description: 'Discover premium electronics, fashion, and lifestyle products at LuxiorMall.',
-    creator: '@luxiormall',
-    images: ['/twitter-image.jpg'],
+    title: 'LuxiorMall - Premium Shopping Experience',
+    description: 'Discover premium products and exceptional shopping experience at LuxiorMall.',
+    images: ['/api/og?title=LuxiorMall'],
   },
   robots: {
     index: true,
@@ -57,7 +59,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: process.env.GOOGLE_SITE_VERIFICATION,
+    google: 'google-site-verification-code',
   },
 }
 
@@ -71,33 +73,46 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/icons/icon-144x144.png" />
-        <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#FF6B35" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="LuxiorMall" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="application-name" content="LuxiorMall" />
       </head>
-      <body className="min-h-screen bg-gray-50">
+      <body className="antialiased bg-white text-gray-900">
         <Providers>
-          <div className="flex flex-col min-h-screen">
+          <div className="min-h-screen flex flex-col">
             <Header />
             <main className="flex-1">
               {children}
             </main>
             <Footer />
           </div>
-          
-          {/* Chat Widget */}
-          <ChatWidget />
-          
-          {/* Additional Components */}
+
+          {/* Global Components */}
           <CartSidebar />
+          <ChatWidget />
           <WhatsAppButton />
           <Toaster
             position="top-right"
             toastOptions={{
               duration: 4000,
               style: {
-                background: '#333',
+                background: '#363636',
                 color: '#fff',
+              },
+              success: {
+                duration: 3000,
+                style: {
+                  background: '#10B981',
+                },
+              },
+              error: {
+                duration: 5000,
+                style: {
+                  background: '#EF4444',
+                },
               },
             }}
           />
