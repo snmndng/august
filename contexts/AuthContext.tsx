@@ -44,7 +44,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       try {
         // Get current session
         const { data: { session }, error } = await supabase.auth.getSession();
-        
+
         if (error) {
           console.error('Error getting session:', error);
           setIsLoading(false);
@@ -105,7 +105,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
     try {
       setIsLoading(true);
-      
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -113,9 +113,9 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
       if (error) {
         console.error('Supabase auth error:', error);
-        return { 
-          success: false, 
-          error: error.message || 'Authentication failed' 
+        return {
+          success: false,
+          error: error.message || 'Authentication failed'
         };
       }
 
@@ -140,21 +140,22 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       return { success: false, error: 'Authentication failed - no user data received' };
     } catch (error) {
       console.error('Sign in error:', error);
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Sign in failed' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Sign in failed'
       };
     } finally {
-      setIsLoading(false);
+      // Don't reset loading here as it interferes with component-level loading states
+      // Components should manage their own loading states
     }
   };
 
   // Sign up user
   const signUp = async (
-    email: string, 
-    password: string, 
-    firstName: string, 
-    lastName: string, 
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
     phone?: string
   ): Promise<{ success: boolean; error?: string }> => {
     if (!supabase) {
@@ -163,7 +164,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
     try {
       setIsLoading(true);
-      
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -209,9 +210,9 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       return { success: false, error: 'Sign up failed' };
     } catch (error) {
       console.error('Sign up error:', error);
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Sign up failed' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Sign up failed'
       };
     } finally {
       setIsLoading(false);
@@ -227,9 +228,9 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
     try {
       setIsLoading(true);
-      
+
       const { error } = await supabase.auth.signOut();
-      
+
       if (error) {
         throw error;
       }
@@ -266,13 +267,13 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
       // Refresh user data
       await refreshUser();
-      
+
       return { success: true };
     } catch (error) {
       console.error('Update profile error:', error);
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Failed to update profile' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to update profile'
       };
     }
   };
