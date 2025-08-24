@@ -38,6 +38,9 @@ export default function AdminChatPage() {
 
       return () => clearInterval(interval);
     }
+    
+    // Return empty cleanup function when condition is not met
+    return () => {};
   }, [user, userRole]);
 
   useEffect(() => {
