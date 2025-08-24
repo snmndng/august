@@ -759,6 +759,143 @@ export type Database = {
           }
         ]
       }
+      chat_rooms: {
+        Row: {
+          id: string
+          customer_id: string
+          agent_id: string | null
+          status: 'waiting' | 'active' | 'closed'
+          priority: 'low' | 'normal' | 'high' | 'urgent'
+          subject: string | null
+          created_at: string
+          updated_at: string
+          closed_at: string | null
+        }
+        Insert: {
+          id?: string
+          customer_id: string
+          agent_id?: string | null
+          status?: 'waiting' | 'active' | 'closed'
+          priority?: 'low' | 'normal' | 'high' | 'urgent'
+          subject?: string | null
+          created_at?: string
+          updated_at?: string
+          closed_at?: string | null
+        }
+        Update: {
+          id?: string
+          customer_id?: string
+          agent_id?: string | null
+          status?: 'waiting' | 'active' | 'closed'
+          priority?: 'low' | 'normal' | 'high' | 'urgent'
+          subject?: string | null
+          created_at?: string
+          updated_at?: string
+          closed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_rooms_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_rooms_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      chat_messages: {
+        Row: {
+          id: string
+          room_id: string
+          sender_id: string
+          message: string
+          message_type: 'text' | 'image' | 'file' | 'system'
+          file_url: string | null
+          is_read: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          room_id: string
+          sender_id: string
+          message: string
+          message_type?: 'text' | 'image' | 'file' | 'system'
+          file_url?: string | null
+          is_read?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          room_id?: string
+          sender_id?: string
+          message?: string
+          message_type?: 'text' | 'image' | 'file' | 'system'
+          file_url?: string | null
+          is_read?: boolean
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "chat_rooms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      agent_availability: {
+        Row: {
+          id: string
+          agent_id: string
+          is_available: boolean
+          status_message: string | null
+          last_seen: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          agent_id: string
+          is_available?: boolean
+          status_message?: string | null
+          last_seen?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          agent_id?: string
+          is_available?: boolean
+          status_message?: string | null
+          last_seen?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_availability_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -773,6 +910,9 @@ export type Database = {
       payment_method: 'mpesa' | 'cash_on_delivery'
       product_status: 'draft' | 'active' | 'inactive' | 'rejected'
       shipping_status: 'pending' | 'in_transit' | 'delivered' | 'returned'
+      chat_status: 'waiting' | 'active' | 'closed'
+      chat_priority: 'low' | 'normal' | 'high' | 'urgent'
+      message_type: 'text' | 'image' | 'file' | 'system'
     }
     CompositeTypes: {
       [_ in never]: never

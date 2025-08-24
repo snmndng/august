@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useAuth, useIsAdmin } from '@/contexts/AuthContext';
@@ -32,7 +31,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         router.push('/auth/login');
         return;
       }
-      
+
       if (!isAdmin) {
         router.push('/');
         return;
@@ -81,7 +80,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 {navigation.map((item) => {
                   const Icon = item.icon;
                   const isActive = pathname === item.href;
-                  
+
                   return (
                     <Link
                       key={item.name}

@@ -6,6 +6,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { WhatsAppButton } from '@/components/common/WhatsAppButton'
 import { CartSidebar } from '@/components/cart/CartSidebar'
+import ChatWidget from '@/components/chat/ChatWidget'
 
 // Fallback to system fonts to avoid build issues
 const fontClasses = 'font-sans'
@@ -110,21 +111,9 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
-            <WhatsAppButton />
-            <CartSidebar />
-          </div>
-          <Toaster 
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: '#363636',
-                color: '#fff',
-              },
-            }}
-          />
-        </Providers>
+
+          {/* Chat Widget */}
+          <ChatWidget />
+        </div>
       </body>
     </html>
-  )
-}
