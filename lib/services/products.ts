@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { Product, Category, ProductImage, AppUser } from '@/types';
+import { Product, Category, ProductImage } from '@/types';
 
 export type ProductWithDetails = Product & {
   images?: ProductImage[];
