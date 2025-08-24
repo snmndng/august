@@ -15,7 +15,7 @@ export class ProductsService {
           images: true,
         },
         orderBy: {
-          created_at: 'desc',
+          createdAt: 'desc',
         },
       });
     } catch (error) {
@@ -36,7 +36,7 @@ export class ProductsService {
         },
         take: 8,
         orderBy: {
-          created_at: 'desc',
+          createdAt: 'desc',
         },
       });
     } catch (error) {
@@ -98,7 +98,7 @@ export class ProductsService {
           skip,
           take: limit,
           orderBy: {
-            created_at: 'desc',
+            createdAt: 'desc',
           },
         }),
         prisma.product.count({
@@ -149,7 +149,7 @@ export class ProductsService {
           skip,
           take: limit,
           orderBy: {
-            created_at: 'desc',
+            createdAt: 'desc',
           },
         }),
         prisma.product.count({
@@ -199,7 +199,7 @@ export class ProductsService {
         },
         take: limit,
         orderBy: {
-          created_at: 'desc',
+          createdAt: 'desc',
         },
       });
     } catch (error) {
@@ -221,7 +221,7 @@ export class ProductsService {
           skip,
           take: limit,
           orderBy: {
-            created_at: 'desc',
+            createdAt: 'desc',
           },
         }),
         prisma.product.count(),
