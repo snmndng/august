@@ -1,9 +1,8 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { chatService, type ChatRoom, type ChatMessage, type AgentAvailability } from '@/lib/services/chat';
+import { chatService, type ChatRoom, type ChatMessage } from '@/lib/services/chat';
 import { useRouter } from 'next/navigation';
 
 export default function AdminChatPage() {
@@ -15,7 +14,7 @@ export default function AdminChatPage() {
   const [statusMessage, setStatusMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
-  
+
   const { user, userRole } = useAuth();
   const router = useRouter();
 
@@ -30,11 +29,11 @@ export default function AdminChatPage() {
   useEffect(() => {
     if (user && ['admin', 'seller'].includes(userRole || '')) {
       loadData();
-      
+
       // Set up real-time subscriptions for new rooms
       // This could be enhanced with more sophisticated real-time updates
       const interval = setInterval(loadChatRooms, 30000); // Refresh every 30 seconds
-      
+
       return () => clearInterval(interval);
     }
   }, [user, userRole]);
@@ -42,7 +41,7 @@ export default function AdminChatPage() {
   useEffect(() => {
     if (selectedRoom) {
       loadMessages();
-      
+
       // Subscribe to new messages
       const channel = chatService.subscribeToMessages(selectedRoom.id, (message) => {
         setMessages(prev => [...prev, message]);
@@ -60,7 +59,7 @@ export default function AdminChatPage() {
 
   const loadChatRooms = async () => {
     if (!user) return;
-    
+
     try {
       const rooms = await chatService.getUserChatRooms(user.id);
       setChatRooms(rooms);
@@ -71,7 +70,7 @@ export default function AdminChatPage() {
 
   const loadMessages = async () => {
     if (!selectedRoom) return;
-    
+
     try {
       const roomMessages = await chatService.getRoomMessages(selectedRoom.id);
       setMessages(roomMessages);
@@ -80,7 +79,7 @@ export default function AdminChatPage() {
     }
   };
 
-  
+
 
   const handleSendMessage = async () => {
     if (!selectedRoom || !newMessage.trim() || isSending) return;
@@ -98,7 +97,7 @@ export default function AdminChatPage() {
 
   const handleAssignToSelf = async (roomId: string) => {
     if (!user) return;
-    
+
     try {
       await chatService.assignAgentToRoom(roomId, user.id);
       await loadChatRooms();
@@ -222,7 +221,7 @@ export default function AdminChatPage() {
                       <div className="text-sm opacity-75 mt-1">
                         {formatTime(room.updated_at)}
                       </div>
-                      
+
                       {/* Action buttons */}
                       {room.status === 'waiting' && (
                         <button
@@ -235,7 +234,7 @@ export default function AdminChatPage() {
                           Assign to me
                         </button>
                       )}
-                      
+
                       {room.status === 'active' && room.agent_id === user?.id && (
                         <button
                           onClick={(e) => {
@@ -249,7 +248,7 @@ export default function AdminChatPage() {
                       )}
                     </div>
                   ))}
-                  
+
                   {chatRooms.length === 0 && (
                     <div className="text-center text-gray-500 py-8">
                       No chat rooms yet
@@ -301,9 +300,9 @@ export default function AdminChatPage() {
                               {message.sender?.first_name} {message.sender?.last_name}
                             </div>
                           )}
-                          
+
                           <p className="break-words">{message.message}</p>
-                          
+
                           <div className={`text-xs mt-1 ${
                             message.sender_id === user?.id ? 'text-white opacity-75' : 'text-gray-500'
                           }`}>

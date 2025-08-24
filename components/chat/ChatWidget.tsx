@@ -10,7 +10,7 @@ interface ChatWidgetProps {
   className?: string;
 }
 
-export default function ChatWidget({ className = '' }: ChatWidgetProps) {
+function ChatWidget({ className = '' }: ChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [activeChatRoom, setActiveChatRoom] = useState<ChatRoom | null>(null);
@@ -125,3 +125,6 @@ export default function ChatWidget({ className = '' }: ChatWidgetProps) {
     </div>
   );
 }
+
+export default ChatWidget;
+export { ChatWidget };
