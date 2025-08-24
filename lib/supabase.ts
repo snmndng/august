@@ -27,21 +27,28 @@ if (!hasValidEnvVars) {
   console.warn('Missing or invalid Supabase environment variables. Using demo mode.');
 }
 
-// Create Supabase client with TypeScript types
-export const supabase = hasValidEnvVars 
-  ? createClient<Database>(supabaseUrl!, supabaseAnonKey!, {
+// Create Supabase client
+export const supabase = supabaseUrl && supabaseAnonKey 
+  ? createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
-        autoRefreshToken: true,
         persistSession: true,
-        detectSessionInUrl: true,
-      },
-      realtime: {
-        params: {
-          eventsPerSecond: 10,
-        },
+        autoRefreshToken: true,
       },
     })
   : null;
+
+// Log configuration status
+if (typeof window === 'undefined') {
+  // Server-side logging
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.warn('Supabase configuration incomplete:', {
+      hasUrl: !!supabaseUrl,
+      hasKey: !!supabaseAnonKey,
+    });
+  } else {
+    console.log('Supabase client initialized successfully');
+  }
+}
 
 // Helper function to get user session
 export const getCurrentUser = async () => {

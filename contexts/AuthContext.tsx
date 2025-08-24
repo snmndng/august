@@ -112,16 +112,32 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       });
 
       if (error) {
-        throw error;
+        console.error('Supabase auth error:', error);
+        return { 
+          success: false, 
+          error: error.message || 'Authentication failed' 
+        };
       }
 
       if (data.user) {
-        await loadUserProfile(data.user.id);
-        router.push('/dashboard');
-        return { success: true };
+        try {
+          await loadUserProfile(data.user.id);
+          // Use setTimeout to ensure state updates complete before redirect
+          setTimeout(() => {
+            router.push('/dashboard');
+          }, 100);
+          return { success: true };
+        } catch (profileError) {
+          console.error('Profile loading error:', profileError);
+          // Still consider sign-in successful even if profile loading fails
+          setTimeout(() => {
+            router.push('/dashboard');
+          }, 100);
+          return { success: true };
+        }
       }
 
-      return { success: false, error: 'Sign in failed' };
+      return { success: false, error: 'Authentication failed - no user data received' };
     } catch (error) {
       console.error('Sign in error:', error);
       return { 

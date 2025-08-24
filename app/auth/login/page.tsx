@@ -24,15 +24,21 @@ export default function LoginPage() {
     setIsLoading(true);
     setError(null);
 
-    const result = await signIn(formData.email, formData.password);
-    
-    if (result.success) {
-      router.push('/dashboard');
-    } else {
-      setError(result.error || 'Login failed. Please try again.');
+    try {
+      const result = await signIn(formData.email, formData.password);
+      
+      if (result.success) {
+        // Success message - redirect is handled by AuthContext
+        setError(null);
+      } else {
+        setError(result.error || 'Login failed. Please try again.');
+        setIsLoading(false);
+      }
+    } catch (err) {
+      console.error('Login submission error:', err);
+      setError('An unexpected error occurred. Please try again.');
+      setIsLoading(false);
     }
-    
-    setIsLoading(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
