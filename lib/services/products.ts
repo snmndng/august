@@ -28,7 +28,7 @@ export class ProductsService {
     try {
       return await prisma.product.findMany({
         where: {
-          is_featured: true,
+          isFeatured: true,
         },
         include: {
           category: true,
@@ -89,7 +89,7 @@ export class ProductsService {
       const [products, total] = await Promise.all([
         prisma.product.findMany({
           where: {
-            category_id: categoryId,
+            categoryId: categoryId,
           },
           include: {
             category: true,
@@ -103,7 +103,7 @@ export class ProductsService {
         }),
         prisma.product.count({
           where: {
-            category_id: categoryId,
+            categoryId: categoryId,
           },
         }),
       ]);
@@ -188,7 +188,7 @@ export class ProductsService {
     try {
       return await prisma.product.findMany({
         where: {
-          category_id: categoryId,
+          categoryId: categoryId,
           id: {
             not: productId,
           },
