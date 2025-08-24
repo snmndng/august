@@ -147,7 +147,7 @@ class ChatService {
   }
 
   // Send a message
-  async sendMessage(roomId: string, message: string, messageType: 'text' | 'image' | 'file' = 'text', fileUrl?: string): Promise<ChatMessage | null> {
+  async sendMessage(roomId: string, message: string, messageType: 'text' | 'image' | 'file' | 'system' = 'text', fileUrl?: string): Promise<ChatMessage | null> {
     if (!supabase) return null;
 
     try {
