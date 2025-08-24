@@ -20,3 +20,5 @@ export function Providers({ children }: ProvidersProps): JSX.Element {
     </ThemeProvider>
   );
 }
+
+export default Providers;
