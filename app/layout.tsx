@@ -5,20 +5,14 @@ import { Toaster } from 'react-hot-toast'
 import { Providers } from '@/components/providers'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { WhatsAppButton } from '@/components/common/WhatsAppButton'
 import { CartSidebar } from '@/components/cart/CartSidebar'
-import ChatWidget from '@/components/chat/ChatWidget'
-
-// Fallback to system fonts to avoid build issues
-const fontClasses = 'font-sans'
+import { ChatWidget } from '@/components/chat/ChatWidget'
+import { WhatsAppButton } from '@/components/common/WhatsAppButton'
 
 export const metadata: Metadata = {
-  title: {
-    default: 'LuxiorMall - Premium Ecommerce Platform',
-    template: '%s | LuxiorMall'
-  },
-  description: 'Modern ecommerce platform for premium products with M-Pesa payments. Shop shoes, fashion, laptops, and more with secure checkout and fast delivery.',
-  keywords: ['ecommerce', 'shopping', 'Kenya', 'M-Pesa', 'fashion', 'electronics', 'shoes', 'laptops'],
+  title: 'LuxiorMall - Premium Electronics & Fashion',
+  description: 'Discover premium electronics, fashion, and lifestyle products at LuxiorMall. Quality guaranteed, fast delivery, exceptional service.',
+  keywords: 'electronics, fashion, premium, luxury, online shopping, Kenya',
   authors: [{ name: 'LuxiorMall Team' }],
   creator: 'LuxiorMall',
   publisher: 'LuxiorMall',
@@ -27,31 +21,29 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
-  alternates: {
-    canonical: '/',
-  },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
+    title: 'LuxiorMall - Premium Electronics & Fashion',
+    description: 'Discover premium electronics, fashion, and lifestyle products at LuxiorMall.',
     url: '/',
-    title: 'LuxiorMall - Premium Ecommerce Platform',
-    description: 'Modern ecommerce platform for premium products with M-Pesa payments.',
     siteName: 'LuxiorMall',
+    locale: 'en_US',
+    type: 'website',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'LuxiorMall - Premium Ecommerce Platform',
+        alt: 'LuxiorMall - Premium Electronics & Fashion',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'LuxiorMall - Premium Ecommerce Platform',
-    description: 'Modern ecommerce platform for premium products with M-Pesa payments.',
-    images: ['/og-image.jpg'],
+    title: 'LuxiorMall - Premium Electronics & Fashion',
+    description: 'Discover premium electronics, fashion, and lifestyle products at LuxiorMall.',
+    creator: '@luxiormall',
+    images: ['/twitter-image.jpg'],
   },
   robots: {
     index: true,
@@ -65,26 +57,8 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'your-google-verification-code',
+    google: process.env.GOOGLE_SITE_VERIFICATION,
   },
-  manifest: '/manifest.json',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'default',
-    title: 'LuxiorMall',
-  },
-  applicationName: 'LuxiorMall',
-  referrer: 'origin-when-cross-origin',
-}
-
-export function generateViewport() {
-  return {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    themeColor: '#ff7900',
-    colorScheme: 'light',
-  }
 }
 
 export default function RootLayout({
@@ -93,20 +67,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={fontClasses}>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="LuxiorMall" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="msapplication-TileColor" content="#ff7900" />
-        <meta name="msapplication-config" content="/browserconfig.xml" />
+        <link rel="apple-touch-icon" href="/icons/icon-144x144.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#FF6B35" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </head>
-      <body className={`${fontClasses} antialiased bg-gray-50`}>
+      <body className="min-h-screen bg-gray-50">
         <Providers>
-          <div className="min-h-screen flex flex-col">
+          <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-1">
               {children}

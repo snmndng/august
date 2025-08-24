@@ -11,7 +11,6 @@ export default function AdminChatPage() {
   const [selectedRoom, setSelectedRoom] = useState<ChatRoom | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [availableAgents, setAvailableAgents] = useState<AgentAvailability[]>([]);
   const [isAvailable, setIsAvailable] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -55,10 +54,7 @@ export default function AdminChatPage() {
 
   const loadData = async () => {
     setIsLoading(true);
-    await Promise.all([
-      loadChatRooms(),
-      loadAvailableAgents(),
-    ]);
+    await loadChatRooms();
     setIsLoading(false);
   };
 
@@ -84,14 +80,7 @@ export default function AdminChatPage() {
     }
   };
 
-  const loadAvailableAgents = async () => {
-    try {
-      const agents = await chatService.getAvailableAgents();
-      setAvailableAgents(agents);
-    } catch (error) {
-      console.error('Error loading agents:', error);
-    }
-  };
+  
 
   const handleSendMessage = async () => {
     if (!selectedRoom || !newMessage.trim() || isSending) return;
@@ -133,7 +122,6 @@ export default function AdminChatPage() {
   const updateAvailability = async () => {
     try {
       await chatService.updateAgentAvailability(isAvailable, statusMessage);
-      await loadAvailableAgents();
     } catch (error) {
       console.error('Error updating availability:', error);
     }
