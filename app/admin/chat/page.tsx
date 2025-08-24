@@ -57,6 +57,9 @@ export default function AdminChatPage() {
         }
       };
     }
+    
+    // Return empty cleanup function when selectedRoom is null
+    return () => {};
   }, [selectedRoom]);
 
   const loadData = async () => {
