@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,7 +7,308 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Enums
+model User {
+  id                 String              @id @default(cuid())
+  email              String              @unique
+  phone              String?             @unique
+  firstName          String              @map("first_name")
+  lastName           String              @map("last_name")
+  role               UserRole            @default(customer)
+  avatarUrl          String?             @map("avatar_url")
+  isVerified         Boolean             @default(false) @map("is_verified")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  auditLogs          AdminAuditLog[]
+  cartItems          CartItem[]
+  sellerOrders       Order[]             @relation("SellerOrders")
+  orders             Order[]             @relation("UserOrders")
+  reviews            ProductReview[]
+  products           Product[]           @relation("SellerProducts")
+  returns            Return[]
+  stockNotifications StockNotification[]
+  addresses          UserAddress[]
+  wishlist           Wishlist[]
+
+  @@map("users")
+}
+
+model UserAddress {
+  id           String     @id @default(cuid())
+  userId       String     @map("user_id")
+  addressLine1 String     @map("address_line_1")
+  addressLine2 String?    @map("address_line_2")
+  city         String
+  state        String
+  postalCode   String?    @map("postal_code")
+  country      String     @default("Kenya")
+  isDefault    Boolean    @default(false) @map("is_default")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+  shipping     Shipping[]
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_addresses")
+}
+
+model Category {
+  id          String     @id @default(cuid())
+  name        String     @unique
+  slug        String     @unique
+  description String?
+  imageUrl    String?    @map("image_url")
+  parentId    String?    @map("parent_id")
+  isActive    Boolean    @default(true) @map("is_active")
+  sortOrder   Int        @default(0) @map("sort_order")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  parent      Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryHierarchy")
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id                 String              @id @default(cuid())
+  sellerId           String              @map("seller_id")
+  categoryId         String?             @map("category_id")
+  name               String
+  slug               String              @unique
+  description        String?
+  shortDescription   String?             @map("short_description")
+  price              Decimal             @db.Decimal(10, 2)
+  comparePrice       Decimal?            @map("compare_price") @db.Decimal(10, 2)
+  costPrice          Decimal?            @map("cost_price") @db.Decimal(10, 2)
+  stockQuantity      Int                 @default(0) @map("stock_quantity")
+  lowStockThreshold  Int                 @default(5) @map("low_stock_threshold")
+  sku                String?             @unique
+  barcode            String?
+  weightKg           Decimal?            @map("weight_kg") @db.Decimal(5, 2)
+  dimensionsCm       String?             @map("dimensions_cm")
+  status             ProductStatus       @default(draft)
+  isFeatured         Boolean             @default(false) @map("is_featured")
+  isBestseller       Boolean             @default(false) @map("is_bestseller")
+  metaTitle          String?             @map("meta_title")
+  metaDescription    String?             @map("meta_description")
+  tags               String[]
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  cartItems          CartItem[]
+  orderItems         OrderItem[]
+  images             ProductImage[]
+  reviews            ProductReview[]
+  variants           ProductVariant[]
+  category           Category?           @relation(fields: [categoryId], references: [id])
+  seller             User                @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
+  stockNotifications StockNotification[]
+  wishlist           Wishlist[]
+
+  @@map("products")
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String   @map("product_id")
+  imageUrl  String   @map("image_url")
+  altText   String?  @map("alt_text")
+  isPrimary Boolean  @default(false) @map("is_primary")
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+model ProductVariant {
+  id              String      @id @default(cuid())
+  productId       String      @map("product_id")
+  name            String
+  value           String
+  priceAdjustment Decimal     @default(0) @map("price_adjustment") @db.Decimal(10, 2)
+  stockQuantity   Int         @default(0) @map("stock_quantity")
+  sku             String?
+  createdAt       DateTime    @default(now()) @map("created_at")
+  cartItems       CartItem[]
+  orderItems      OrderItem[]
+  product         Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_variants")
+}
+
+model CartItem {
+  id        String          @id @default(cuid())
+  userId    String          @map("user_id")
+  productId String          @map("product_id")
+  variantId String?         @map("variant_id")
+  quantity  Int
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+  product   Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
+
+  @@unique([userId, productId, variantId])
+  @@map("cart_items")
+}
+
+model Order {
+  id             String          @id @default(cuid())
+  orderNumber    String          @unique @map("order_number")
+  userId         String          @map("user_id")
+  sellerId       String?         @map("seller_id")
+  status         OrderStatus     @default(pending)
+  subtotal       Decimal         @db.Decimal(10, 2)
+  taxAmount      Decimal         @default(0) @map("tax_amount") @db.Decimal(10, 2)
+  shippingAmount Decimal         @default(0) @map("shipping_amount") @db.Decimal(10, 2)
+  discountAmount Decimal         @default(0) @map("discount_amount") @db.Decimal(10, 2)
+  totalAmount    Decimal         @map("total_amount") @db.Decimal(10, 2)
+  currency       String          @default("KES")
+  notes          String?
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+  items          OrderItem[]
+  seller         User?           @relation("SellerOrders", fields: [sellerId], references: [id])
+  user           User            @relation("UserOrders", fields: [userId], references: [id], onDelete: Cascade)
+  payments       Payment[]
+  reviews        ProductReview[]
+  returns        Return[]
+  shipping       Shipping[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id          String          @id @default(cuid())
+  orderId     String          @map("order_id")
+  productId   String?         @map("product_id")
+  variantId   String?         @map("variant_id")
+  productName String          @map("product_name")
+  productSku  String?         @map("product_sku")
+  quantity    Int
+  unitPrice   Decimal         @map("unit_price") @db.Decimal(10, 2)
+  totalPrice  Decimal         @map("total_price") @db.Decimal(10, 2)
+  createdAt   DateTime        @default(now()) @map("created_at")
+  order       Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product?        @relation(fields: [productId], references: [id])
+  variant     ProductVariant? @relation(fields: [variantId], references: [id])
+
+  @@map("order_items")
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  orderId         String        @map("order_id")
+  amount          Decimal       @db.Decimal(10, 2)
+  currency        String        @default("KES")
+  method          PaymentMethod
+  status          PaymentStatus @default(pending)
+  transactionId   String?       @map("transaction_id")
+  mpesaPhone      String?       @map("mpesa_phone")
+  mpesaReference  String?       @map("mpesa_reference")
+  gatewayResponse Json?         @map("gateway_response")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  order           Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model Shipping {
+  id                String         @id @default(cuid())
+  orderId           String         @map("order_id")
+  addressId         String?        @map("address_id")
+  trackingNumber    String?        @map("tracking_number")
+  carrier           String?
+  status            ShippingStatus @default(pending)
+  estimatedDelivery DateTime?      @map("estimated_delivery")
+  actualDelivery    DateTime?      @map("actual_delivery")
+  shippingCost      Decimal        @default(0) @map("shipping_cost") @db.Decimal(10, 2)
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+  address           UserAddress?   @relation(fields: [addressId], references: [id])
+  order             Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("shipping")
+}
+
+model Return {
+  id           String   @id @default(cuid())
+  orderId      String   @map("order_id")
+  userId       String   @map("user_id")
+  reason       String
+  description  String?
+  status       String   @default("pending")
+  refundAmount Decimal? @map("refund_amount") @db.Decimal(10, 2)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("returns")
+}
+
+model StockNotification {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  productId  String   @map("product_id")
+  email      String
+  isNotified Boolean  @default(false) @map("is_notified")
+  createdAt  DateTime @default(now()) @map("created_at")
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("stock_notifications")
+}
+
+model ProductReview {
+  id                 String   @id @default(cuid())
+  productId          String   @map("product_id")
+  userId             String   @map("user_id")
+  orderId            String?  @map("order_id")
+  rating             Int
+  title              String?
+  comment            String?
+  isVerifiedPurchase Boolean  @default(false) @map("is_verified_purchase")
+  isApproved         Boolean  @default(false) @map("is_approved")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+  order              Order?   @relation(fields: [orderId], references: [id])
+  product            Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("product_reviews")
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  productId String   @map("product_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("wishlist")
+}
+
+model AdminAuditLog {
+  id        String   @id @default(cuid())
+  adminId   String?  @map("admin_id")
+  action    String
+  tableName String?  @map("table_name")
+  recordId  String?  @map("record_id")
+  oldValues Json?    @map("old_values")
+  newValues Json?    @map("new_values")
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  createdAt DateTime @default(now()) @map("created_at")
+  admin     User?    @relation(fields: [adminId], references: [id])
+
+  @@map("admin_audit_log")
+}
+
 enum UserRole {
   customer
   seller
@@ -51,339 +349,4 @@ enum ShippingStatus {
   in_transit
   delivered
   returned
-}
-
-// Models
-model User {
-  id         String   @id @default(cuid())
-  email      String   @unique
-  phone      String?  @unique
-  firstName  String   @map("first_name")
-  lastName   String   @map("last_name")
-  role       UserRole @default(customer)
-  avatarUrl  String?  @map("avatar_url")
-  isVerified Boolean  @default(false) @map("is_verified")
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
-
-  // Relations
-  addresses        UserAddress[]
-  products        Product[]       @relation("SellerProducts")
-  orders          Order[]         @relation("UserOrders")
-  sellerOrders    Order[]         @relation("SellerOrders")
-  cartItems       CartItem[]
-  reviews         ProductReview[]
-  wishlist        Wishlist[]
-  stockNotifications StockNotification[]
-  returns         Return[]
-  auditLogs       AdminAuditLog[]
-
-  @@map("users")
-}
-
-model UserAddress {
-  id          String   @id @default(cuid())
-  userId      String   @map("user_id")
-  addressLine1 String  @map("address_line_1")
-  addressLine2 String? @map("address_line_2")
-  city        String
-  state       String
-  postalCode  String?  @map("postal_code")
-  country     String   @default("Kenya")
-  isDefault   Boolean  @default(false) @map("is_default")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  // Relations
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  shipping Shipping[]
-
-  @@map("user_addresses")
-}
-
-model Category {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
-  description String?
-  imageUrl    String?  @map("image_url")
-  parentId    String?  @map("parent_id")
-  isActive    Boolean  @default(true) @map("is_active")
-  sortOrder   Int      @default(0) @map("sort_order")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  // Relations
-  parent     Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
-  children   Category[] @relation("CategoryHierarchy")
-  products   Product[]
-
-  @@map("categories")
-}
-
-model Product {
-  id                 String        @id @default(cuid())
-  sellerId           String        @map("seller_id")
-  categoryId         String?       @map("category_id")
-  name               String
-  slug               String        @unique
-  description        String?
-  shortDescription   String?       @map("short_description")
-  price              Decimal       @db.Decimal(10, 2)
-  comparePrice       Decimal?      @db.Decimal(10, 2) @map("compare_price")
-  costPrice          Decimal?      @db.Decimal(10, 2) @map("cost_price")
-  stockQuantity      Int           @default(0) @map("stock_quantity")
-  lowStockThreshold  Int           @default(5) @map("low_stock_threshold")
-  sku                String?       @unique
-  barcode            String?
-  weightKg           Decimal?      @db.Decimal(5, 2) @map("weight_kg")
-  dimensionsCm       String?       @map("dimensions_cm")
-  status             ProductStatus @default(draft)
-  isFeatured         Boolean       @default(false) @map("is_featured")
-  isBestseller       Boolean       @default(false) @map("is_bestseller")
-  metaTitle          String?       @map("meta_title")
-  metaDescription    String?       @map("meta_description")
-  tags               String[]
-  createdAt          DateTime      @default(now()) @map("created_at")
-  updatedAt          DateTime      @updatedAt @map("updated_at")
-
-  // Relations
-  seller             User              @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
-  category           Category?         @relation(fields: [categoryId], references: [id])
-  images             ProductImage[]
-  variants           ProductVariant[]
-  cartItems          CartItem[]
-  orderItems         OrderItem[]
-  reviews            ProductReview[]
-  wishlist           Wishlist[]
-  stockNotifications StockNotification[]
-
-  @@map("products")
-}
-
-model ProductImage {
-  id         String   @id @default(cuid())
-  productId  String   @map("product_id")
-  imageUrl   String   @map("image_url")
-  altText    String?  @map("alt_text")
-  isPrimary  Boolean  @default(false) @map("is_primary")
-  sortOrder  Int      @default(0) @map("sort_order")
-  createdAt  DateTime @default(now()) @map("created_at")
-
-  // Relations
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  @@map("product_images")
-}
-
-model ProductVariant {
-  id            String   @id @default(cuid())
-  productId     String   @map("product_id")
-  name          String
-  value         String
-  priceAdjustment Decimal @default(0) @db.Decimal(10, 2) @map("price_adjustment")
-  stockQuantity Int      @default(0) @map("stock_quantity")
-  sku           String?
-  createdAt     DateTime @default(now()) @map("created_at")
-
-  // Relations
-  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
-  cartItems  CartItem[]
-  orderItems OrderItem[]
-
-  @@map("product_variants")
-}
-
-model CartItem {
-  id         String   @id @default(cuid())
-  userId     String   @map("user_id")
-  productId  String   @map("product_id")
-  variantId  String?  @map("variant_id")
-  quantity   Int
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
-
-  // Relations
-  user    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  product Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
-  variant ProductVariant? @relation(fields: [variantId], references: [id])
-
-  @@unique([userId, productId, variantId])
-  @@map("cart_items")
-}
-
-model Order {
-  id             String      @id @default(cuid())
-  orderNumber    String      @unique @map("order_number")
-  userId         String      @map("user_id")
-  sellerId       String?     @map("seller_id")
-  status         OrderStatus @default(pending)
-  subtotal       Decimal     @db.Decimal(10, 2)
-  taxAmount      Decimal     @default(0) @db.Decimal(10, 2) @map("tax_amount")
-  shippingAmount Decimal     @default(0) @db.Decimal(10, 2) @map("shipping_amount")
-  discountAmount Decimal     @default(0) @db.Decimal(10, 2) @map("discount_amount")
-  totalAmount    Decimal     @db.Decimal(10, 2) @map("total_amount")
-  currency       String      @default("KES")
-  notes          String?
-  createdAt      DateTime    @default(now()) @map("created_at")
-  updatedAt      DateTime    @updatedAt @map("updated_at")
-
-  // Relations
-  user           User           @relation("UserOrders", fields: [userId], references: [id], onDelete: Cascade)
-  seller         User?          @relation("SellerOrders", fields: [sellerId], references: [id])
-  items          OrderItem[]
-  payments       Payment[]
-  shipping       Shipping[]
-  returns        Return[]
-  reviews        ProductReview[]
-
-  @@map("orders")
-}
-
-model OrderItem {
-  id          String   @id @default(cuid())
-  orderId     String   @map("order_id")
-  productId   String?  @map("product_id")
-  variantId   String?  @map("variant_id")
-  productName String   @map("product_name")
-  productSku  String?  @map("product_sku")
-  quantity    Int
-  unitPrice   Decimal  @db.Decimal(10, 2) @map("unit_price")
-  totalPrice  Decimal  @db.Decimal(10, 2) @map("total_price")
-  createdAt   DateTime @default(now()) @map("created_at")
-
-  // Relations
-  order   Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product Product?        @relation(fields: [productId], references: [id])
-  variant ProductVariant? @relation(fields: [variantId], references: [id])
-
-  @@map("order_items")
-}
-
-model Payment {
-  id              String        @id @default(cuid())
-  orderId         String        @map("order_id")
-  amount          Decimal       @db.Decimal(10, 2)
-  currency        String        @default("KES")
-  method          PaymentMethod
-  status          PaymentStatus @default(pending)
-  transactionId   String?       @map("transaction_id")
-  mpesaPhone      String?       @map("mpesa_phone")
-  mpesaReference  String?       @map("mpesa_reference")
-  gatewayResponse Json?         @map("gateway_response")
-  createdAt       DateTime      @default(now()) @map("created_at")
-  updatedAt       DateTime      @updatedAt @map("updated_at")
-
-  // Relations
-  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
-
-  @@map("payments")
-}
-
-model Shipping {
-  id                String         @id @default(cuid())
-  orderId           String         @map("order_id")
-  addressId         String?        @map("address_id")
-  trackingNumber    String?        @map("tracking_number")
-  carrier           String?
-  status            ShippingStatus @default(pending)
-  estimatedDelivery DateTime?      @map("estimated_delivery")
-  actualDelivery    DateTime?      @map("actual_delivery")
-  shippingCost      Decimal        @default(0) @db.Decimal(10, 2) @map("shipping_cost")
-  createdAt         DateTime       @default(now()) @map("created_at")
-  updatedAt         DateTime       @updatedAt @map("updated_at")
-
-  // Relations
-  order   Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  address UserAddress? @relation(fields: [addressId], references: [id])
-
-  @@map("shipping")
-}
-
-model Return {
-  id           String   @id @default(cuid())
-  orderId      String   @map("order_id")
-  userId       String   @map("user_id")
-  reason       String
-  description  String?
-  status       String   @default("pending")
-  refundAmount Decimal? @db.Decimal(10, 2) @map("refund_amount")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-
-  // Relations
-  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("returns")
-}
-
-model StockNotification {
-  id         String   @id @default(cuid())
-  userId     String   @map("user_id")
-  productId  String   @map("product_id")
-  email      String
-  isNotified Boolean  @default(false) @map("is_notified")
-  createdAt  DateTime @default(now()) @map("created_at")
-
-  // Relations
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, productId])
-  @@map("stock_notifications")
-}
-
-model ProductReview {
-  id                String   @id @default(cuid())
-  productId         String   @map("product_id")
-  userId            String   @map("user_id")
-  orderId           String?  @map("order_id")
-  rating            Int
-  title             String?
-  comment           String?
-  isVerifiedPurchase Boolean @default(false) @map("is_verified_purchase")
-  isApproved        Boolean  @default(false) @map("is_approved")
-  createdAt         DateTime @default(now()) @map("created_at")
-  updatedAt         DateTime @updatedAt @map("updated_at")
-
-  // Relations
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  order   Order?  @relation(fields: [orderId], references: [id])
-
-  @@unique([userId, productId])
-  @@map("product_reviews")
-}
-
-model Wishlist {
-  id        String   @id @default(cuid())
-  userId    String   @map("user_id")
-  productId String   @map("product_id")
-  createdAt DateTime @default(now()) @map("created_at")
-
-  // Relations
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, productId])
-  @@map("wishlist")
-}
-
-model AdminAuditLog {
-  id        String   @id @default(cuid())
-  adminId   String?  @map("admin_id")
-  action    String
-  tableName String?  @map("table_name")
-  recordId  String?  @map("record_id")
-  oldValues Json?    @map("old_values")
-  newValues Json?    @map("new_values")
-  ipAddress String?  @map("ip_address")
-  userAgent String?  @map("user_agent")
-  createdAt DateTime @default(now()) @map("created_at")
-
-  // Relations
-  admin User? @relation(fields: [adminId], references: [id])
-
-  @@map("admin_audit_log")
 }
