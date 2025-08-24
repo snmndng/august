@@ -111,9 +111,24 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
-
+          </div>
+          
           {/* Chat Widget */}
           <ChatWidget />
-        </div>
+          
+          {/* Additional Components */}
+          <CartSidebar />
+          <WhatsAppButton />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: '#333',
+                color: '#fff',
+              },
+            }}
+          />
+        </Providers>
       </body>
     </html>
