@@ -47,12 +47,15 @@ export default function AdminChatPage() {
     if (selectedRoom) {
       loadMessages();
 
-      // Subscribe to new messages
-      const channel = chatService.subscribeToMessages(selectedRoom.id, (message) => {
+      const cleanup = chatService.subscribeToMessages(selectedRoom.id, (message) => {
         setMessages(prev => [...prev, message]);
       });
 
-      return () => channel?.unsubscribe();
+      return () => {
+        if (cleanup) {
+          cleanup();
+        }
+      };
     }
   }, [selectedRoom]);
 

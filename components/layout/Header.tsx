@@ -10,7 +10,7 @@ import UserMenu from '@/components/common/UserMenu';
 import { MobileMenu } from '@/components/layout/MobileMenu';
 import { CartIcon } from '@/components/common/CartIcon';
 
-export function Header(): JSX.Element {
+export default function Header() {
   const { isAuthenticated } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

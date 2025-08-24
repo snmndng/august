@@ -8,7 +8,7 @@ interface WhatsAppButtonProps {
   className?: string;
 }
 
-export function WhatsAppButton({ 
+export default function WhatsAppButton({ 
   phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '+254797923313',
   message = process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || "Hi! I'm interested in your products.",
   className = ''

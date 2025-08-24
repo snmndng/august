@@ -4,7 +4,7 @@ import { X, Trash2, Minus, Plus, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import Link from 'next/link';
 
-export function CartSidebar(): JSX.Element | null {
+export default function CartSidebar(): JSX.Element | null {
   const { state, removeItem, updateQuantity, clearCart, closeCart } = useCart();
 
   const formatPrice = (price: number | string | any): string => {
