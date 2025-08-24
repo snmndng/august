@@ -56,7 +56,7 @@ class ChatService {
     }
 
     return data || [];
-  },
+  }
 
   // Update agent availability
   async updateAgentAvailability(isAvailable: boolean, statusMessage?: string): Promise<void> {
@@ -81,7 +81,7 @@ class ChatService {
     if (error) {
       throw error;
     }
-  },
+  }
 
   // Create a new chat room
   async createChatRoom(subject?: string, priority: 'low' | 'normal' | 'high' | 'urgent' = 'normal'): Promise<ChatRoom | null> {

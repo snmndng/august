@@ -22,8 +22,10 @@ export default function AdminChatPage() {
   useEffect(() => {
     if (!user || !['admin', 'seller'].includes(userRole || '')) {
       router.push('/dashboard');
+      // Explicitly return here as the effect's job is done if access is denied.
       return;
     }
+    // No return value needed if access is granted and the effect does nothing else.
   }, [user, userRole, router]);
 
   useEffect(() => {
@@ -36,7 +38,7 @@ export default function AdminChatPage() {
 
       return () => clearInterval(interval);
     }
-    
+
     // Return empty cleanup function when condition is false
     return () => {};
   }, [user, userRole]);
@@ -139,9 +141,9 @@ export default function AdminChatPage() {
   };
 
   const formatTime = (timestamp: string) => {
-    return new Date(timestamp).toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return new Date(timestamp).toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
 
