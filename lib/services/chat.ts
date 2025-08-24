@@ -203,19 +203,26 @@ class ChatService {
         },
         async (payload) => {
           // Fetch the complete message with sender info
-          if (!supabase) return;
+          if (!supabase) {
+            console.warn('Supabase client not available for message subscription');
+            return;
+          }
           
-          const { data } = await supabase
-            .from('chat_messages')
-            .select(`
-              *,
-              sender:users!chat_messages_sender_id_fkey(first_name, last_name, role)
-            `)
-            .eq('id', payload.new.id)
-            .single();
+          try {
+            const { data } = await supabase
+              .from('chat_messages')
+              .select(`
+                *,
+                sender:users!chat_messages_sender_id_fkey(first_name, last_name, role)
+              `)
+              .eq('id', payload.new.id)
+              .single();
 
-          if (data) {
-            onMessage(data);
+            if (data) {
+              onMessage(data);
+            }
+          } catch (error) {
+            console.error('Error fetching message in subscription:', error);
           }
         }
       )
