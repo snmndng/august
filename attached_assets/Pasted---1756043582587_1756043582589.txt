@@ -1,0 +1,69 @@
+                                                                                                   ─╯
+
+> luxiormall@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.0
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: /home/portgas/luxiorMall/node_modules/next-pwa/register.js
+> [PWA] Service worker: /home/portgas/luxiorMall/public/sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+ ⚠ Compiled with warnings in 9.4s
+
+./app/layout.tsx
+Attempted import error: '@/components/providers' does not contain a default export (imported as 'Providers').
+
+Import trace for requested module:
+./app/layout.tsx
+
+./app/layout.tsx
+Attempted import error: '@/components/layout/Header' does not contain a default export (imported as 'Header').
+
+Import trace for requested module:
+./app/layout.tsx
+
+./app/layout.tsx
+Attempted import error: '@/components/layout/Footer' does not contain a default export (imported as 'Footer').
+
+Import trace for requested module:
+./app/layout.tsx
+
+./app/layout.tsx
+Attempted import error: '@/components/cart/CartSidebar' does not contain a default export (imported as 'CartSidebar').
+
+Import trace for requested module:
+./app/layout.tsx
+
+./app/layout.tsx
+Attempted import error: '@/components/common/WhatsAppButton' does not contain a default export (imported as 'WhatsAppButton').
+
+Import trace for requested module:
+./app/layout.tsx
+
+   Linting and checking validity of types  ..Failed to compile.
+
+./app/admin/chat/page.tsx:46:13
+Type error: Argument of type '() => (() => Promise<"error" | "ok" | "timed out"> | undefined) | undefined' is not assignable to parameter of type 'EffectCallback'.
+  Type '(() => Promise<"error" | "ok" | "timed out"> | undefined) | undefined' is not assignable to type 'void | Destructor'.
+    Type '() => Promise<"error" | "ok" | "timed out"> | undefined' is not assignable to type 'void | Destructor'.
+      Type '() => Promise<"error" | "ok" | "timed out"> | undefined' is not assignable to type 'Destructor'.
+        Type 'Promise<"error" | "ok" | "timed out"> | undefined' is not assignable to type 'void | { [UNDEFINED_VOID_ONLY]: never; }'.
+          Type 'Promise<"error" | "ok" | "timed out">' is not assignable to type 'void | { [UNDEFINED_VOID_ONLY]: never; }'.
+
+  44 |   }, [user, userRole]);
+  45 |
+> 46 |   useEffect(() => {
+     |             ^
+  47 |     if (selectedRoom) {
+  48 |       loadMessages();
+  49 |
+Next.js build worker exited with code: 1 and signal: null
+
+╭─ ~/luxiorMall  on main ───────────────────────────────────────────────────────── 1 ✘  took 20s  at 16:51:43 ─╮
+╰─                                                       
