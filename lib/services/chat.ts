@@ -203,6 +203,8 @@ class ChatService {
         },
         async (payload) => {
           // Fetch the complete message with sender info
+          if (!supabase) return;
+          
           const { data } = await supabase
             .from('chat_messages')
             .select(`
