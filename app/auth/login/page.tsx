@@ -16,8 +16,52 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { signIn } = useAuth();
+  const { signIn, isAuthenticated, user, signOut } = useAuth();
   const router = useRouter();
+
+  // If user is already logged in, show different content
+  if (isAuthenticated && user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          <div className="text-center">
+            <div className="mx-auto h-12 w-12 bg-gradient-to-br from-luxior-deep-orange to-luxior-orange rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-xl">L</span>
+            </div>
+            <h2 className="mt-6 text-3xl font-bold text-gray-900">Already Signed In</h2>
+            <p className="mt-2 text-sm text-gray-600">
+              You are already logged in as {user.first_name} {user.last_name}
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-soft p-8 text-center space-y-6">
+            <div className="space-y-4">
+              <button
+                onClick={() => router.push('/dashboard')}
+                className="btn-primary w-full py-3 text-lg"
+              >
+                Go to Dashboard
+              </button>
+              
+              <button
+                onClick={() => router.push('/')}
+                className="btn-secondary w-full py-3 text-lg"
+              >
+                Go to Home
+              </button>
+              
+              <button
+                onClick={signOut}
+                className="text-luxior-deep-orange hover:text-luxior-orange font-medium"
+              >
+                Sign out and login as different user
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
