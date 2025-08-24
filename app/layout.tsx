@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
@@ -132,3 +133,5 @@ export default function RootLayout({
         </Providers>
       </body>
     </html>
+  )
+}
