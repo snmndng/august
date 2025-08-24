@@ -183,6 +183,10 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           // Still return success as user was created in auth
         }
 
+        // Load user profile and redirect to dashboard
+        await loadUserProfile(data.user.id);
+        router.push('/dashboard');
+
         return { success: true };
       }
 

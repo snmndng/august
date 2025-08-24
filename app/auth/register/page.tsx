@@ -53,10 +53,8 @@ export default function RegisterPage() {
     );
 
     if (result.success) {
-      setSuccess('Account created successfully! Please check your email to verify your account.');
-      setTimeout(() => {
-        router.push('/auth/login');
-      }, 3000);
+      setSuccess('Account created successfully! Signing you in...');
+      // User will be automatically redirected by AuthContext
     } else {
       setError(result.error || 'Registration failed. Please try again.');
     }
