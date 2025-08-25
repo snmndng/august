@@ -251,6 +251,7 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
           )}
         </button>
       </div>
+      </div>
 
       {/* Animated border on hover */}
       <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-luxior-deep-orange via-luxior-orange to-luxior-peach opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none" style={{padding: '1px'}}>
