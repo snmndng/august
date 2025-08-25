@@ -45,6 +45,16 @@ export default function AdminOrdersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [dateFilter, setDateFilter] = useState('all');
+  const [stats, setStats] = useState({
+    total: 0,
+    pending: 0,
+    shipped: 0,
+    totalRevenue: 0
+  });
+  const [pagination, setPagination] = useState({
+    page: 1,
+    totalPages: 1
+  });
 
   useEffect(() => {
     if (!isLoading) {
@@ -56,58 +66,47 @@ export default function AdminOrdersPage() {
     }
   }, [isAuthenticated, isAdmin, isLoading, router]);
 
+  // Reload orders when filters change
+  useEffect(() => {
+    if (!isLoading && isAuthenticated && isAdmin) {
+      const timeoutId = setTimeout(() => {
+        loadOrders();
+      }, 500); // debounce search
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [searchTerm, statusFilter, pagination.page]);
+
   const loadOrders = async () => {
     try {
       setLoading(true);
-      // TODO: Implement order loading from API
-      // const response = await fetch('/api/admin/orders');
-      // const data = await response.json();
-      // setOrders(data);
       
-      // Mock data for now
-      setOrders([
-        {
-          id: 'ORD-001',
-          customer: {
-            name: 'John Doe',
-            email: 'john@example.com'
-          },
-          total: 97000,
-          status: 'pending',
-          payment_status: 'completed',
-          items_count: 3,
-          created_at: '2024-01-20T10:30:00Z',
-          shipping_address: 'Nairobi, Kenya'
-        },
-        {
-          id: 'ORD-002',
-          customer: {
-            name: 'Jane Smith',
-            email: 'jane@example.com'
-          },
-          total: 12000,
-          status: 'shipped',
-          payment_status: 'completed',
-          items_count: 1,
-          created_at: '2024-01-19T14:20:00Z',
-          shipping_address: 'Mombasa, Kenya'
-        },
-        {
-          id: 'ORD-003',
-          customer: {
-            name: 'Bob Johnson',
-            email: 'bob@example.com'
-          },
-          total: 45000,
-          status: 'delivered',
-          payment_status: 'completed',
-          items_count: 2,
-          created_at: '2024-01-18T09:15:00Z',
-          shipping_address: 'Kisumu, Kenya'
-        }
-      ]);
+      const params = new URLSearchParams({
+        page: pagination.page.toString(),
+        search: searchTerm,
+        status: statusFilter
+      });
+      
+      const response = await fetch(`/api/admin/orders?${params}`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch orders');
+      }
+      
+      const data = await response.json();
+      
+      setOrders(data.orders);
+      setStats(data.stats);
+      setPagination({
+        page: data.pagination.page,
+        totalPages: data.pagination.totalPages
+      });
+      
     } catch (error) {
       console.error('Error loading orders:', error);
+      // Fallback to empty state on error
+      setOrders([]);
+      setStats({ total: 0, pending: 0, shipped: 0, totalRevenue: 0 });
     } finally {
       setLoading(false);
     }
@@ -182,7 +181,7 @@ export default function AdminOrdersPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Total Orders</p>
-              <p className="text-2xl font-bold text-gray-900">{orders.length}</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
             </div>
             <ShoppingCart className="w-8 h-8 text-blue-500" />
           </div>
@@ -193,7 +192,7 @@ export default function AdminOrdersPage() {
             <div>
               <p className="text-sm text-gray-600">Pending Orders</p>
               <p className="text-2xl font-bold text-yellow-600">
-                {orders.filter(o => o.status === 'pending').length}
+                {stats.pending}
               </p>
             </div>
             <Clock className="w-8 h-8 text-yellow-500" />
@@ -205,7 +204,7 @@ export default function AdminOrdersPage() {
             <div>
               <p className="text-sm text-gray-600">Shipped Orders</p>
               <p className="text-2xl font-bold text-blue-600">
-                {orders.filter(o => o.status === 'shipped').length}
+                {stats.shipped}
               </p>
             </div>
             <Truck className="w-8 h-8 text-blue-500" />
@@ -217,7 +216,7 @@ export default function AdminOrdersPage() {
             <div>
               <p className="text-sm text-gray-600">Total Revenue</p>
               <p className="text-2xl font-bold text-green-600">
-                KES {orders.reduce((sum, order) => sum + order.total, 0).toLocaleString()}
+                KES {stats.totalRevenue.toLocaleString()}
               </p>
             </div>
             <DollarSign className="w-8 h-8 text-green-500" />
@@ -312,7 +311,7 @@ export default function AdminOrdersPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
                         <div className="text-sm font-medium text-gray-900">
-                          {order.id}
+                          {order.orderNumber}
                         </div>
                         <div className="text-sm text-gray-500">
                           {order.items_count} item(s)

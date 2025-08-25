@@ -39,6 +39,16 @@ export default function AdminProductsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [stats, setStats] = useState({
+    total: 0,
+    active: 0,
+    lowStock: 0,
+    outOfStock: 0
+  });
+  const [pagination, setPagination] = useState({
+    page: 1,
+    totalPages: 1
+  });
 
   useEffect(() => {
     if (!isLoading) {
@@ -50,43 +60,48 @@ export default function AdminProductsPage() {
     }
   }, [isAuthenticated, isAdmin, isLoading, router]);
 
+  // Reload products when filters change
+  useEffect(() => {
+    if (!isLoading && isAuthenticated && isAdmin) {
+      const timeoutId = setTimeout(() => {
+        loadProducts();
+      }, 500); // debounce search
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [searchTerm, statusFilter, categoryFilter, pagination.page]);
+
   const loadProducts = async () => {
     try {
       setLoading(true);
-      // TODO: Implement product loading from API
-      // const response = await fetch('/api/admin/products');
-      // const data = await response.json();
-      // setProducts(data);
       
-      // Mock data for now
-      setProducts([
-        {
-          id: '1',
-          name: 'Premium Laptop',
-          description: 'High-performance laptop for professionals',
-          price: 85000,
-          stock: 15,
-          category: 'Electronics',
-          status: 'active',
-          seller: 'Tech Store',
-          created_at: '2024-01-15',
-          image_url: '/api/placeholder/300/300'
-        },
-        {
-          id: '2',
-          name: 'Running Shoes',
-          description: 'Comfortable running shoes for athletes',
-          price: 12000,
-          stock: 0,
-          category: 'Shoes',
-          status: 'active',
-          seller: 'Sports World',
-          created_at: '2024-01-10',
-          image_url: '/api/placeholder/300/300'
-        }
-      ]);
+      const params = new URLSearchParams({
+        page: pagination.page.toString(),
+        search: searchTerm,
+        status: statusFilter,
+        category: categoryFilter
+      });
+      
+      const response = await fetch(`/api/admin/products?${params}`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch products');
+      }
+      
+      const data = await response.json();
+      
+      setProducts(data.products);
+      setStats(data.stats);
+      setPagination({
+        page: data.pagination.page,
+        totalPages: data.pagination.totalPages
+      });
+      
     } catch (error) {
       console.error('Error loading products:', error);
+      // Fallback to empty state on error
+      setProducts([]);
+      setStats({ total: 0, active: 0, lowStock: 0, outOfStock: 0 });
     } finally {
       setLoading(false);
     }
@@ -141,7 +156,7 @@ export default function AdminProductsPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Total Products</p>
-              <p className="text-2xl font-bold text-gray-900">{products.length}</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
             </div>
             <Package className="w-8 h-8 text-blue-500" />
           </div>
@@ -152,7 +167,7 @@ export default function AdminProductsPage() {
             <div>
               <p className="text-sm text-gray-600">Active Products</p>
               <p className="text-2xl font-bold text-green-600">
-                {products.filter(p => p.status === 'active').length}
+                {stats.active}
               </p>
             </div>
             <CheckCircle className="w-8 h-8 text-green-500" />
@@ -164,7 +179,7 @@ export default function AdminProductsPage() {
             <div>
               <p className="text-sm text-gray-600">Low Stock</p>
               <p className="text-2xl font-bold text-yellow-600">
-                {products.filter(p => p.stock > 0 && p.stock < 10).length}
+                {stats.lowStock}
               </p>
             </div>
             <AlertTriangle className="w-8 h-8 text-yellow-500" />
@@ -176,7 +191,7 @@ export default function AdminProductsPage() {
             <div>
               <p className="text-sm text-gray-600">Out of Stock</p>
               <p className="text-2xl font-bold text-red-600">
-                {products.filter(p => p.stock === 0).length}
+                {stats.outOfStock}
               </p>
             </div>
             <AlertTriangle className="w-8 h-8 text-red-500" />
