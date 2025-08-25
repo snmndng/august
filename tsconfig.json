@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "exactOptionalPropertyTypes": false,
     "target": "ES2020",
     "lib": ["dom", "dom.iterable", "ES6"],
     "allowJs": true,
