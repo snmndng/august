@@ -6,66 +6,82 @@ async function main() {
   console.log('🌱 Starting database seeding...')
 
   // Create categories
-  console.log('📂 Creating categories...')
+  console.log('📂 Creating/updating categories...')
   const categories = await Promise.all([
-    prisma.category.create({
-      data: {
+    prisma.category.upsert({
+      where: { slug: 'shoes' },
+      update: {},
+      create: {
         name: 'Shoes',
         slug: 'shoes',
         description: 'Premium footwear for all occasions',
         sortOrder: 1,
       },
     }),
-    prisma.category.create({
-      data: {
+    prisma.category.upsert({
+      where: { slug: 'fashion' },
+      update: {},
+      create: {
         name: 'Fashion',
         slug: 'fashion',
         description: 'Trendy clothing and accessories',
         sortOrder: 2,
       },
     }),
-    prisma.category.create({
-      data: {
+    prisma.category.upsert({
+      where: { slug: 'laptops' },
+      update: {},
+      create: {
         name: 'Laptops',
         slug: 'laptops',
         description: 'High-performance computing devices',
         sortOrder: 3,
       },
     }),
-    prisma.category.create({
-      data: {
+    prisma.category.upsert({
+      where: { slug: 'electronics' },
+      update: {},
+      create: {
         name: 'Electronics',
         slug: 'electronics',
         description: 'Latest gadgets and devices',
         sortOrder: 4,
       },
     }),
-    prisma.category.create({
-      data: {
+    prisma.category.upsert({
+      where: { slug: 'home-living' },
+      update: {},
+      create: {
         name: 'Home & Living',
         slug: 'home-living',
         description: 'Comfort and style for your home',
         sortOrder: 5,
       },
     }),
-    prisma.category.create({
-      data: {
+    prisma.category.upsert({
+      where: { slug: 'sports-fitness' },
+      update: {},
+      create: {
         name: 'Sports & Fitness',
         slug: 'sports-fitness',
         description: 'Equipment for active lifestyle',
         sortOrder: 6,
       },
     }),
-    prisma.category.create({
-      data: {
+    prisma.category.upsert({
+      where: { slug: 'beauty-health' },
+      update: {},
+      create: {
         name: 'Beauty & Health',
         slug: 'beauty-health',
         description: 'Personal care and wellness',
         sortOrder: 7,
       },
     }),
-    prisma.category.create({
-      data: {
+    prisma.category.upsert({
+      where: { slug: 'books-media' },
+      update: {},
+      create: {
         name: 'Books & Media',
         slug: 'books-media',
         description: 'Knowledge and entertainment',
@@ -74,12 +90,14 @@ async function main() {
     }),
   ])
 
-  console.log(`✅ Created ${categories.length} categories`)
+  console.log(`✅ Created/updated ${categories.length} categories`)
 
   // Create a sample seller user
-  console.log('👤 Creating sample seller user...')
-  const seller = await prisma.user.create({
-    data: {
+  console.log('👤 Creating/updating sample seller user...')
+  const seller = await prisma.user.upsert({
+    where: { email: 'seller@luxiormall.com' },
+    update: {},
+    create: {
       email: 'seller@luxiormall.com',
       firstName: 'Sample',
       lastName: 'Seller',
@@ -88,21 +106,23 @@ async function main() {
     },
   })
 
-  console.log(`✅ Created seller user: ${seller.email}`)
+  console.log(`✅ Created/updated seller user: ${seller.email}`)
 
   // Create sample products
-  console.log('🛍️ Creating sample products...')
-  
+  console.log('🛍️ Creating/updating sample products...')
+
   // Helper function to safely get category ID
   const getCategoryId = (slug: string) => {
     const category = categories.find(c => c.slug === slug)
     return category?.id || null
   }
-  
+
   const products = await Promise.all([
     // Shoes
-    prisma.product.create({
-      data: {
+    prisma.product.upsert({
+      where: { slug: 'premium-leather-sneakers' },
+      update: {},
+      create: {
         sellerId: seller.id,
         categoryId: getCategoryId('shoes'),
         name: 'Premium Leather Sneakers',
@@ -136,8 +156,10 @@ async function main() {
     }),
 
     // Running Shoes
-    prisma.product.create({
-      data: {
+    prisma.product.upsert({
+      where: { slug: 'running-shoes-pro' },
+      update: {},
+      create: {
         sellerId: seller.id,
         categoryId: getCategoryId('shoes'),
         name: 'Running Shoes Pro',
@@ -165,8 +187,10 @@ async function main() {
     }),
 
     // Fashion
-    prisma.product.create({
-      data: {
+    prisma.product.upsert({
+      where: { slug: 'classic-denim-jacket' },
+      update: {},
+      create: {
         sellerId: seller.id,
         categoryId: getCategoryId('fashion'),
         name: 'Classic Denim Jacket',
@@ -194,8 +218,10 @@ async function main() {
     }),
 
     // Laptops
-    prisma.product.create({
-      data: {
+    prisma.product.upsert({
+      where: { slug: 'gaming-laptop-pro' },
+      update: {},
+      create: {
         sellerId: seller.id,
         categoryId: getCategoryId('laptops'),
         name: 'Gaming Laptop Pro',
@@ -223,8 +249,10 @@ async function main() {
     }),
 
     // Electronics
-    prisma.product.create({
-      data: {
+    prisma.product.upsert({
+      where: { slug: 'wireless-bluetooth-headphones' },
+      update: {},
+      create: {
         sellerId: seller.id,
         categoryId: getCategoryId('electronics'),
         name: 'Wireless Bluetooth Headphones',
@@ -252,14 +280,16 @@ async function main() {
     }),
   ])
 
-  console.log(`✅ Created ${products.length} products`)
+  console.log(`✅ Created/updated ${products.length} products`)
 
   // Create product variants for some products
-  console.log('🔧 Creating product variants...')
+  console.log('🔧 Creating/updating product variants...')
   const variants = await Promise.all([
     // Sneaker sizes
-    prisma.productVariant.create({
-      data: {
+    prisma.productVariant.upsert({
+      where: { sku: 'PLS-42' },
+      update: {},
+      create: {
         productId: products.find(p => p.slug === 'premium-leather-sneakers')?.id!,
         name: 'Size',
         value: '42',
@@ -267,8 +297,10 @@ async function main() {
         sku: 'PLS-42',
       },
     }),
-    prisma.productVariant.create({
-      data: {
+    prisma.productVariant.upsert({
+      where: { sku: 'PLS-43' },
+      update: {},
+      create: {
         productId: products.find(p => p.slug === 'premium-leather-sneakers')?.id!,
         name: 'Size',
         value: '43',
@@ -276,8 +308,10 @@ async function main() {
         sku: 'PLS-43',
       },
     }),
-    prisma.productVariant.create({
-      data: {
+    prisma.productVariant.upsert({
+      where: { sku: 'PLS-44' },
+      update: {},
+      create: {
         productId: products.find(p => p.slug === 'premium-leather-sneakers')?.id!,
         name: 'Size',
         value: '44',
@@ -287,8 +321,10 @@ async function main() {
     }),
 
     // Jacket sizes
-    prisma.productVariant.create({
-      data: {
+    prisma.productVariant.upsert({
+      where: { sku: 'CDJ-M' },
+      update: {},
+      create: {
         productId: products.find(p => p.slug === 'classic-denim-jacket')?.id!,
         name: 'Size',
         value: 'M',
@@ -296,8 +332,10 @@ async function main() {
         sku: 'CDJ-M',
       },
     }),
-    prisma.productVariant.create({
-      data: {
+    prisma.productVariant.upsert({
+      where: { sku: 'CDJ-L' },
+      update: {},
+      create: {
         productId: products.find(p => p.slug === 'classic-denim-jacket')?.id!,
         name: 'Size',
         value: 'L',
@@ -305,8 +343,10 @@ async function main() {
         sku: 'CDJ-L',
       },
     }),
-    prisma.productVariant.create({
-      data: {
+    prisma.productVariant.upsert({
+      where: { sku: 'CDJ-XL' },
+      update: {},
+      create: {
         productId: products.find(p => p.slug === 'classic-denim-jacket')?.id!,
         name: 'Size',
         value: 'XL',
@@ -316,7 +356,7 @@ async function main() {
     }),
   ])
 
-  console.log(`✅ Created ${variants.length} product variants`)
+  console.log(`✅ Created/updated ${variants.length} product variants`)
 
   console.log('🎉 Database seeding completed successfully!')
   console.log(`📊 Summary:`)
