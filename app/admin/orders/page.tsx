@@ -20,11 +20,27 @@ import {
   XCircle
 } from 'lucide-react';
 
+interface OrderCustomer {
+  name: string;
+  email: string;
+}
+
+interface Order {
+  id: string;
+  customer: OrderCustomer;
+  total: number;
+  status: string;
+  payment_status: string;
+  items_count: number;
+  created_at: string;
+  shipping_address: string;
+}
+
 export default function AdminOrdersPage() {
   const { isAuthenticated, isLoading } = useAuth();
   const isAdmin = useIsAdmin();
   const router = useRouter();
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
