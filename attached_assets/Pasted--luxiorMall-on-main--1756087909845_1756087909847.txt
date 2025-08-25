@@ -1,0 +1,56 @@
+─ ~/luxiorMall  on main ────────────────────────────────────────────────────────────────────── ✔  at 05:11:10 ─╮
+╰─ git pull origin main                                                                                              ─╯
+remote: Enumerating objects: 18, done.
+remote: Counting objects: 100% (18/18), done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 11 (delta 5), reused 11 (delta 5), pack-reused 0 (from 0)
+Unpacking objects: 100% (11/11), 2.30 KiB | 90.00 KiB/s, done.
+From https://github.com/snmndng/august
+ * branch            main       -> FETCH_HEAD
+   15f6657..891d9ab  main       -> origin/main
+Updating 15f6657..891d9ab
+Fast-forward
+ app/api/orders/guest/route.ts                                               | 22 ++++++++++-----------
+ attached_assets/Pasted--luxiorMall-on-main--1756087815011_1756087815013.txt | 39 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 50 insertions(+), 11 deletions(-)
+ create mode 100644 attached_assets/Pasted--luxiorMall-on-main--1756087815011_1756087815013.txt
+
+╭─ ~/luxiorMall  on main ────────────────────────────────────────────────────────────────────── ✔  at 05:11:13 ─╮
+╰─ npm run build                                                                                                     ─╯
+
+> luxiormall@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.0
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: /home/portgas/luxiorMall/node_modules/next-pwa/register.js
+> [PWA] Service worker: /home/portgas/luxiorMall/public/sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+ ✓ Compiled successfully in 8.0s
+   Linting and checking validity of types  .Failed to compile.
+
+./app/api/orders/guest/route.ts:58:15
+Type error: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "orders", never, "POST">', gave the following error.
+    Argument of type '{ user_id: string | null; guest_email: any; guest_name: string | null; guest_phone: any; shipping_address: string; total_amount: any; status: string; payment_status: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "orders", never, "POST">', gave the following error.
+    Argument of type '{ user_id: string | null; guest_email: any; guest_name: string | null; guest_phone: any; shipping_address: string; total_amount: any; status: string; payment_status: string; }' is not assignable to parameter of type 'never[]'.
+      Type '{ user_id: string | null; guest_email: any; guest_name: string | null; guest_phone: any; shipping_address: string; total_amount: any; status: string; payment_status: string; }' is missing the following properties from type 'never[]': length, pop, push, concat, and 29 more.
+
+  56 |     const { data: order, error: orderError } = await supabase
+  57 |       .from('orders')
+> 58 |       .insert(orderInsert)
+     |               ^
+  59 |       .select()
+  60 |       .single();
+  61 |
+Next.js build worker exited with code: 1 and signal: null
+
+╭─ ~/luxiorMall  on main ───────────────────────────────────────────────────────── 1 ✘  took 19s  at 05:11:36 ─╮
+╰─                                 
