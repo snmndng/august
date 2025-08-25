@@ -2,6 +2,88 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+export async function POST(request: NextRequest) {
+  try {
+    // TODO: Add proper authentication check for admin users
+    // const session = await getServerSession();
+    // if (!session || session.user.role !== 'admin') {
+    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // }
+
+    const body = await request.json();
+    const {
+      name,
+      slug,
+      description,
+      shortDescription,
+      price,
+      comparePrice,
+      stockQuantity,
+      categoryId,
+      sku,
+      tags,
+      status,
+      isFeatured,
+      isBestseller,
+      sellerId
+    } = body;
+
+    // Create product in database
+    const product = await prisma.product.create({
+      data: {
+        name,
+        slug,
+        description,
+        shortDescription,
+        price,
+        comparePrice,
+        stockQuantity,
+        categoryId: categoryId || null,
+        sku,
+        tags: tags || [],
+        status,
+        isFeatured: Boolean(isFeatured),
+        isBestseller: Boolean(isBestseller),
+        sellerId: sellerId || 'default-seller-id' // TODO: Replace with actual seller ID
+      },
+      include: {
+        seller: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        },
+        category: {
+          select: {
+            name: true
+          }
+        }
+      }
+    });
+
+    return NextResponse.json({
+      success: true,
+      product: {
+        id: product.id,
+        name: product.name,
+        slug: product.slug,
+        price: Number(product.price),
+        status: product.status,
+        seller: `${product.seller.firstName} ${product.seller.lastName}`,
+        category: product.category?.name || 'Uncategorized'
+      }
+    });
+
+  } catch (error) {
+    console.error('Error creating product:', error);
+    return NextResponse.json(
+      { error: 'Failed to create product' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function GET(request: NextRequest) {
   try {
     // TODO: Add proper authentication check for admin users

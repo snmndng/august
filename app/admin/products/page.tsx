@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth, useIsAdmin } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { 
   Package, 
   Search, 
@@ -146,10 +147,13 @@ export default function AdminProductsPage() {
             </div>
             <p className="text-gray-600">Manage products, inventory, and pricing</p>
           </div>
-          <button className="flex items-center gap-2 bg-luxior-deep-orange text-white px-4 py-2 rounded-lg hover:bg-luxior-orange transition-colors">
+          <Link
+            href="/admin/products/create"
+            className="flex items-center gap-2 bg-luxior-deep-orange text-white px-4 py-2 rounded-lg hover:bg-luxior-orange transition-colors"
+          >
             <Plus className="w-5 h-5" />
             Add Product
-          </button>
+          </Link>
         </div>
       </div>
 

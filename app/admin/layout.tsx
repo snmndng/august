@@ -2,47 +2,36 @@
 
 import { useAuth, useIsAdmin } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, ReactNode } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { 
-  Users, 
-  Package, 
-  ShoppingCart, 
-  BarChart3, 
-  Settings, 
-  UserPlus,
+import { useEffect } from 'react';
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingCart,
+  Users,
+  BarChart3,
+  Settings,
+  MessageSquare,
   Home
 } from 'lucide-react';
 
-interface AdminLayoutProps {
-  children: ReactNode;
-}
-
-export default function AdminLayout({ children }: AdminLayoutProps) {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
   const isAdmin = useIsAdmin();
   const router = useRouter();
-  const pathname = usePathname();
 
   useEffect(() => {
     if (!isLoading) {
-      if (!isAuthenticated) {
-        router.push('/auth/login');
-        return;
-      }
-
-      if (!isAdmin) {
+      if (!isAuthenticated || !isAdmin) {
         router.push('/');
-        return;
       }
     }
   }, [isAuthenticated, isAdmin, isLoading, router]);
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-luxior-deep-orange"></div>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-luxior-deep-orange"></div>
       </div>
     );
   }
@@ -51,74 +40,68 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     return null;
   }
 
-  const navigation = [
-    { name: 'Dashboard', href: '/admin', icon: Home, description: 'Overview & stats' },
-    { name: 'Users', href: '/admin/users', icon: Users, description: 'Manage user roles' },
-    { name: 'Products', href: '/admin/products', icon: Package, description: 'Product management' },
-    { name: 'Orders', href: '/admin/orders', icon: ShoppingCart, description: 'Track orders' },
-    { name: 'Sellers', href: '/admin/sellers', icon: UserPlus, description: 'Seller accounts' },
-    { name: 'Analytics', href: '/admin/analytics', icon: BarChart3, description: 'Business insights' },
-    { name: 'Settings', href: '/admin/settings', icon: Settings, description: 'Platform config' },
+  const menuItems = [
+    { href: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
+    { href: '/admin/products', icon: Package, label: 'Products' },
+    { href: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
+    { href: '/admin/users', icon: Users, label: 'User Roles' },
+    { href: '/admin/analytics', icon: BarChart3, label: 'Analytics' },
+    { href: '/admin/chat', icon: MessageSquare, label: 'Chat' },
+    { href: '/admin/settings', icon: Settings, label: 'Settings' }
   ];
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="hidden md:flex md:w-64 md:flex-col">
-          <div className="flex min-h-0 flex-1 flex-col bg-white shadow-soft">
-            <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-              <div className="flex flex-shrink-0 items-center px-4">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-luxior-deep-orange to-luxior-orange rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-lg">L</span>
-                  </div>
-                  <span className="text-xl font-bold text-gray-900">Admin</span>
-                </div>
-              </div>
-              <nav className="mt-8 flex-1 space-y-1 px-2">
-                {navigation.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = pathname === item.href;
-
-                  return (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className={`group flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
-                        isActive
-                          ? 'bg-luxior-deep-orange text-white shadow-lg'
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm'
-                      }`}
-                      title={item.description}
-                    >
-                      <Icon
-                        className={`mr-3 flex-shrink-0 h-5 w-5 ${
-                          isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-500'
-                        }`}
-                      />
-                      <div className="flex flex-col">
-                        <span>{item.name}</span>
-                        {!isActive && (
-                          <span className="text-xs text-gray-400 group-hover:text-gray-500">
-                            {item.description}
-                          </span>
-                        )}
-                      </div>
-                    </Link>
-                  );
-                })}
-              </nav>
+      {/* Admin Header - Fixed to avoid conflicts with main header */}
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-40">
+        <div className="px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link 
+                href="/"
+                className="flex items-center gap-2 text-gray-600 hover:text-luxior-deep-orange transition-colors"
+              >
+                <Home className="w-5 h-5" />
+                <span className="text-sm">Back to Store</span>
+              </Link>
+              <div className="h-6 w-px bg-gray-300"></div>
+              <h1 className="text-xl font-bold text-luxior-deep-orange">Admin Panel</h1>
+            </div>
+            <div className="text-sm text-gray-600">
+              Welcome, Admin
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Main content */}
-        <div className="flex flex-1 flex-col md:pl-0">
-          <main className="flex-1">
+      <div className="flex">
+        {/* Sidebar */}
+        <aside className="w-64 bg-white shadow-lg min-h-[calc(100vh-80px)] sticky top-[80px]">
+          <nav className="p-4">
+            <div className="space-y-1">
+              {menuItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-luxior-peach hover:text-luxior-deep-orange rounded-lg transition-colors group"
+                  >
+                    <Icon className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    <span className="font-medium">{item.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </nav>
+        </aside>
+
+        {/* Main Content Area */}
+        <main className="flex-1 min-h-[calc(100vh-80px)] overflow-x-hidden">
+          <div className="max-w-7xl mx-auto">
             {children}
-          </main>
-        </div>
+          </div>
+        </main>
       </div>
     </div>
   );
