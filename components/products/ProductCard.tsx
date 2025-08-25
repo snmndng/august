@@ -63,23 +63,26 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Product Image Container */}
-      <div className="relative aspect-[4/5] overflow-hidden rounded-t-3xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
-        {product.images && product.images.length > 0 && product.images[0] ? (
-          <img
-            src={product.images[0].image_url}
-            alt={product.images[0].alt_text || product.name}
-            className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center p-8">
-              <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 mx-auto">
-                <ShoppingCart className="w-8 h-8 text-gray-400 dark:text-gray-500" />
+      <Link href={`/products/${product.slug}`} className="block">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-t-3xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 cursor-pointer">
+          {product.images && product.images.length > 0 && product.images[0] ? (
+            <img
+              src={product.images[0].image_url}
+              alt={product.images[0].alt_text || product.name}
+              className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center p-8">
+                <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 mx-auto">
+                  <ShoppingCart className="w-8 h-8 text-gray-400 dark:text-gray-500" />
+                </div>
+                <span className="text-gray-400 dark:text-gray-500 text-sm font-medium">No Image Available</span>
               </div>
-              <span className="text-gray-400 dark:text-gray-500 text-sm font-medium">No Image Available</span>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+      </Link>
         
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

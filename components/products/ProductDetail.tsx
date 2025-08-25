@@ -112,7 +112,7 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
       {/* Product Images */}
       <div className="space-y-4">
         {/* Main Image */}
-        <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden">
+        <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden cursor-pointer">
           <div className="w-full h-full flex items-center justify-center">
             <span className="text-gray-400 text-lg dark:text-gray-500">Product Image {selectedImage + 1}</span>
           </div>
@@ -124,7 +124,7 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
             <button
               key={index}
               onClick={() => setSelectedImage(index)}
-              className={`aspect-square bg-luxior-accent rounded-lg overflow-hidden border-2 transition-colors dark:bg-luxior-black ${
+              className={`aspect-square bg-luxior-accent rounded-lg overflow-hidden border-2 transition-colors cursor-pointer hover:border-luxior-info/50 dark:bg-luxior-black ${
                 selectedImage === index ? 'border-luxior-info' : 'border-transparent'
               }`}
             >
