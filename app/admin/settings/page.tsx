@@ -8,7 +8,6 @@ import {
   Settings, 
   Save, 
   Globe, 
-  Mail, 
   DollarSign, 
   Shield, 
   Bell,
