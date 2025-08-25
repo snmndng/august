@@ -64,6 +64,30 @@ export default function AdminAnalyticsPage() {
       // const data = await response.json();
       // setAnalytics(data);
       
+      // For now, keep the existing mock data
+      setAnalytics({
+        revenue: {
+          current: 2450000,
+          previous: 2100000,
+          change: 16.7
+        },
+        orders: {
+          current: 142,
+          previous: 128,
+          change: 10.9
+        },
+        customers: {
+          current: 89,
+          previous: 75,
+          change: 18.7
+        },
+        products: {
+          current: 267,
+          previous: 245,
+          change: 9.0
+        }
+      });
+      
       setTimeout(() => setLoading(false), 1000);
     } catch (error) {
       console.error('Error loading analytics:', error);
