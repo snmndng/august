@@ -34,28 +34,28 @@ export async function POST(request: NextRequest) {
       userId = authData.user?.id;
     }
 
-    // Create order
-    const orderData = {
-      user_id: userId,
-      guest_email: customerInfo.email,
-      guest_name: customerInfo.firstName ? `${customerInfo.firstName} ${customerInfo.lastName}`.trim() : null,
-      guest_phone: customerInfo.phone,
-      shipping_address: {
+    // Create order data with proper typing
+    const orderInsert = {
+      user_id: userId || null,
+      guest_email: userId ? null : customerInfo.email,
+      guest_name: userId ? null : `${customerInfo.firstName} ${customerInfo.lastName}`.trim(),
+      guest_phone: userId ? null : customerInfo.phone,
+      shipping_address: JSON.stringify({
         firstName: customerInfo.firstName,
         lastName: customerInfo.lastName,
         address: customerInfo.address,
         city: customerInfo.city,
         postalCode: customerInfo.postalCode,
         phone: customerInfo.phone,
-      },
+      }),
       total_amount: totalAmount,
-      status: 'pending' as const,
-      payment_status: 'pending' as const,
+      status: 'pending',
+      payment_status: 'pending',
     };
 
     const { data: order, error: orderError } = await supabase
       .from('orders')
-      .insert([orderData])
+      .insert(orderInsert)
       .select()
       .single();
 
