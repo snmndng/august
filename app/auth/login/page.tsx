@@ -16,8 +16,20 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { signIn, isAuthenticated, user, signOut } = useAuth();
+  const { signIn, isAuthenticated, user, signOut, isLoading } = useAuth();
+
+  // Debug authentication state
+  console.log('Login page - Auth state:', { isAuthenticated, user: user?.email, isLoading });
   const router = useRouter();
+
+  // Show loading spinner while auth is initializing
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-luxior-deep-orange"></div>
+      </div>
+    );
+  }
 
   // If user is already logged in, show different content
   if (isAuthenticated && user) {

@@ -68,9 +68,12 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     if (supabase) {
       const { data: { subscription } } = supabase.auth.onAuthStateChange(
         async (event, session) => {
+          console.log('Auth state changed:', event, session?.user?.id);
           if (event === 'SIGNED_IN' && session?.user) {
+            console.log('User signed in, loading profile...');
             await loadUserProfile(session.user.id);
           } else if (event === 'SIGNED_OUT') {
+            console.log('User signed out');
             setUser(null);
             setUserRole(null);
           }
@@ -87,15 +90,41 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   // Load user profile from database
   const loadUserProfile = async (userId: string): Promise<void> => {
     try {
+      console.log('Loading profile for user:', userId);
       const profile = await getUserProfile(userId);
       if (profile) {
+        console.log('Profile loaded successfully:', profile);
         setUser(profile);
         setUserRole(profile.role);
       } else {
         console.warn('No profile found for user:', userId);
-        // Still set loading to false even if profile is not found
-        setUser(null);
-        setUserRole(null);
+        // Create a basic profile from auth user if none exists
+        try {
+          const { data: { user: authUser } } = await supabase?.auth.getUser() || { data: { user: null } };
+          if (authUser && authUser.id === userId) {
+            const basicProfile = {
+              id: authUser.id,
+              email: authUser.email!,
+              first_name: authUser.user_metadata?.first_name || authUser.email?.split('@')[0] || 'User',
+              last_name: authUser.user_metadata?.last_name || '',
+              phone: authUser.user_metadata?.phone || null,
+              role: 'customer' as const,
+              is_verified: false,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            };
+            console.log('Using basic profile:', basicProfile);
+            setUser(basicProfile);
+            setUserRole(basicProfile.role);
+          } else {
+            setUser(null);
+            setUserRole(null);
+          }
+        } catch (fallbackError) {
+          console.error('Fallback profile creation failed:', fallbackError);
+          setUser(null);
+          setUserRole(null);
+        }
       }
     } catch (error) {
       console.error('Error loading user profile:', error);

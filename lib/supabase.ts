@@ -93,7 +93,7 @@ export const getUserProfile = async (userId: string) => {
               .insert({
                 id: user.id,
                 email: user.email!,
-                first_name: user.user_metadata?.first_name || 'User',
+                first_name: user.user_metadata?.first_name || user.email?.split('@')[0] || 'User',
                 last_name: user.user_metadata?.last_name || '',
                 phone: user.user_metadata?.phone || null,
                 role: 'customer',
@@ -103,8 +103,19 @@ export const getUserProfile = async (userId: string) => {
               .single();
             
             if (createError) {
-              console.error('Error creating user profile:', createError);
-              return null;
+              console.error('Error creating user profile:', createError.message || createError);
+              // Return a minimal profile even if DB insert fails
+              return {
+                id: user.id,
+                email: user.email!,
+                first_name: user.user_metadata?.first_name || user.email?.split('@')[0] || 'User',
+                last_name: user.user_metadata?.last_name || '',
+                phone: user.user_metadata?.phone || null,
+                role: 'customer' as const,
+                is_verified: false,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+              };
             }
             return newProfile;
           }

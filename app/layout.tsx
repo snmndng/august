@@ -1,5 +1,3 @@
-
-
 import type { Metadata } from 'next'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
@@ -9,6 +7,7 @@ import Footer from '@/components/layout/Footer'
 import CartSidebar from '@/components/cart/CartSidebar'
 import ChatWidget from '@/components/chat/ChatWidget'
 import WhatsAppButton from '@/components/common/WhatsAppButton'
+import AuthDebug from '@/components/common/AuthDebug'
 
 export const metadata: Metadata = {
   title: 'LuxiorMall - Premium Shopping Experience',
@@ -95,6 +94,7 @@ export default function RootLayout({
           <CartSidebar />
           <ChatWidget />
           <WhatsAppButton />
+          <AuthDebug />
           <Toaster
             position="top-right"
             toastOptions={{
