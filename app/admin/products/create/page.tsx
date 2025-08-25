@@ -1577,9 +1577,6 @@ export default function CreateProductPage() {
 
           {/* Step 7: Publishing Options */}
           {activeStep === 7 && (
-
-          {/* Step 5: Publishing Options */}
-          {activeStep === 5 && (
             <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50 shadow-2xl">
               <div className="flex items-center gap-3 mb-6">
                 <Star className="w-6 h-6 text-yellow-400" />
