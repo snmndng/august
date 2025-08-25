@@ -57,6 +57,9 @@ export interface Product {
   cost_price?: number | null;
   stock_quantity: number;
   low_stock_threshold: number;
+  allow_preorder?: boolean;
+  preorder_limit?: number;
+  estimated_restock_date?: string;
   sku?: string | null;
   barcode?: string | null;
   weight_kg?: number | null;

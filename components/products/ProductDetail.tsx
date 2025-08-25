@@ -6,6 +6,7 @@ import type { ProductWithDetails } from '@/lib/services/products';
 import { useCart } from '@/contexts/CartContext';
 import { PriceDropBadge, PriceHistoryIndicator } from '@/components/products/PriceDropBadge';
 import { PriceAlertForm } from '@/components/products/PriceAlertForm';
+import { StockStatus } from '@/components/products/StockStatus';
 
 interface ProductDetailProps {
   product: ProductWithDetails;
@@ -166,18 +167,16 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
         </div>
 
         {/* Stock Status */}
-        <div className="flex items-center gap-2">
-          {product.stock_quantity > 0 ? (
-            <span className="text-luxior-success font-medium">
-              ✓ In Stock ({product.stock_quantity} available)
-            </span>
-          ) : (
-            <span className="text-luxior-error font-medium">✗ Out of Stock</span>
-          )}
-        </div>
+        <StockStatus 
+          stockQuantity={product.stock_quantity}
+          lowStockThreshold={product.low_stock_threshold || 5}
+          allowPreorder={product.allow_preorder}
+          preorderLimit={product.preorder_limit}
+          estimatedRestockDate={product.estimated_restock_date}
+        />
 
         {/* Quantity Selector */}
-        {product.stock_quantity > 0 && (
+        {(product.stock_quantity > 0 || product.allow_preorder) && (
           <div className="flex items-center gap-4">
             <label className="font-medium">Quantity:</label>
             <div className="flex items-center border border-border rounded-lg">
@@ -202,16 +201,25 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
 
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-3">
-          {product.stock_quantity > 0 ? (
+          {product.stock_quantity > 0 || product.allow_preorder ? (
             <button
               onClick={handleAddToCart}
               disabled={isAddingToCart}
-              className={`btn-primary flex-1 flex items-center justify-center gap-2 py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 text-lg font-semibold rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
+                product.stock_quantity === 0 && product.allow_preorder
+                  ? 'bg-luxior-orange text-white hover:bg-luxior-deep-orange'
+                  : 'btn-primary'
+              }`}
             >
               {isAddingToCart ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Adding...
+                  {product.stock_quantity === 0 && product.allow_preorder ? 'Adding to Preorder...' : 'Adding...'}
+                </>
+              ) : product.stock_quantity === 0 && product.allow_preorder ? (
+                <>
+                  <ShoppingCart size={20} />
+                  Preorder Now
                 </>
               ) : (
                 <>

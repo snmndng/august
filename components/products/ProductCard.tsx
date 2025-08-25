@@ -7,6 +7,7 @@ import { Heart, ShoppingCart, Eye, Star, ArrowRight } from 'lucide-react';
 import type { ProductWithDetails } from '@/lib/services/products';
 import { useCart } from '@/contexts/CartContext';
 import { PriceDropBadge, PriceHistoryIndicator } from '@/components/products/PriceDropBadge';
+import { StockBadge } from '@/components/products/StockStatus';
 
 interface ProductCardProps {
   product: ProductWithDetails;
@@ -113,6 +114,11 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
 
         {/* Badges */}
         <div className="absolute top-4 left-4 flex flex-col gap-2">
+          <StockBadge 
+            stockQuantity={product.stock_quantity} 
+            lowStockThreshold={product.low_stock_threshold || 5}
+            allowPreorder={product.allow_preorder}
+          />
           <PriceDropBadge product={product} variant="small" showAmount={false} />
           {product.is_featured && (
             <span className="px-3 py-1 bg-luxior-info text-white text-xs font-medium rounded-full shadow-lg">
@@ -179,19 +185,31 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
           <PriceDropBadge product={product} variant="small" /></div>
           
           {/* Stock Status */}
-          <div className="flex items-center gap-2">
-            {product.stock_quantity > 0 ? (
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-luxior-success rounded-full"></div>
-                <span className="text-sm text-luxior-success font-medium">
-                  In Stock {product.stock_quantity < 10 && `(${product.stock_quantity} left)`}
-                </span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-luxior-error rounded-full"></div>
-                <span className="text-sm text-luxior-error font-medium">Out of Stock</span>
-              </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {product.stock_quantity > 0 ? (
+                <>
+                  <div className="w-2 h-2 bg-luxior-success rounded-full"></div>
+                  <span className="text-sm text-luxior-success font-medium">
+                    In Stock {product.stock_quantity <= (product.low_stock_threshold || 5) && `(${product.stock_quantity} left)`}
+                  </span>
+                </>
+              ) : product.allow_preorder ? (
+                <>
+                  <div className="w-2 h-2 bg-luxior-orange rounded-full"></div>
+                  <span className="text-sm text-luxior-orange font-medium">Preorder Available</span>
+                </>
+              ) : (
+                <>
+                  <div className="w-2 h-2 bg-luxior-error rounded-full"></div>
+                  <span className="text-sm text-luxior-error font-medium">Out of Stock</span>
+                </>
+              )}
+            </div>
+            {product.estimated_restock_date && product.stock_quantity === 0 && (
+              <span className="text-xs text-gray-500">
+                {new Date(product.estimated_restock_date) > new Date() ? 'Coming Soon' : 'Available Now'}
+              </span>
             )}
           </div>
         </div>
@@ -199,22 +217,30 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
         {/* Action Button */}
         <button
           onClick={handleAddToCart}
-          disabled={product.stock_quantity === 0 || isAddingToCart}
+          disabled={(product.stock_quantity === 0 && !product.allow_preorder) || isAddingToCart}
           className={`w-full py-3 px-6 rounded-2xl font-semibold transition-all duration-300 transform flex items-center justify-center gap-2 ${
-            product.stock_quantity === 0 
+            (product.stock_quantity === 0 && !product.allow_preorder)
               ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
               : isAddingToCart
                 ? 'bg-luxior-orange text-white scale-95'
-                : 'bg-luxior-deep-orange text-white hover:bg-luxior-orange hover:scale-105 hover:shadow-lg active:scale-95'
+                : product.stock_quantity === 0 && product.allow_preorder
+                  ? 'bg-luxior-orange text-white hover:bg-luxior-deep-orange hover:scale-105 hover:shadow-lg active:scale-95'
+                  : 'bg-luxior-deep-orange text-white hover:bg-luxior-orange hover:scale-105 hover:shadow-lg active:scale-95'
           }`}
         >
           {isAddingToCart ? (
             <>
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              Adding...
+              {product.stock_quantity === 0 && product.allow_preorder ? 'Adding to Preorder...' : 'Adding...'}
             </>
-          ) : product.stock_quantity === 0 ? (
+          ) : (product.stock_quantity === 0 && !product.allow_preorder) ? (
             'Out of Stock'
+          ) : product.stock_quantity === 0 && product.allow_preorder ? (
+            <>
+              <ShoppingCart size={18} />
+              Preorder Now
+              <ArrowRight size={16} className={`transition-transform duration-200 ${isHovered ? 'translate-x-1' : ''}`} />
+            </>
           ) : (
             <>
               <ShoppingCart size={18} />
