@@ -95,17 +95,6 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    const statsObj = {
-      total,
-      pending: stats.find(s => s.status === 'pending')?._count || 0,
-      confirmed: stats.find(s => s.status === 'confirmed')?._count || 0,
-      processing: stats.find(s => s.status === 'processing')?._count || 0,
-      shipped: stats.find(s => s.status === 'shipped')?._count || 0,
-      delivered: stats.find(s => s.status === 'delivered')?._count || 0,
-      cancelled: stats.find(s => s.status === 'cancelled')?._count || 0,
-      totalRevenue: stats.reduce((sum, s) => sum + Number(s._sum.totalAmount || 0), 0)
-    };
-
     const formattedOrders = orders.map(order => ({
       id: order.id,
       orderNumber: order.orderNumber,
