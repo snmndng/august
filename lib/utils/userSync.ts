@@ -14,6 +14,11 @@ export interface UserSyncData {
  * This function can be called after successful authentication
  */
 export const ensureUserProfile = async (userData: UserSyncData): Promise<{ success: boolean; error?: string }> => {
+  if (!supabase) {
+    console.warn('Supabase client not initialized - cannot ensure user profile');
+    return { success: false, error: 'Supabase client not initialized' };
+  }
+
   try {
     // First, check if profile exists
     const { data: existingProfile, error: selectError } = await supabase
@@ -24,7 +29,7 @@ export const ensureUserProfile = async (userData: UserSyncData): Promise<{ succe
 
     // If profile exists, update it
     if (existingProfile && !selectError) {
-      const { error: updateError } = await supabase
+      const { error: updateError } = await supabase!
         .from('users')
         .update({
           email: userData.email,
@@ -44,7 +49,7 @@ export const ensureUserProfile = async (userData: UserSyncData): Promise<{ succe
     }
 
     // If profile doesn't exist, create it
-    const { error: insertError } = await supabase
+    const { error: insertError } = await supabase!
       .from('users')
       .insert({
         id: userData.id,
