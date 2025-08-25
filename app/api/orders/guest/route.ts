@@ -1,4 +1,3 @@
-
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
@@ -35,12 +34,12 @@ export async function POST(request: NextRequest) {
       userId = authData.user?.id;
     }
 
-    // Create order in database
+    // Create order
     const orderData = {
       user_id: userId,
-      guest_email: userId ? null : customerInfo.email,
-      guest_name: userId ? null : `${customerInfo.firstName} ${customerInfo.lastName}`,
-      guest_phone: userId ? null : customerInfo.phone,
+      guest_email: customerInfo.email,
+      guest_name: customerInfo.firstName ? `${customerInfo.firstName} ${customerInfo.lastName}`.trim() : null,
+      guest_phone: customerInfo.phone,
       shipping_address: {
         firstName: customerInfo.firstName,
         lastName: customerInfo.lastName,
@@ -50,13 +49,13 @@ export async function POST(request: NextRequest) {
         phone: customerInfo.phone,
       },
       total_amount: totalAmount,
-      status: 'pending',
-      payment_status: 'pending',
+      status: 'pending' as const,
+      payment_status: 'pending' as const,
     };
 
     const { data: order, error: orderError } = await supabase
       .from('orders')
-      .insert(orderData)
+      .insert([orderData])
       .select()
       .single();
 
@@ -91,11 +90,11 @@ export async function POST(request: NextRequest) {
 
     // TODO: Integrate with M-Pesa STK Push here
     // For now, we'll return success
-    
+
     return NextResponse.json({
       success: true,
       orderId: order.id,
-      message: createAccount 
+      message: createAccount
         ? 'Account created and order placed successfully!'
         : 'Order placed successfully!',
     });
