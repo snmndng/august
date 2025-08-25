@@ -113,7 +113,7 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
           <StockBadge 
             stockQuantity={product.stock_quantity} 
             lowStockThreshold={product.low_stock_threshold || 5}
-            allowPreorder={product.allow_preorder}
+            allowPreorder={product.allow_preorder ?? false}
           />
           <PriceDropBadge product={product} variant="small" showAmount={false} />
           {product.is_featured && (
