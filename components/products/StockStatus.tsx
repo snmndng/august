@@ -7,7 +7,6 @@ interface StockStatusProps {
   allowPreorder?: boolean;
   preorderLimit?: number;
   estimatedRestockDate?: string | Date;
-  isPreorder?: boolean;
 }
 
 export function StockStatus({ 
@@ -15,8 +14,7 @@ export function StockStatus({
   lowStockThreshold, 
   allowPreorder = false,
   preorderLimit,
-  estimatedRestockDate,
-  isPreorder = false
+  estimatedRestockDate
 }: StockStatusProps) {
   const formatDate = (date: string | Date) => {
     if (!date) return '';
