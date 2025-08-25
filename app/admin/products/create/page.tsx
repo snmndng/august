@@ -48,7 +48,6 @@ export default function CreateProductPage() {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
   const [sellers, setSellers] = useState<User[]>([]);
   const [formData, setFormData] = useState<ProductFormData>({
     name: '',
