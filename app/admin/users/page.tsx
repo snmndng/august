@@ -10,7 +10,6 @@ import {
   Users, 
   Search, 
   Filter, 
-  MoreVertical, 
   Mail, 
   Phone, 
   Calendar,
