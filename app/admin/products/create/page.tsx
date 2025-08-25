@@ -9,8 +9,7 @@ import {
   ArrowLeft,
   DollarSign,
   Tag,
-  FileText,
-  Image as ImageIcon
+  FileText
 } from 'lucide-react';
 
 interface ProductFormData {
