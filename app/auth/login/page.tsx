@@ -72,16 +72,15 @@ export default function LoginPage() {
       const result = await signIn(formData.email, formData.password);
       
       if (result.success) {
-        // Success message - redirect is handled by AuthContext
-        setError(null);
-        // Don't reset loading here, let the redirect happen
+        // Success - redirect to dashboard
+        router.push('/dashboard');
       } else {
         setError(result.error || 'Login failed. Please try again.');
-        setIsLoading(false);
       }
     } catch (err) {
       console.error('Login submission error:', err);
       setError('An unexpected error occurred. Please try again.');
+    } finally {
       setIsLoading(false);
     }
   };

@@ -84,6 +84,33 @@ export const getUserProfile = async (userId: string) => {
       // Handle specific error cases
       if (error.code === 'PGRST116') {
         console.warn('User profile not found for userId:', userId);
+        // Attempt to create a basic profile from auth user data
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user && user.id === userId) {
+            const { data: newProfile, error: createError } = await supabase
+              .from('users')
+              .insert({
+                id: user.id,
+                email: user.email!,
+                first_name: user.user_metadata?.first_name || 'User',
+                last_name: user.user_metadata?.last_name || '',
+                phone: user.user_metadata?.phone || null,
+                role: 'customer',
+                is_verified: false,
+              })
+              .select()
+              .single();
+            
+            if (createError) {
+              console.error('Error creating user profile:', createError);
+              return null;
+            }
+            return newProfile;
+          }
+        } catch (createError) {
+          console.error('Failed to create user profile:', createError);
+        }
         return null;
       }
       console.error('Supabase error getting user profile:', error);

@@ -111,8 +111,6 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
 
     try {
-      setIsLoading(true);
-
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -129,20 +127,11 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       if (data.user) {
         try {
           await loadUserProfile(data.user.id);
-          // Use setTimeout to ensure state updates complete before redirect
-          setTimeout(() => {
-            router.push('/dashboard');
-          }, 100);
           return { success: true };
         } catch (profileError) {
           console.error('Profile loading error:', profileError);
           // Still consider sign-in successful even if profile loading fails
-          setTimeout(() => {
-            router.push('/dashboard');
-          }, 100);
           return { success: true };
-        } finally {
-          setIsLoading(false);
         }
       }
 
@@ -153,9 +142,6 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         success: false,
         error: error instanceof Error ? error.message : 'Sign in failed'
       };
-    } finally {
-      // Don't reset loading here as it interferes with component-level loading states
-      // Components should manage their own loading states
     }
   };
 
@@ -172,8 +158,6 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
 
     try {
-      setIsLoading(true);
-
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -209,10 +193,8 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           // Still return success as user was created in auth
         }
 
-        // Load user profile and redirect to dashboard
+        // Load user profile
         await loadUserProfile(data.user.id);
-        router.push('/dashboard');
-
         return { success: true };
       }
 
@@ -223,8 +205,6 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         success: false,
         error: error instanceof Error ? error.message : 'Sign up failed'
       };
-    } finally {
-      setIsLoading(false);
     }
   };
 

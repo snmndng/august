@@ -86,22 +86,30 @@ export default function RegisterPage() {
       return;
     }
 
-    const result = await signUp(
-      formData.email,
-      formData.password,
-      formData.firstName,
-      formData.lastName,
-      formData.phone
-    );
+    try {
+      const result = await signUp(
+        formData.email,
+        formData.password,
+        formData.firstName,
+        formData.lastName,
+        formData.phone
+      );
 
-    if (result.success) {
-      setSuccess('Account created successfully! Signing you in...');
-      // User will be automatically redirected by AuthContext
-    } else {
-      setError(result.error || 'Registration failed. Please try again.');
+      if (result.success) {
+        setSuccess('Account created successfully! Redirecting to dashboard...');
+        // Wait a moment for user to see success message
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 1500);
+      } else {
+        setError(result.error || 'Registration failed. Please try again.');
+      }
+    } catch (err) {
+      console.error('Registration submission error:', err);
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

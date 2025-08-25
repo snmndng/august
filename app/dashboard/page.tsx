@@ -2,9 +2,9 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { User, Package, ShoppingCart, Heart } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { ShoppingBag, User, Heart, Package, Settings, LogOut } from 'lucide-react';
 
 export default function DashboardPage() {
   const { user, isAuthenticated, isLoading, signOut } = useAuth();
@@ -16,146 +16,164 @@ export default function DashboardPage() {
     }
   }, [isAuthenticated, isLoading, router]);
 
+  const handleSignOut = async () => {
+    await signOut();
+    router.push('/');
+  };
+
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-luxior-deep-orange"></div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-luxior-deep-orange"></div>
       </div>
     );
   }
 
   if (!isAuthenticated || !user) {
-    return null;
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <p className="text-gray-600 mb-6">Please log in to access your dashboard.</p>
+          <button
+            onClick={() => router.push('/auth/login')}
+            className="btn-primary"
+          >
+            Go to Login
+          </button>
+        </div>
+      </div>
+    );
   }
 
-  const handleSignOut = async () => {
-    await signOut();
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow">
+        <div className="container-max py-4">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
                 Welcome back, {user.first_name}!
               </h1>
-              <p className="text-gray-600">Manage your account and orders</p>
+              <p className="text-gray-600">
+                Manage your account and orders from your dashboard
+              </p>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                {user.role}
-              </span>
+            <button
+              onClick={handleSignOut}
+              className="flex items-center gap-2 text-red-600 hover:text-red-700 font-medium"
+            >
+              <LogOut size={20} />
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="container-max py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Profile Card */}
+          <div className="bg-white rounded-2xl shadow-soft p-6">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-luxior-deep-orange to-luxior-orange rounded-full flex items-center justify-center">
+                <User className="text-white" size={24} />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Profile</h3>
+                <p className="text-sm text-gray-600">Manage your information</p>
+              </div>
+            </div>
+            <div className="space-y-2 text-sm">
+              <p><span className="font-medium">Name:</span> {user.first_name} {user.last_name}</p>
+              <p><span className="font-medium">Email:</span> {user.email}</p>
+              <p><span className="font-medium">Role:</span> {user.role}</p>
+              {user.phone && (
+                <p><span className="font-medium">Phone:</span> {user.phone}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Orders Card */}
+          <div className="bg-white rounded-2xl shadow-soft p-6">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                <Package className="text-white" size={24} />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Orders</h3>
+                <p className="text-sm text-gray-600">Track your purchases</p>
+              </div>
+            </div>
+            <div className="text-center py-4">
+              <p className="text-gray-500 text-sm">No orders yet</p>
               <button
-                onClick={handleSignOut}
-                className="btn-secondary"
+                onClick={() => router.push('/products')}
+                className="btn-secondary mt-3"
               >
-                Sign Out
+                Start Shopping
               </button>
             </div>
           </div>
-        </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <ShoppingCart className="h-8 w-8 text-luxior-deep-orange" />
+          {/* Wishlist Card */}
+          <div className="bg-white rounded-2xl shadow-soft p-6">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
+                <Heart className="text-white" size={24} />
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Total Orders</p>
-                <p className="text-2xl font-semibold text-gray-900">0</p>
+              <div>
+                <h3 className="font-semibold text-gray-900">Wishlist</h3>
+                <p className="text-sm text-gray-600">Your favorite items</p>
               </div>
+            </div>
+            <div className="text-center py-4">
+              <p className="text-gray-500 text-sm">No items in wishlist</p>
+              <button
+                onClick={() => router.push('/products')}
+                className="btn-secondary mt-3"
+              >
+                Browse Products
+              </button>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <Package className="h-8 w-8 text-blue-500" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Active Orders</p>
-                <p className="text-2xl font-semibold text-gray-900">0</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <Heart className="h-8 w-8 text-red-500" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Wishlist Items</p>
-                <p className="text-2xl font-semibold text-gray-900">0</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <User className="h-8 w-8 text-green-500" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Account Status</p>
-                <p className="text-sm font-semibold text-green-600">
-                  {user.is_verified ? 'Verified' : 'Pending'}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Account Information */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-white rounded-lg shadow">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Account Information</h2>
-            </div>
-            <div className="p-6">
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-500">Full Name</label>
-                  <p className="text-gray-900">{user.first_name} {user.last_name}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-500">Email</label>
-                  <p className="text-gray-900">{user.email}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-500">Phone</label>
-                  <p className="text-gray-900">{user.phone || 'Not provided'}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-500">Member Since</label>
-                  <p className="text-gray-900">
-                    {new Date(user.created_at).toLocaleDateString()}
-                  </p>
-                </div>
-              </div>
-              <div className="mt-6">
-                <button className="btn-primary">
-                  Edit Profile
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
-            </div>
-            <div className="p-6">
-              <div className="text-center py-8 text-gray-500">
-                <Package className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                <p>No recent activity</p>
-                <p className="text-sm">Your orders and activities will appear here</p>
-              </div>
+          {/* Quick Actions */}
+          <div className="bg-white rounded-2xl shadow-soft p-6 md:col-span-2 lg:col-span-3">
+            <h3 className="font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <button
+                onClick={() => router.push('/products')}
+                className="flex flex-col items-center gap-2 p-4 rounded-lg border border-gray-200 hover:border-luxior-deep-orange hover:bg-orange-50 transition-colors"
+              >
+                <ShoppingBag className="text-luxior-deep-orange" size={32} />
+                <span className="text-sm font-medium">Shop Now</span>
+              </button>
+              
+              <button
+                onClick={() => router.push('/categories')}
+                className="flex flex-col items-center gap-2 p-4 rounded-lg border border-gray-200 hover:border-luxior-deep-orange hover:bg-orange-50 transition-colors"
+              >
+                <Package className="text-luxior-deep-orange" size={32} />
+                <span className="text-sm font-medium">Categories</span>
+              </button>
+              
+              <button
+                onClick={() => router.push('/deals')}
+                className="flex flex-col items-center gap-2 p-4 rounded-lg border border-gray-200 hover:border-luxior-deep-orange hover:bg-orange-50 transition-colors"
+              >
+                <Heart className="text-luxior-deep-orange" size={32} />
+                <span className="text-sm font-medium">Deals</span>
+              </button>
+              
+              <button
+                onClick={() => router.push('/contact')}
+                className="flex flex-col items-center gap-2 p-4 rounded-lg border border-gray-200 hover:border-luxior-deep-orange hover:bg-orange-50 transition-colors"
+              >
+                <Settings className="text-luxior-deep-orange" size={32} />
+                <span className="text-sm font-medium">Support</span>
+              </button>
             </div>
           </div>
         </div>
