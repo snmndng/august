@@ -1,0 +1,97 @@
+
+╭─ ~/luxiorMall  on main ────────────────────────────────────────────────────────────────────── ✔  at 04:41:26 ─╮
+╰─ npm run dev                                                                                                       ─╯
+
+> luxiormall@0.1.0 dev
+> next dev -H 0.0.0.0 -p 5000
+
+   ▲ Next.js 15.5.0
+   - Local:        http://localhost:5000
+   - Network:      http://0.0.0.0:5000
+   - Environments: .env.local, .env
+
+ ✓ Starting...
+> [PWA] PWA support is disabled
+> [PWA] PWA support is disabled
+ ✓ Ready in 4.1s
+ ○ Compiling /deals ...
+ ⨯ ./components/products/ProductCard.tsx
+Error:   × Expected ',', got '{'
+     ╭─[/home/portgas/luxiorMall/components/products/ProductCard.tsx:254:1]
+ 251 │         </button>
+ 252 │       </div>
+ 253 │
+ 254 │       {/* Animated border on hover */}
+     ·       ─
+ 255 │       <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-luxior-deep-orange via-luxior-orange to-luxior-peach opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none" style={{padding: '1px'}}>
+ 256 │         <div className="w-full h-full bg-white dark:bg-gray-900 rounded-3xl"></div>
+ 257 │       </div>
+     ╰────
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/products/ProductCard.tsx
+./app/deals/page.tsx
+ ⨯ ./components/products/ProductCard.tsx
+Error:   × Expected ',', got '{'
+     ╭─[/home/portgas/luxiorMall/components/products/ProductCard.tsx:254:1]
+ 251 │         </button>
+ 252 │       </div>
+ 253 │
+ 254 │       {/* Animated border on hover */}
+     ·       ─
+ 255 │       <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-luxior-deep-orange via-luxior-orange to-luxior-peach opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none" style={{padding: '1px'}}>
+ 256 │         <div className="w-full h-full bg-white dark:bg-gray-900 rounded-3xl"></div>
+ 257 │       </div>
+     ╰────
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/products/ProductCard.tsx
+./app/deals/page.tsx
+ ⨯ ./components/products/ProductCard.tsx
+Error:   × Expected ',', got '{'
+     ╭─[/home/portgas/luxiorMall/components/products/ProductCard.tsx:254:1]
+ 251 │         </button>
+ 252 │       </div>
+ 253 │
+ 254 │       {/* Animated border on hover */}
+     ·       ─
+ 255 │       <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-luxior-deep-orange via-luxior-orange to-luxior-peach opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none" style={{padding: '1px'}}>
+ 256 │         <div className="w-full h-full bg-white dark:bg-gray-900 rounded-3xl"></div>
+ 257 │       </div>
+     ╰────
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/products/ProductCard.tsx
+./app/deals/page.tsx
+ GET /deals 500 in 9469ms
+ ⨯ ./components/products/ProductCard.tsx
+Error:   × Expected ',', got '{'
+     ╭─[/home/portgas/luxiorMall/components/products/ProductCard.tsx:254:1]
+ 251 │         </button>
+ 252 │       </div>
+ 253 │
+ 254 │       {/* Animated border on hover */}
+     ·       ─
+ 255 │       <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-luxior-deep-orange via-luxior-orange to-luxior-peach opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none" style={{padding: '1px'}}>
+ 256 │         <div className="w-full h-full bg-white dark:bg-gray-900 rounded-3xl"></div>
+ 257 │       </div>
+     ╰────
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/products/ProductCard.tsx
+./app/deals/page.tsx
+ GET / 500 in 1990ms
+ GET / 500 in 29ms
+ GET / 500 in 52ms
