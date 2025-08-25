@@ -182,10 +182,11 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
             )}
             <PriceHistoryIndicator product={product} />
           </div>
-          <PriceDropBadge product={product} variant="small" /></div>
+          <PriceDropBadge product={product} variant="small" />
+        </div>
           
-          {/* Stock Status */}
-          <div className="flex items-center justify-between">
+        {/* Stock Status */}
+        <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               {product.stock_quantity > 0 ? (
                 <>
