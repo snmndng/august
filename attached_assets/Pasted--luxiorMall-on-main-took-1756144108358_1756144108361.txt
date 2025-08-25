@@ -1,0 +1,135 @@
+
+╭─ ~/luxiorMall  on main ──────────────────────────────────────────────────────────── ✔  took 4s  at 20:47:31 ─╮
+╰─ npm run build                                                                                                     ─╯
+
+> luxiormall@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.0
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: /home/portgas/luxiorMall/node_modules/next-pwa/register.js
+> [PWA] Service worker: /home/portgas/luxiorMall/public/sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+Failed to compile.
+
+./app/categories/page.tsx
+Error:   × Return statement is not allowed here
+    ╭─[/home/portgas/luxiorMall/app/categories/page.tsx:35:1]
+ 32 │     }
+ 33 │
+ 34 │       if (error) {
+ 35 │ ╭─▶     return (
+ 36 │ │         <div className="min-h-screen flex items-center justify-center">
+ 37 │ │           <div className="text-center">
+ 38 │ │             <p className="text-red-600 text-lg mb-4">{error}</p>
+ 39 │ │             <button
+ 40 │ │               onClick={() => window.location.reload()}
+ 41 │ │               className="btn-primary"
+ 42 │ │             >
+ 43 │ │               Try Again
+ 44 │ │             </button>
+ 45 │ │           </div>
+ 46 │ │         </div>
+ 47 │ ╰─▶     );
+ 48 │       }
+ 49 │
+ 50 │       return (
+    ╰────
+  × Return statement is not allowed here
+     ╭─[/home/portgas/luxiorMall/app/categories/page.tsx:50:1]
+  47 │         );
+  48 │       }
+  49 │
+  50 │ ╭─▶   return (
+  51 │ │       <div className="min-h-screen bg-gray-50">
+  52 │ │         {/* Header */}
+  53 │ │         <div className="bg-gradient-to-br from-luxior-black via-gray-900 to-luxior-deep-orange text-white">
+  54 │ │           <div className="container-max py-20">
+  55 │ │             <div className="text-center">
+  56 │ │               <h1 className="text-4xl md:text-6xl font-bold mb-6">Shop by Category</h1>
+  57 │ │               <p className="text-xl text-gray-200 max-w-2xl mx-auto">
+  58 │ │                 Discover our curated collection of premium products across various categories
+  59 │ │               </p>
+  60 │ │             </div>
+  61 │ │           </div>
+  62 │ │         </div>
+  63 │ │
+  64 │ │         {/* Categories Grid */}
+  65 │ │         <section className="section-padding">
+  66 │ │           <div className="container-max">
+  67 │ │             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  68 │ │               {categories && categories.length > 0 ? categories.map((category) => {
+  69 │ │                 const IconComponent = categoryIcons[category.slug] || ShoppingBag;
+  70 │ │                 return (
+  71 │ │                   <Link
+  72 │ │                     key={category.id}
+  73 │ │                     href={`/categories/${category.slug}`}
+  74 │ │                     className="group"
+  75 │ │                   >
+  76 │ │                     <div className="category-card">
+  77 │ │                       <div className="category-icon">
+  78 │ │                         <IconComponent size={48} />
+  79 │ │                       </div>
+  80 │ │                       <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
+  81 │ │                       <p className="text-gray-600 text-sm mb-4">
+  82 │ │                         {category.description || `Explore our ${category.name} collection`}
+  83 │ │                       </p>
+  84 │ │                       <div className="flex items-center justify-between">
+  85 │ │                         <span className="text-luxior-deep-orange font-medium">
+  86 │ │                           Browse Products
+  87 │ │                         </span>
+  88 │ │                         <svg
+  89 │ │                           className="w-5 h-5 text-luxior-deep-orange group-hover:translate-x-1 transition-transform duration-200"
+  90 │ │                           fill="none"
+  91 │ │                           stroke="currentColor"
+  92 │ │                           viewBox="0 0 24 24"
+  93 │ │                         >
+  94 │ │                           <path
+  95 │ │                             strokeLinecap="round"
+  96 │ │                             strokeLinejoin="round"
+  97 │ │                             strokeWidth={2}
+  98 │ │                             d="M9 5l7 7-7 7"
+  99 │ │                           />
+ 100 │ │                         </svg>
+ 101 │ │                       </div>
+ 102 │ │                     </div>
+ 103 │ │                   </Link>
+ 104 │ │                 );
+ 105 │ │               }) : (
+ 106 │ │                 <div className="col-span-full text-center py-12">
+ 107 │ │                   <p className="text-gray-600 text-lg">No categories available at the moment.</p>
+ 108 │ │                 </div>
+ 109 │ │               )}
+ 110 │ │             </div>
+ 111 │ │           </div>
+ 112 │ │         </section>
+ 113 │ │       </div>
+ 114 │ ╰─▶   );
+ 115 │     }
+     ╰────
+  × Expression expected
+     ╭─[/home/portgas/luxiorMall/app/categories/page.tsx:115:1]
+ 112 │       </section>
+ 113 │     </div>
+ 114 │   );
+ 115 │ }
+     · ─
+     ╰────
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/categories/page.tsx
+
+
+> Build failed because of webpack errors
+
+╭─ ~/luxiorMall  on main ───────────────────────────────────────────────────────── 1 ✘  took 11s  at 20:47:45 ─╮
+╰─                             
