@@ -187,32 +187,31 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
           
         {/* Stock Status */}
         <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              {product.stock_quantity > 0 ? (
-                <>
-                  <div className="w-2 h-2 bg-luxior-success rounded-full"></div>
-                  <span className="text-sm text-luxior-success font-medium">
-                    In Stock {product.stock_quantity <= (product.low_stock_threshold || 5) && `(${product.stock_quantity} left)`}
-                  </span>
-                </>
-              ) : product.allow_preorder ? (
-                <>
-                  <div className="w-2 h-2 bg-luxior-orange rounded-full"></div>
-                  <span className="text-sm text-luxior-orange font-medium">Preorder Available</span>
-                </>
-              ) : (
-                <>
-                  <div className="w-2 h-2 bg-luxior-error rounded-full"></div>
-                  <span className="text-sm text-luxior-error font-medium">Out of Stock</span>
-                </>
-              )}
-            </div>
-            {product.estimated_restock_date && product.stock_quantity === 0 && (
-              <span className="text-xs text-gray-500">
-                {new Date(product.estimated_restock_date) > new Date() ? 'Coming Soon' : 'Available Now'}
-              </span>
+          <div className="flex items-center gap-2">
+            {product.stock_quantity > 0 ? (
+              <>
+                <div className="w-2 h-2 bg-luxior-success rounded-full"></div>
+                <span className="text-sm text-luxior-success font-medium">
+                  In Stock {product.stock_quantity <= (product.low_stock_threshold || 5) && `(${product.stock_quantity} left)`}
+                </span>
+              </>
+            ) : product.allow_preorder ? (
+              <>
+                <div className="w-2 h-2 bg-luxior-orange rounded-full"></div>
+                <span className="text-sm text-luxior-orange font-medium">Preorder Available</span>
+              </>
+            ) : (
+              <>
+                <div className="w-2 h-2 bg-luxior-error rounded-full"></div>
+                <span className="text-sm text-luxior-error font-medium">Out of Stock</span>
+              </>
             )}
           </div>
+          {product.estimated_restock_date && product.stock_quantity === 0 && (
+            <span className="text-xs text-gray-500">
+              {new Date(product.estimated_restock_date) > new Date() ? 'Coming Soon' : 'Available Now'}
+            </span>
+          )}
         </div>
 
         {/* Action Button */}
