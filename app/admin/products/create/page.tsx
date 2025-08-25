@@ -29,18 +29,7 @@ interface ProductFormData {
   sellerId: string;
 }
 
-interface Category {
-  id: string;
-  name: string;
-}
 
-interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: string;
-}
 
 export default function CreateProductPage() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -48,7 +37,6 @@ export default function CreateProductPage() {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
-  const [sellers, setSellers] = useState<User[]>([]);
   const [formData, setFormData] = useState<ProductFormData>({
     name: '',
     slug: '',
