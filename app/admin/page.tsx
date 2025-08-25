@@ -14,7 +14,6 @@ import {
   CheckCircle,
   Plus,
   BarChart3,
-  Settings,
   Eye
 } from 'lucide-react';
 
