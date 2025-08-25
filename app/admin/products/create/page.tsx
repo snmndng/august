@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -105,7 +104,7 @@ export default function CreateProductPage() {
   const [dynamicSpecs, setDynamicSpecs] = useState<Array<{key: string, value: string}>>([]);
   const [images, setImages] = useState<Array<{file: File, preview: string, isPrimary: boolean}>>([]);
   const [dragOver, setDragOver] = useState(false);
-  
+
   const [formData, setFormData] = useState<ProductFormData>({
     name: '',
     slug: '',
@@ -270,14 +269,14 @@ export default function CreateProductPage() {
   const removeImage = (index: number) => {
     const imageToRemove = images[index];
     URL.revokeObjectURL(imageToRemove.preview);
-    
+
     const newImages = images.filter((_, i) => i !== index);
-    
+
     // If we removed the primary image, make the first remaining image primary
     if (imageToRemove.isPrimary && newImages.length > 0) {
       newImages[0].isPrimary = true;
     }
-    
+
     setImages(newImages);
   };
 
@@ -290,41 +289,41 @@ export default function CreateProductPage() {
 
   const moveImageToFirst = (index: number) => {
     if (index === 0) return;
-    
+
     const imageToMove = images[index];
     const newImages = [...images];
     newImages.splice(index, 1);
     newImages.unshift(imageToMove);
-    
+
     setImages(newImages);
   };
 
   const moveImageToLast = (index: number) => {
     if (index === images.length - 1) return;
-    
+
     const imageToMove = images[index];
     const newImages = [...images];
     newImages.splice(index, 1);
     newImages.push(imageToMove);
-    
+
     setImages(newImages);
   };
 
   const moveImageUp = (index: number) => {
     if (index === 0) return;
-    
+
     const newImages = [...images];
     [newImages[index - 1], newImages[index]] = [newImages[index], newImages[index - 1]];
-    
+
     setImages(newImages);
   };
 
   const moveImageDown = (index: number) => {
     if (index === images.length - 1) return;
-    
+
     const newImages = [...images];
     [newImages[index], newImages[index + 1]] = [newImages[index + 1], newImages[index]];
-    
+
     setImages(newImages);
   };
 
@@ -339,14 +338,14 @@ export default function CreateProductPage() {
   const handleImageDropReorder = (e: React.DragEvent, dropIndex: number) => {
     e.preventDefault();
     const dragIndex = parseInt(e.dataTransfer.getData('text/plain'));
-    
+
     if (dragIndex === dropIndex) return;
-    
+
     const newImages = [...images];
     const draggedImage = newImages[dragIndex];
     newImages.splice(dragIndex, 1);
     newImages.splice(dropIndex, 0, draggedImage);
-    
+
     setImages(newImages);
   };
 
@@ -365,7 +364,7 @@ export default function CreateProductPage() {
 
       // Create FormData for file upload
       const submitData = new FormData();
-      
+
       // Add product data
       submitData.append('productData', JSON.stringify({
         ...formData,
@@ -640,7 +639,7 @@ export default function CreateProductPage() {
                             className="w-full h-full object-cover"
                           />
                         </div>
-                        
+
                         {/* Image Overlay with Enhanced Controls */}
                         <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                           {/* Top Controls */}
@@ -698,7 +697,7 @@ export default function CreateProductPage() {
                               >
                                 <SkipForward className="w-3 h-3 text-white" />
                               </button>
-                              
+
                               {/* Second Row - Down button centered */}
                               <div></div>
                               <button
@@ -1046,7 +1045,7 @@ export default function CreateProductPage() {
                 {/* Stock Management */}
                 <div className="mb-8">
                   <h3 className="text-lg font-medium text-gray-300 mb-4">📦 Stock Management</h3>
-                  
+
                   <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-xl border border-slate-600/50 mb-4">
                     <div className="flex items-center gap-3">
                       <Package className="w-5 h-5 text-blue-400" />
@@ -1258,7 +1257,7 @@ export default function CreateProductPage() {
                   /* Physical Product Shipping */
                   <div className="space-y-6">
                     <h3 className="text-lg font-medium text-gray-300">🚚 Shipping Settings</h3>
-                    
+
                     <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-xl border border-slate-600/50 mb-4">
                       <div className="flex items-center gap-3">
                         <Package className="w-5 h-5 text-green-400" />
@@ -1621,7 +1620,7 @@ export default function CreateProductPage() {
                 <div className="space-y-6">
                   <div className="space-y-4">
                     <h3 className="text-lg font-medium text-gray-300">Product Highlights</h3>
-                    
+
                     <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-xl border border-slate-600/50">
                       <div className="flex items-center gap-3">
                         <Star className="w-5 h-5 text-yellow-400" />
@@ -1686,7 +1685,7 @@ export default function CreateProductPage() {
               >
                 Cancel
               </button>
-              
+
               {activeStep < 7 ? (
                 <button
                   type="button"
