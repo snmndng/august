@@ -49,7 +49,7 @@ A modern, TypeScript-based ecommerce Progressive Web App built with Next.js, fea
 
 ## 📋 Prerequisites
 
-- Node.js 18+ and npm/yarn
+- Node.js 22+ and npm/yarn
 - Supabase account and project
 - Cloudinary account
 - M-Pesa Daraja API credentials
