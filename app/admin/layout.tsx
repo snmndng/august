@@ -52,13 +52,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   const navigation = [
-    { name: 'Dashboard', href: '/admin', icon: Home },
-    { name: 'Users', href: '/admin/users', icon: Users },
-    { name: 'Products', href: '/admin/products', icon: Package },
-    { name: 'Orders', href: '/admin/orders', icon: ShoppingCart },
-    { name: 'Sellers', href: '/admin/sellers', icon: UserPlus },
-    { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
-    { name: 'Settings', href: '/admin/settings', icon: Settings },
+    { name: 'Dashboard', href: '/admin', icon: Home, description: 'Overview & stats' },
+    { name: 'Users', href: '/admin/users', icon: Users, description: 'Manage user roles' },
+    { name: 'Products', href: '/admin/products', icon: Package, description: 'Product management' },
+    { name: 'Orders', href: '/admin/orders', icon: ShoppingCart, description: 'Track orders' },
+    { name: 'Sellers', href: '/admin/sellers', icon: UserPlus, description: 'Seller accounts' },
+    { name: 'Analytics', href: '/admin/analytics', icon: BarChart3, description: 'Business insights' },
+    { name: 'Settings', href: '/admin/settings', icon: Settings, description: 'Platform config' },
   ];
 
   return (
@@ -85,18 +85,26 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     <Link
                       key={item.name}
                       href={item.href}
-                      className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
+                      className={`group flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
                         isActive
-                          ? 'bg-luxior-deep-orange text-white'
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                          ? 'bg-luxior-deep-orange text-white shadow-lg'
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm'
                       }`}
+                      title={item.description}
                     >
                       <Icon
                         className={`mr-3 flex-shrink-0 h-5 w-5 ${
                           isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-500'
                         }`}
                       />
-                      {item.name}
+                      <div className="flex flex-col">
+                        <span>{item.name}</span>
+                        {!isActive && (
+                          <span className="text-xs text-gray-400 group-hover:text-gray-500">
+                            {item.description}
+                          </span>
+                        )}
+                      </div>
                     </Link>
                   );
                 })}
