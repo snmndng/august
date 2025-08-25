@@ -165,5 +165,8 @@ export const getUserRole = async (userId: string): Promise<string | null> => {
   }
 };
 
+// Import types for use in this file
+import type { AppUser, UserRole } from '@/types';
+
 // Export types for use in components
 export type { AppUser, UserRole } from '@/types';
