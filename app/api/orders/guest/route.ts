@@ -67,9 +67,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!order) {
+      return NextResponse.json(
+        { error: 'Failed to create order - no data returned' },
+        { status: 500 }
+      );
+    }
+
     // Create order items
     const orderItems = items.map((item: any) => ({
-      order_id: order.id,
+      order_id: (order as any).id,
       product_id: item.product.id,
       quantity: item.quantity,
       price: item.product.price,
