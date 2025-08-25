@@ -26,6 +26,10 @@ export class ProductsService {
 
   static async getFeaturedProducts() {
     try {
+      // Reset connection if there are prepared statement conflicts
+      await prisma.$disconnect();
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
       return await prisma.product.findMany({
         where: {
           isFeatured: true,
@@ -64,6 +68,10 @@ export class ProductsService {
 
   static async getAllCategories() {
     try {
+      // Reset connection if there are prepared statement conflicts
+      await prisma.$disconnect();
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
       return await prisma.category.findMany({
         include: {
           _count: {

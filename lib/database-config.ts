@@ -20,7 +20,8 @@ export const prisma = new PrismaClient({
       url: DATABASE_CONFIG.pooled,
     },
   },
-})
+  log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
+});
 
 // Create Prisma client with direct connection (for admin tasks)
 export const prismaAdmin = new PrismaClient({
@@ -29,7 +30,8 @@ export const prismaAdmin = new PrismaClient({
       url: DATABASE_CONFIG.direct,
     },
   },
-})
+  log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
+});
 
 // Context-based client selection
 export function getPrismaClient(context: 'app' | 'admin' | 'migration' = 'app') {
@@ -47,4 +49,24 @@ if (process.env.NODE_ENV === 'development') {
   console.log('🔗 Database Configuration:')
   console.log(`📱 App queries: ${DATABASE_CONFIG.pooled ? 'Pooled connection' : 'No pooled URL set'}`)
   console.log(`🔧 Admin tasks: ${DATABASE_CONFIG.direct ? 'Direct connection' : 'No direct URL set'}`)
+}
+
+// Graceful shutdown
+if (typeof window === 'undefined') {
+  process.on('beforeExit', async () => {
+    await prisma.$disconnect();
+    await prismaAdmin.$disconnect();
+  });
+
+  process.on('SIGINT', async () => {
+    await prisma.$disconnect();
+    await prismaAdmin.$disconnect();
+    process.exit(0);
+  });
+
+  process.on('SIGTERM', async () => {
+    await prisma.$disconnect();
+    await prismaAdmin.$disconnect();
+    process.exit(0);
+  });
 }

@@ -11,7 +11,6 @@ import {
   DollarSign, 
   Shield, 
   Bell,
-  Database,
   Key,
   Users,
   Package
