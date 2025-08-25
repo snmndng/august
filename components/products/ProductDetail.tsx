@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Heart, ShoppingCart, Share2, MessageCircle, Truck, Shield, RotateCcw } from 'lucide-react';
 import type { ProductWithDetails } from '@/lib/services/products';
 import { useCart } from '@/contexts/CartContext';
-import { PriceDropBadge, PriceHistoryIndicator } from '@/components/products/PriceDropBadge';
+import { PriceHistoryIndicator } from '@/components/products/PriceDropBadge';
 import { PriceAlertForm } from '@/components/products/PriceAlertForm';
 import { StockStatus } from '@/components/products/StockStatus';
 
