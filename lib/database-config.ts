@@ -3,9 +3,14 @@ import { PrismaClient } from '@prisma/client'
 // Database connection configuration
 export const DATABASE_CONFIG = {
   // Use pooled connection for application queries (default)
-  pooled: process.env.DATABASE_URL_POOLER || process.env.DATABASE_URL,
+  pooled: process.env.DATABASE_URL_POOLER || process.env.DATABASE_URL || '',
   // Use direct connection for admin tasks, migrations, seeding
-  direct: process.env.DATABASE_URL_DIRECT || process.env.DATABASE_URL,
+  direct: process.env.DATABASE_URL_DIRECT || process.env.DATABASE_URL || '',
+}
+
+// Validate database URLs
+if (!DATABASE_CONFIG.pooled || !DATABASE_CONFIG.direct) {
+  throw new Error('Database URLs are required. Please check your environment variables.')
 }
 
 // Create Prisma client with pooled connection (for app usage)
