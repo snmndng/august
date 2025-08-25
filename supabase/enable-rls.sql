@@ -1,3 +1,4 @@
+
 -- Enable RLS on all tables
 ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.user_addresses ENABLE ROW LEVEL SECURITY;
@@ -5,6 +6,7 @@ ALTER TABLE public.categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.product_images ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.product_variants ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.product_reviews ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.cart_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.wishlist ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
@@ -13,249 +15,231 @@ ALTER TABLE public.payments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.shipping ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.returns ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.stock_notifications ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.product_reviews ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.admin_audit_log ENABLE ROW LEVEL SECURITY;
 
--- Helper function to get user role
-CREATE OR REPLACE FUNCTION public.get_user_role(user_uuid uuid)
-RETURNS text
-LANGUAGE sql
-SECURITY DEFINER
-AS $$
-  SELECT role FROM public.users WHERE id = user_uuid::text;
-$$;
+-- Users table policies
+CREATE POLICY "Users can view own profile" ON public.users
+  FOR SELECT USING (auth.uid() = id);
 
--- Helper function to check if user is admin
-CREATE OR REPLACE FUNCTION public.is_admin()
-RETURNS boolean
-LANGUAGE sql
-SECURITY DEFINER
-AS $$
-  SELECT EXISTS (
-    SELECT 1 FROM public.users 
-    WHERE id = auth.uid()::text 
-    AND role = 'admin'
-  );
-$$;
-
--- Helper function to check if user is seller
-CREATE OR REPLACE FUNCTION public.is_seller()
-RETURNS boolean
-LANGUAGE sql
-SECURITY DEFINER
-AS $$
-  SELECT EXISTS (
-    SELECT 1 FROM public.users 
-    WHERE id = auth.uid()::text 
-    AND role IN ('seller', 'admin')
-  );
-$$;
-
--- Public read policies for product catalog
-CREATE POLICY "Allow public read access to categories" ON public.categories
-    FOR SELECT USING (true);
-
-CREATE POLICY "Allow public read access to products" ON public.products
-    FOR SELECT USING (status = 'active');
-
-CREATE POLICY "Allow public read access to product_images" ON public.product_images
-    FOR SELECT USING (
-        EXISTS (
-            SELECT 1 FROM public.products 
-            WHERE products.id = product_images.product_id 
-            AND products.status = 'active'
-        )
-    );
-
-CREATE POLICY "Allow public read access to product_variants" ON public.product_variants
-    FOR SELECT USING (
-        EXISTS (
-            SELECT 1 FROM public.products 
-            WHERE products.id = product_variants.product_id 
-            AND products.status = 'active'
-        )
-    );
-
-CREATE POLICY "Allow public read access to approved reviews" ON public.product_reviews
-    FOR SELECT USING (is_approved = true);
-
--- User management policies
-CREATE POLICY "Users can view their own profile" ON public.users
-    FOR SELECT USING (auth.uid()::text = id);
-
-CREATE POLICY "Users can update their own profile" ON public.users
-    FOR UPDATE USING (auth.uid()::text = id);
+CREATE POLICY "Users can update own profile" ON public.users
+  FOR UPDATE USING (auth.uid() = id);
 
 CREATE POLICY "Admins can view all users" ON public.users
-    FOR SELECT USING (is_admin());
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND role = 'admin'
+    )
+  );
 
-CREATE POLICY "Admins can update user roles" ON public.users
-    FOR UPDATE USING (is_admin());
+-- User addresses policies
+CREATE POLICY "Users can manage own addresses" ON public.user_addresses
+  FOR ALL USING (auth.uid() = user_id);
 
--- Address policies
-CREATE POLICY "Users can manage their own addresses" ON public.user_addresses
-    FOR ALL USING (auth.uid()::text = user_id);
+-- Categories policies (publicly readable)
+CREATE POLICY "Categories are publicly readable" ON public.categories
+  FOR SELECT USING (true);
 
--- Category management (admin only)
-CREATE POLICY "Admins can manage categories" ON public.categories
-    FOR ALL USING (is_admin());
+CREATE POLICY "Only admins can manage categories" ON public.categories
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND role = 'admin'
+    )
+  );
 
--- Product management policies
-CREATE POLICY "Sellers can view all their products" ON public.products
-    FOR SELECT USING (
-        auth.uid()::text = seller_id OR 
-        is_admin() OR 
-        status = 'active'
-    );
+-- Products policies (publicly readable for active products)
+CREATE POLICY "Active products are publicly readable" ON public.products
+  FOR SELECT USING (status = 'active');
 
-CREATE POLICY "Sellers can create products" ON public.products
-    FOR INSERT WITH CHECK (
-        auth.uid()::text = seller_id AND 
-        is_seller()
-    );
-
-CREATE POLICY "Sellers can update their own products" ON public.products
-    FOR UPDATE USING (
-        auth.uid()::text = seller_id OR 
-        is_admin()
-    );
-
-CREATE POLICY "Admins can delete any product" ON public.products
-    FOR DELETE USING (is_admin());
+CREATE POLICY "Sellers can manage own products" ON public.products
+  FOR ALL USING (
+    auth.uid() = seller_id OR
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND role = 'admin'
+    )
+  );
 
 -- Product images policies
-CREATE POLICY "Sellers can manage their product images" ON public.product_images
-    FOR ALL USING (
-        EXISTS (
-            SELECT 1 FROM public.products 
-            WHERE products.id = product_images.product_id 
-            AND (products.seller_id = auth.uid()::text OR is_admin())
-        )
-    );
+CREATE POLICY "Product images are publicly readable" ON public.product_images
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.products 
+      WHERE id = product_id AND status = 'active'
+    )
+  );
+
+CREATE POLICY "Sellers can manage own product images" ON public.product_images
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM public.products 
+      WHERE id = product_id AND (seller_id = auth.uid() OR 
+        EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'))
+    )
+  );
 
 -- Product variants policies
-CREATE POLICY "Sellers can manage their product variants" ON public.product_variants
-    FOR ALL USING (
-        EXISTS (
-            SELECT 1 FROM public.products 
-            WHERE products.id = product_variants.product_id 
-            AND (products.seller_id = auth.uid()::text OR is_admin())
-        )
-    );
+CREATE POLICY "Product variants are publicly readable" ON public.product_variants
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.products 
+      WHERE id = product_id AND status = 'active'
+    )
+  );
 
--- Cart and wishlist policies
-CREATE POLICY "Users can manage their own cart items" ON public.cart_items
-    FOR ALL USING (auth.uid()::text = user_id);
-
-CREATE POLICY "Users can manage their own wishlist" ON public.wishlist
-    FOR ALL USING (auth.uid()::text = user_id);
-
--- Order policies
-CREATE POLICY "Users can view their own orders" ON public.orders
-    FOR SELECT USING (
-        auth.uid()::text = user_id OR 
-        auth.uid()::text = seller_id OR 
-        is_admin()
-    );
-
--- Allow authenticated users and guest users to create orders
-CREATE POLICY "Users can create orders" ON public.orders
-    FOR INSERT WITH CHECK (
-        auth.uid() = user_id::uuid OR 
-        (user_id IS NULL AND guest_email IS NOT NULL)
-    );
-
--- Allow access to guest orders via email lookup (for order tracking)
-CREATE POLICY "Guest users can view their orders" ON public.orders
-    FOR SELECT USING (
-        auth.uid() = user_id::uuid OR 
-        (user_id IS NULL AND guest_email IS NOT NULL)
-    );
-
-CREATE POLICY "Sellers and admins can update orders" ON public.orders
-    FOR UPDATE USING (
-        auth.uid()::text = seller_id OR 
-        is_admin()
-    );
-
--- Order items policies
-CREATE POLICY "Users can view order items for their orders" ON public.order_items
-    FOR SELECT USING (
-        EXISTS (
-            SELECT 1 FROM public.orders 
-            WHERE orders.id = order_items.order_id 
-            AND (orders.user_id = auth.uid()::text OR orders.seller_id = auth.uid()::text OR is_admin())
-        )
-    );
-
-CREATE POLICY "System can create order items" ON public.order_items
-    FOR INSERT WITH CHECK (
-        EXISTS (
-            SELECT 1 FROM public.orders 
-            WHERE orders.id = order_items.order_id 
-            AND orders.user_id = auth.uid()::text
-        )
-    );
-
--- Payment policies
-CREATE POLICY "Users can view payments for their orders" ON public.payments
-    FOR SELECT USING (
-        EXISTS (
-            SELECT 1 FROM public.orders 
-            WHERE orders.id = payments.order_id 
-            AND (orders.user_id = auth.uid()::text OR orders.seller_id = auth.uid()::text OR is_admin())
-        )
-    );
-
-CREATE POLICY "Users can create payments for their orders" ON public.payments
-    FOR INSERT WITH CHECK (
-        EXISTS (
-            SELECT 1 FROM public.orders 
-            WHERE orders.id = payments.order_id 
-            AND orders.user_id = auth.uid()::text
-        )
-    );
-
--- Shipping policies
-CREATE POLICY "Users can view shipping for their orders" ON public.shipping
-    FOR SELECT USING (
-        EXISTS (
-            SELECT 1 FROM public.orders 
-            WHERE orders.id = shipping.order_id 
-            AND (orders.user_id = auth.uid()::text OR orders.seller_id = auth.uid()::text OR is_admin())
-        )
-    );
-
-CREATE POLICY "Sellers and admins can manage shipping" ON public.shipping
-    FOR ALL USING (
-        EXISTS (
-            SELECT 1 FROM public.orders 
-            WHERE orders.id = shipping.order_id 
-            AND (orders.seller_id = auth.uid()::text OR is_admin())
-        )
-    );
-
--- Returns policies
-CREATE POLICY "Users can manage their own returns" ON public.returns
-    FOR ALL USING (
-        auth.uid()::text = user_id OR 
-        is_admin()
-    );
-
--- Stock notifications policies
-CREATE POLICY "Users can manage their own stock notifications" ON public.stock_notifications
-    FOR ALL USING (auth.uid()::text = user_id);
+CREATE POLICY "Sellers can manage own product variants" ON public.product_variants
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM public.products 
+      WHERE id = product_id AND (seller_id = auth.uid() OR 
+        EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'))
+    )
+  );
 
 -- Product reviews policies
-CREATE POLICY "Users can create reviews" ON public.product_reviews
-    FOR INSERT WITH CHECK (auth.uid()::text = user_id);
+CREATE POLICY "Reviews are publicly readable" ON public.product_reviews
+  FOR SELECT USING (true);
 
-CREATE POLICY "Users can view and update their own reviews" ON public.product_reviews
-    FOR ALL USING (
-        auth.uid()::text = user_id OR 
-        is_admin()
-    );
+CREATE POLICY "Users can create reviews" ON public.product_reviews
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own reviews" ON public.product_reviews
+  FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE POLICY "Admins can manage all reviews" ON public.product_reviews
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND role = 'admin'
+    )
+  );
+
+-- Cart items policies
+CREATE POLICY "Users can manage own cart" ON public.cart_items
+  FOR ALL USING (auth.uid() = user_id);
+
+-- Wishlist policies
+CREATE POLICY "Users can manage own wishlist" ON public.wishlist
+  FOR ALL USING (auth.uid() = user_id);
+
+-- Orders policies
+CREATE POLICY "Users can view own orders" ON public.orders
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can create own orders" ON public.orders
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Sellers can view orders for their products" ON public.orders
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.order_items oi
+      JOIN public.products p ON oi.product_id = p.id
+      WHERE oi.order_id = id AND p.seller_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Admins can manage all orders" ON public.orders
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND role = 'admin'
+    )
+  );
+
+-- Order items policies
+CREATE POLICY "Users can view own order items" ON public.order_items
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.orders 
+      WHERE id = order_id AND user_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Sellers can view order items for their products" ON public.order_items
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.products 
+      WHERE id = product_id AND seller_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Admins can manage all order items" ON public.order_items
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND role = 'admin'
+    )
+  );
+
+-- Payments policies
+CREATE POLICY "Users can view own payments" ON public.payments
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.orders 
+      WHERE id = order_id AND user_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Admins can manage all payments" ON public.payments
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND role = 'admin'
+    )
+  );
+
+-- Shipping policies
+CREATE POLICY "Users can view own shipping" ON public.shipping
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.orders 
+      WHERE id = order_id AND user_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Admins can manage all shipping" ON public.shipping
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND role = 'admin'
+    )
+  );
+
+-- Returns policies
+CREATE POLICY "Users can manage own returns" ON public.returns
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM public.orders 
+      WHERE id = order_id AND user_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Admins can manage all returns" ON public.returns
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND role = 'admin'
+    )
+  );
+
+-- Stock notifications policies
+CREATE POLICY "Users can manage own stock notifications" ON public.stock_notifications
+  FOR ALL USING (auth.uid() = user_id);
 
 -- Admin audit log policies
-CREATE POLICY "Admins can manage audit log" ON public.admin_audit_log
-    FOR ALL USING (is_admin());
+CREATE POLICY "Only admins can view audit log" ON public.admin_audit_log
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND role = 'admin'
+    )
+  );
+
+CREATE POLICY "Only admins can create audit log entries" ON public.admin_audit_log
+  FOR INSERT WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND role = 'admin'
+    )
+  );
