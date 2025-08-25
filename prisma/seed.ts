@@ -290,82 +290,99 @@ async function main() {
   const jacketProduct = products.find(p => p.slug === 'classic-denim-jacket')
 
   // Delete existing variants for these products to avoid duplicates
-  await prisma.productVariant.deleteMany({
-    where: {
-      OR: [
-        { productId: sneakersProduct?.id },
-        { productId: jacketProduct?.id }
-      ]
+  if (sneakersProduct?.id || jacketProduct?.id) {
+    const deleteConditions = []
+    if (sneakersProduct?.id) {
+      deleteConditions.push({ productId: sneakersProduct.id })
     }
-  })
+    if (jacketProduct?.id) {
+      deleteConditions.push({ productId: jacketProduct.id })
+    }
+    
+    await prisma.productVariant.deleteMany({
+      where: {
+        OR: deleteConditions
+      }
+    })
+  }
 
-  const variants = await Promise.all([
-    // Sneaker sizes
-    prisma.productVariant.create({
-      data: {
-        productId: sneakersProduct?.id!,
-        name: 'Size',
-        value: '42',
-        stockQuantity: 10,
-        sku: 'PLS-42',
-      },
-    }),
-    prisma.productVariant.create({
-      data: {
-        productId: sneakersProduct?.id!,
-        name: 'Size',
-        value: '43',
-        stockQuantity: 15,
-        sku: 'PLS-43',
-      },
-    }),
-    prisma.productVariant.create({
-      data: {
-        productId: sneakersProduct?.id!,
-        name: 'Size',
-        value: '44',
-        stockQuantity: 20,
-        sku: 'PLS-44',
-      },
-    }),
+  const variants = []
 
-    // Jacket sizes
-    prisma.productVariant.create({
-      data: {
-        productId: jacketProduct?.id!,
-        name: 'Size',
-        value: 'M',
-        stockQuantity: 8,
-        sku: 'CDJ-M',
-      },
-    }),
-    prisma.productVariant.create({
-      data: {
-        productId: jacketProduct?.id!,
-        name: 'Size',
-        value: 'L',
-        stockQuantity: 12,
-        sku: 'CDJ-L',
-      },
-    }),
-    prisma.productVariant.create({
-      data: {
-        productId: jacketProduct?.id!,
-        name: 'Size',
-        value: 'XL',
-        stockQuantity: 5,
-        sku: 'CDJ-XL',
-      },
-    }),
-  ])
+  // Create sneaker variants if product exists
+  if (sneakersProduct?.id) {
+    variants.push(
+      prisma.productVariant.create({
+        data: {
+          productId: sneakersProduct.id,
+          name: 'Size',
+          value: '42',
+          stockQuantity: 10,
+          sku: 'PLS-42',
+        },
+      }),
+      prisma.productVariant.create({
+        data: {
+          productId: sneakersProduct.id,
+          name: 'Size',
+          value: '43',
+          stockQuantity: 15,
+          sku: 'PLS-43',
+        },
+      }),
+      prisma.productVariant.create({
+        data: {
+          productId: sneakersProduct.id,
+          name: 'Size',
+          value: '44',
+          stockQuantity: 20,
+          sku: 'PLS-44',
+        },
+      })
+    )
+  }
 
-  console.log(`✅ Created/updated ${variants.length} product variants`)
+  // Create jacket variants if product exists
+  if (jacketProduct?.id) {
+    variants.push(
+      prisma.productVariant.create({
+        data: {
+          productId: jacketProduct.id,
+          name: 'Size',
+          value: 'M',
+          stockQuantity: 8,
+          sku: 'CDJ-M',
+        },
+      }),
+      prisma.productVariant.create({
+        data: {
+          productId: jacketProduct.id,
+          name: 'Size',
+          value: 'L',
+          stockQuantity: 12,
+          sku: 'CDJ-L',
+        },
+      }),
+      prisma.productVariant.create({
+        data: {
+          productId: jacketProduct.id,
+          name: 'Size',
+          value: 'XL',
+          stockQuantity: 5,
+          sku: 'CDJ-XL',
+        },
+      })
+    )
+  }
+
+  const createdVariants = await Promise.all(variants)
+
+  console.log(`✅ Created/updated ${createdVariants.length} product variants`)
 
   console.log('🎉 Database seeding completed successfully!')
   console.log(`📊 Summary:`)
   console.log(`   - Categories: ${categories.length}`)
   console.log(`   - Products: ${products.length}`)
-  console.log(`   - Variants: ${variants.length}`)
+  console.log(`   - Variants: ${createdVariants.length}`)
   console.log(`   - Seller: ${seller.email}`)
 }
 
