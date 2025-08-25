@@ -8,6 +8,7 @@ import CartSidebar from '@/components/cart/CartSidebar'
 import ChatWidget from '@/components/chat/ChatWidget'
 import WhatsAppButton from '@/components/common/WhatsAppButton'
 import AuthDebug from '@/components/common/AuthDebug'
+import ChatSidePanel from '@/components/chat/ChatSidePanel'
 
 export const metadata: Metadata = {
   title: 'LuxiorMall - Premium Shopping Experience',
@@ -95,6 +96,7 @@ export default function RootLayout({
           <ChatWidget />
           <WhatsAppButton />
           <AuthDebug />
+          <ChatSidePanel />
           <Toaster
             position="top-right"
             toastOptions={{

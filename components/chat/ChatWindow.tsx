@@ -9,9 +9,10 @@ interface ChatWindowProps {
   chatRoom: ChatRoom;
   onClose: () => void;
   onRoomUpdate: (room: ChatRoom) => void;
+  isInSidePanel?: boolean;
 }
 
-export default function ChatWindow({ chatRoom, onClose, onRoomUpdate }: ChatWindowProps) {
+export default function ChatWindow({ chatRoom, onClose, onRoomUpdate, isInSidePanel = false }: ChatWindowProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -122,25 +123,29 @@ export default function ChatWindow({ chatRoom, onClose, onRoomUpdate }: ChatWind
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-xl w-96 h-96 flex flex-col overflow-hidden">
-      {/* Header */}
-      <div className="bg-luxior-orange text-white p-4 flex items-center justify-between">
-        <div>
-          <h3 className="font-semibold">Chat Support</h3>
-          <p className={`text-sm ${getStatusColor(chatRoom.status)} text-white opacity-90`}>
-            {getStatusText(chatRoom.status)}
-          </p>
+    <div className={`bg-white flex flex-col overflow-hidden ${
+      isInSidePanel ? 'h-full' : 'rounded-lg shadow-xl w-96 h-96'
+    }`}>
+      {/* Header - only show if not in side panel */}
+      {!isInSidePanel && (
+        <div className="bg-luxior-orange text-white p-4 flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold">Chat Support</h3>
+            <p className={`text-sm ${getStatusColor(chatRoom.status)} text-white opacity-90`}>
+              {getStatusText(chatRoom.status)}
+            </p>
+          </div>
+          
+          <button
+            onClick={onClose}
+            className="text-white hover:text-gray-200 transition-colors"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
-        
-        <button
-          onClick={onClose}
-          className="text-white hover:text-gray-200 transition-colors"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
+      )}
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
