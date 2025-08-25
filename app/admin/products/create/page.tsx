@@ -17,7 +17,10 @@ import {
   EyeOff,
   ChevronDown,
   Plus,
-  X
+  X,
+  Upload,
+  Image,
+  Camera
 } from 'lucide-react';
 
 interface ProductFormData {
@@ -70,6 +73,8 @@ export default function CreateProductPage() {
   const [activeStep, setActiveStep] = useState(1);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [dynamicSpecs, setDynamicSpecs] = useState<Array<{key: string, value: string}>>([]);
+  const [images, setImages] = useState<Array<{file: File, preview: string, isPrimary: boolean}>>([]);
+  const [dragOver, setDragOver] = useState(false);
   
   const [formData, setFormData] = useState<ProductFormData>({
     name: '',
@@ -178,6 +183,56 @@ export default function CreateProductPage() {
     setDynamicSpecs(dynamicSpecs.filter((_, i) => i !== index));
   };
 
+  const handleImageUpload = (files: FileList | null) => {
+    if (!files) return;
+
+    const newImages = Array.from(files).map((file, index) => ({
+      file,
+      preview: URL.createObjectURL(file),
+      isPrimary: images.length === 0 && index === 0 // First image is primary if no images exist
+    }));
+
+    setImages(prev => [...prev, ...newImages]);
+  };
+
+  const handleImageDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    const files = e.dataTransfer.files;
+    handleImageUpload(files);
+  };
+
+  const handleImageDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(true);
+  };
+
+  const handleImageDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+  };
+
+  const removeImage = (index: number) => {
+    const imageToRemove = images[index];
+    URL.revokeObjectURL(imageToRemove.preview);
+    
+    const newImages = images.filter((_, i) => i !== index);
+    
+    // If we removed the primary image, make the first remaining image primary
+    if (imageToRemove.isPrimary && newImages.length > 0) {
+      newImages[0].isPrimary = true;
+    }
+    
+    setImages(newImages);
+  };
+
+  const setPrimaryImage = (index: number) => {
+    setImages(prev => prev.map((img, i) => ({
+      ...img,
+      isPrimary: i === index
+    })));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -191,19 +246,28 @@ export default function CreateProductPage() {
         }
       });
 
+      // Create FormData for file upload
+      const submitData = new FormData();
+      
+      // Add product data
+      submitData.append('productData', JSON.stringify({
+        ...formData,
+        price: Number(formData.price),
+        comparePrice: Number(formData.comparePrice),
+        stockQuantity: Number(formData.stockQuantity),
+        tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+        specifications
+      }));
+
+      // Add images
+      images.forEach((image, index) => {
+        submitData.append('images', image.file);
+        submitData.append(`isPrimary_${index}`, image.isPrimary.toString());
+      });
+
       const response = await fetch('/api/admin/products', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          price: Number(formData.price),
-          comparePrice: Number(formData.comparePrice),
-          stockQuantity: Number(formData.stockQuantity),
-          tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
-          specifications
-        }),
+        body: submitData,
       });
 
       if (response.ok) {
@@ -220,14 +284,24 @@ export default function CreateProductPage() {
     }
   };
 
+  // Cleanup image previews on component unmount
+  React.useEffect(() => {
+    return () => {
+      images.forEach(image => {
+        URL.revokeObjectURL(image.preview);
+      });
+    };
+  }, []);
+
   const selectedCategory = categories.find(cat => cat.id === formData.categoryId);
   const categoryConfig = selectedCategory ? categoryConfigs[selectedCategory.slug] : null;
 
   const steps = [
     { id: 1, name: 'Basic Info', icon: FileText },
-    { id: 2, name: 'Category & Specs', icon: Package },
-    { id: 3, name: 'Pricing', icon: DollarSign },
-    { id: 4, name: 'Publishing', icon: Star }
+    { id: 2, name: 'Images', icon: Camera },
+    { id: 3, name: 'Category & Specs', icon: Package },
+    { id: 4, name: 'Pricing', icon: DollarSign },
+    { id: 5, name: 'Publishing', icon: Star }
   ];
 
   if (loading) {
@@ -362,8 +436,137 @@ export default function CreateProductPage() {
             </div>
           )}
 
-          {/* Step 2: Category & Specifications */}
+          {/* Step 2: Images */}
           {activeStep === 2 && (
+            <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50 shadow-2xl">
+              <div className="flex items-center gap-3 mb-6">
+                <Camera className="w-6 h-6 text-cyan-400" />
+                <h2 className="text-2xl font-semibold">Product Images</h2>
+                <span className="text-sm text-gray-400">Upload high-quality product photos</span>
+              </div>
+
+              {/* Image Upload Area */}
+              <div
+                className={`relative border-2 border-dashed rounded-2xl p-8 transition-all duration-300 ${
+                  dragOver
+                    ? 'border-cyan-400 bg-cyan-400/10'
+                    : 'border-slate-600 hover:border-slate-500'
+                }`}
+                onDrop={handleImageDrop}
+                onDragOver={handleImageDragOver}
+                onDragLeave={handleImageDragLeave}
+              >
+                <div className="text-center">
+                  <div className="mx-auto w-16 h-16 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full flex items-center justify-center mb-4">
+                    <Upload className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-medium text-white mb-2">
+                    Drag & drop images here
+                  </h3>
+                  <p className="text-gray-400 mb-4">
+                    or click to browse your files
+                  </p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={(e) => handleImageUpload(e.target.files)}
+                    className="hidden"
+                    id="image-upload"
+                  />
+                  <label
+                    htmlFor="image-upload"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl hover:from-cyan-600 hover:to-blue-700 transition-all duration-200 cursor-pointer"
+                  >
+                    <Image className="w-5 h-5" />
+                    Choose Images
+                  </label>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Supports: JPG, PNG, WebP • Max 10MB per image
+                  </p>
+                </div>
+              </div>
+
+              {/* Image Preview Grid */}
+              {images.length > 0 && (
+                <div className="mt-8">
+                  <h3 className="text-lg font-medium text-white mb-4 flex items-center gap-2">
+                    <Image className="w-5 h-5" />
+                    Uploaded Images ({images.length})
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {images.map((image, index) => (
+                      <div
+                        key={index}
+                        className={`relative group rounded-xl overflow-hidden border-2 transition-all duration-200 ${
+                          image.isPrimary
+                            ? 'border-cyan-400 ring-2 ring-cyan-400/20'
+                            : 'border-slate-600 hover:border-slate-500'
+                        }`}
+                      >
+                        <div className="aspect-square bg-slate-700">
+                          <img
+                            src={image.preview}
+                            alt={`Product image ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        
+                        {/* Image Overlay */}
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2">
+                          {!image.isPrimary && (
+                            <button
+                              type="button"
+                              onClick={() => setPrimaryImage(index)}
+                              className="p-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors duration-200"
+                              title="Set as primary image"
+                            >
+                              <Star className="w-4 h-4 text-white" />
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => removeImage(index)}
+                            className="p-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors duration-200"
+                            title="Remove image"
+                          >
+                            <X className="w-4 h-4 text-white" />
+                          </button>
+                        </div>
+
+                        {/* Primary Badge */}
+                        {image.isPrimary && (
+                          <div className="absolute top-2 left-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-xs px-2 py-1 rounded-lg flex items-center gap-1">
+                            <Star className="w-3 h-3" />
+                            Primary
+                          </div>
+                        )}
+
+                        {/* Image Index */}
+                        <div className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-lg">
+                          {index + 1}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Image Tips */}
+                  <div className="mt-6 p-4 bg-slate-700/30 rounded-xl border border-slate-600/50">
+                    <h4 className="text-sm font-medium text-cyan-400 mb-2">💡 Image Tips</h4>
+                    <ul className="text-sm text-gray-400 space-y-1">
+                      <li>• Use high-resolution images (at least 1000x1000px)</li>
+                      <li>• First image will be the main product image</li>
+                      <li>• Show different angles and product details</li>
+                      <li>• Use good lighting and clean backgrounds</li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Step 3: Category & Specifications */}
+          {activeStep === 3 && (
             <div className="space-y-6">
               <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50 shadow-2xl">
                 <div className="flex items-center gap-3 mb-6">
@@ -498,8 +701,8 @@ export default function CreateProductPage() {
             </div>
           )}
 
-          {/* Step 3: Pricing & Inventory */}
-          {activeStep === 3 && (
+          {/* Step 4: Pricing & Inventory */}
+          {activeStep === 4 && (
             <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50 shadow-2xl">
               <div className="flex items-center gap-3 mb-6">
                 <DollarSign className="w-6 h-6 text-green-400" />
@@ -579,8 +782,8 @@ export default function CreateProductPage() {
             </div>
           )}
 
-          {/* Step 4: Publishing Options */}
-          {activeStep === 4 && (
+          {/* Step 5: Publishing Options */}
+          {activeStep === 5 && (
             <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50 shadow-2xl">
               <div className="flex items-center gap-3 mb-6">
                 <Star className="w-6 h-6 text-yellow-400" />
@@ -692,7 +895,7 @@ export default function CreateProductPage() {
                 Cancel
               </button>
               
-              {activeStep < 4 ? (
+              {activeStep < 5 ? (
                 <button
                   type="button"
                   onClick={() => setActiveStep(activeStep + 1)}
