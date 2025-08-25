@@ -47,7 +47,9 @@ export async function performTransaction() {
     const order = await tx.order.create({
       data: {
         userId: user.id,
-        total: 100,
+        orderNumber: `ORD-${Date.now()}`,
+        subtotal: 100,
+        totalAmount: 100,
         status: 'pending'
       }
     })
