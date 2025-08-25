@@ -20,7 +20,13 @@ import {
   X,
   Upload,
   Image,
-  Camera
+  Camera,
+  ArrowUp,
+  ArrowDown,
+  SkipForward,
+  SkipBack,
+  Move,
+  Edit3
 } from 'lucide-react';
 
 interface ProductFormData {
@@ -231,6 +237,68 @@ export default function CreateProductPage() {
       ...img,
       isPrimary: i === index
     })));
+  };
+
+  const moveImageToFirst = (index: number) => {
+    if (index === 0) return;
+    
+    const imageToMove = images[index];
+    const newImages = [...images];
+    newImages.splice(index, 1);
+    newImages.unshift(imageToMove);
+    
+    setImages(newImages);
+  };
+
+  const moveImageToLast = (index: number) => {
+    if (index === images.length - 1) return;
+    
+    const imageToMove = images[index];
+    const newImages = [...images];
+    newImages.splice(index, 1);
+    newImages.push(imageToMove);
+    
+    setImages(newImages);
+  };
+
+  const moveImageUp = (index: number) => {
+    if (index === 0) return;
+    
+    const newImages = [...images];
+    [newImages[index - 1], newImages[index]] = [newImages[index], newImages[index - 1]];
+    
+    setImages(newImages);
+  };
+
+  const moveImageDown = (index: number) => {
+    if (index === images.length - 1) return;
+    
+    const newImages = [...images];
+    [newImages[index], newImages[index + 1]] = [newImages[index + 1], newImages[index]];
+    
+    setImages(newImages);
+  };
+
+  const handleImageDrag = (e: React.DragEvent, index: number) => {
+    e.dataTransfer.setData('text/plain', index.toString());
+  };
+
+  const handleImageDragOverReorder = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleImageDropReorder = (e: React.DragEvent, dropIndex: number) => {
+    e.preventDefault();
+    const dragIndex = parseInt(e.dataTransfer.getData('text/plain'));
+    
+    if (dragIndex === dropIndex) return;
+    
+    const newImages = [...images];
+    const draggedImage = newImages[dragIndex];
+    newImages.splice(dragIndex, 1);
+    newImages.splice(dropIndex, 0, draggedImage);
+    
+    setImages(newImages);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -490,17 +558,27 @@ export default function CreateProductPage() {
               {/* Image Preview Grid */}
               {images.length > 0 && (
                 <div className="mt-8">
-                  <h3 className="text-lg font-medium text-white mb-4 flex items-center gap-2">
-                    <Image className="w-5 h-5" />
-                    Uploaded Images ({images.length})
-                  </h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-medium text-white flex items-center gap-2">
+                      <Image className="w-5 h-5" />
+                      Uploaded Images ({images.length})
+                    </h3>
+                    <div className="text-sm text-gray-400">
+                      <Move className="w-4 h-4 inline mr-1" />
+                      Drag to reorder
+                    </div>
+                  </div>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {images.map((image, index) => (
                       <div
                         key={index}
-                        className={`relative group rounded-xl overflow-hidden border-2 transition-all duration-200 ${
+                        draggable
+                        onDragStart={(e) => handleImageDrag(e, index)}
+                        onDragOver={handleImageDragOverReorder}
+                        onDrop={(e) => handleImageDropReorder(e, index)}
+                        className={`relative group rounded-xl overflow-hidden border-2 transition-all duration-200 cursor-move ${
                           image.isPrimary
-                            ? 'border-cyan-400 ring-2 ring-cyan-400/20'
+                            ? 'border-cyan-400 ring-2 ring-cyan-400/20 shadow-lg shadow-cyan-400/20'
                             : 'border-slate-600 hover:border-slate-500'
                         }`}
                       >
@@ -512,54 +590,184 @@ export default function CreateProductPage() {
                           />
                         </div>
                         
-                        {/* Image Overlay */}
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2">
-                          {!image.isPrimary && (
-                            <button
-                              type="button"
-                              onClick={() => setPrimaryImage(index)}
-                              className="p-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors duration-200"
-                              title="Set as primary image"
-                            >
-                              <Star className="w-4 h-4 text-white" />
-                            </button>
-                          )}
-                          <button
-                            type="button"
-                            onClick={() => removeImage(index)}
-                            className="p-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors duration-200"
-                            title="Remove image"
-                          >
-                            <X className="w-4 h-4 text-white" />
-                          </button>
+                        {/* Image Overlay with Enhanced Controls */}
+                        <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          {/* Top Controls */}
+                          <div className="absolute top-2 left-2 right-2 flex justify-between">
+                            <div className="flex gap-1">
+                              {!image.isPrimary && (
+                                <button
+                                  type="button"
+                                  onClick={() => setPrimaryImage(index)}
+                                  className="p-1.5 bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors duration-200 shadow-lg"
+                                  title="Set as primary image"
+                                >
+                                  <Star className="w-3 h-3 text-white" />
+                                </button>
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => removeImage(index)}
+                                className="p-1.5 bg-red-600 hover:bg-red-700 rounded-lg transition-colors duration-200 shadow-lg"
+                                title="Remove image"
+                              >
+                                <X className="w-3 h-3 text-white" />
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Center Controls - Movement */}
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="grid grid-cols-3 gap-1 p-2 bg-black/50 rounded-lg backdrop-blur-sm">
+                              {/* First Row */}
+                              <button
+                                type="button"
+                                onClick={() => moveImageToFirst(index)}
+                                disabled={index === 0}
+                                className="p-1.5 bg-slate-600 hover:bg-slate-500 disabled:opacity-50 disabled:cursor-not-allowed rounded transition-colors duration-200"
+                                title="Move to first"
+                              >
+                                <SkipBack className="w-3 h-3 text-white" />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => moveImageUp(index)}
+                                disabled={index === 0}
+                                className="p-1.5 bg-slate-600 hover:bg-slate-500 disabled:opacity-50 disabled:cursor-not-allowed rounded transition-colors duration-200"
+                                title="Move up"
+                              >
+                                <ArrowUp className="w-3 h-3 text-white" />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => moveImageToLast(index)}
+                                disabled={index === images.length - 1}
+                                className="p-1.5 bg-slate-600 hover:bg-slate-500 disabled:opacity-50 disabled:cursor-not-allowed rounded transition-colors duration-200"
+                                title="Move to last"
+                              >
+                                <SkipForward className="w-3 h-3 text-white" />
+                              </button>
+                              
+                              {/* Second Row - Down button centered */}
+                              <div></div>
+                              <button
+                                type="button"
+                                onClick={() => moveImageDown(index)}
+                                disabled={index === images.length - 1}
+                                className="p-1.5 bg-slate-600 hover:bg-slate-500 disabled:opacity-50 disabled:cursor-not-allowed rounded transition-colors duration-200"
+                                title="Move down"
+                              >
+                                <ArrowDown className="w-3 h-3 text-white" />
+                              </button>
+                              <div></div>
+                            </div>
+                          </div>
                         </div>
 
                         {/* Primary Badge */}
                         {image.isPrimary && (
-                          <div className="absolute top-2 left-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-xs px-2 py-1 rounded-lg flex items-center gap-1">
+                          <div className="absolute top-2 left-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-xs px-2 py-1 rounded-lg flex items-center gap-1 shadow-lg">
                             <Star className="w-3 h-3" />
                             Primary
                           </div>
                         )}
 
-                        {/* Image Index */}
-                        <div className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-lg">
-                          {index + 1}
+                        {/* Position Indicator */}
+                        <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded-lg backdrop-blur-sm">
+                          #{index + 1}
+                        </div>
+
+                        {/* Drag Handle */}
+                        <div className="absolute bottom-2 left-2 bg-black/80 text-white p-1 rounded-lg backdrop-blur-sm">
+                          <Move className="w-3 h-3" />
                         </div>
                       </div>
                     ))}
                   </div>
 
-                  {/* Image Tips */}
-                  <div className="mt-6 p-4 bg-slate-700/30 rounded-xl border border-slate-600/50">
-                    <h4 className="text-sm font-medium text-cyan-400 mb-2">💡 Image Tips</h4>
-                    <ul className="text-sm text-gray-400 space-y-1">
-                      <li>• Use high-resolution images (at least 1000x1000px)</li>
-                      <li>• First image will be the main product image</li>
-                      <li>• Show different angles and product details</li>
-                      <li>• Use good lighting and clean backgrounds</li>
-                    </ul>
+                  {/* Image Management Features */}
+                  <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Quick Actions */}
+                    <div className="p-4 bg-slate-700/30 rounded-xl border border-slate-600/50">
+                      <h4 className="text-sm font-medium text-purple-400 mb-3 flex items-center gap-2">
+                        <Edit3 className="w-4 h-4" />
+                        Quick Actions
+                      </h4>
+                      <div className="space-y-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const shuffled = [...images].sort(() => Math.random() - 0.5);
+                            setImages(shuffled);
+                          }}
+                          className="w-full px-3 py-2 bg-slate-600 hover:bg-slate-500 rounded-lg text-sm transition-colors duration-200"
+                          disabled={images.length < 2}
+                        >
+                          🔀 Shuffle Images
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const reversed = [...images].reverse();
+                            setImages(reversed);
+                          }}
+                          className="w-full px-3 py-2 bg-slate-600 hover:bg-slate-500 rounded-lg text-sm transition-colors duration-200"
+                          disabled={images.length < 2}
+                        >
+                          🔄 Reverse Order
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Image Tips */}
+                    <div className="p-4 bg-slate-700/30 rounded-xl border border-slate-600/50">
+                      <h4 className="text-sm font-medium text-cyan-400 mb-3">💡 Image Best Practices</h4>
+                      <ul className="text-sm text-gray-400 space-y-1">
+                        <li>• Use high-resolution images (min 1000x1000px)</li>
+                        <li>• Primary image appears first in product listings</li>
+                        <li>• Drag images to reorder them easily</li>
+                        <li>• Show multiple angles and details</li>
+                        <li>• Use consistent lighting and backgrounds</li>
+                        <li>• Optimize file sizes for faster loading</li>
+                      </ul>
+                    </div>
                   </div>
+
+                  {/* Image Statistics */}
+                  {images.length > 0 && (
+                    <div className="mt-6 p-4 bg-gradient-to-r from-slate-800/50 to-slate-700/50 rounded-xl border border-slate-600/50">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-medium text-white">📊 Image Statistics</h4>
+                        <div className="text-xs text-gray-400">
+                          Total size: {Math.round(images.reduce((total, img) => total + img.file.size, 0) / 1024 / 1024 * 100) / 100}MB
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3">
+                        <div className="text-center">
+                          <div className="text-lg font-semibold text-cyan-400">{images.length}</div>
+                          <div className="text-xs text-gray-400">Images</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-lg font-semibold text-green-400">
+                            {images.filter(img => img.isPrimary).length}
+                          </div>
+                          <div className="text-xs text-gray-400">Primary</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-lg font-semibold text-yellow-400">
+                            {Math.round(images.reduce((total, img) => total + img.file.size, 0) / images.length / 1024)}KB
+                          </div>
+                          <div className="text-xs text-gray-400">Avg Size</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-lg font-semibold text-purple-400">
+                            {images.filter(img => img.file.type.includes('jpeg')).length}
+                          </div>
+                          <div className="text-xs text-gray-400">JPEG</div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
