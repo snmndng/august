@@ -169,7 +169,7 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
         <StockStatus 
           stockQuantity={product.stock_quantity}
           lowStockThreshold={product.low_stock_threshold || 5}
-          allowPreorder={product.allow_preorder}
+          allowPreorder={product.allow_preorder ?? false}
           preorderLimit={product.preorder_limit}
           estimatedRestockDate={product.estimated_restock_date}
         />
@@ -290,29 +290,29 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
         )}
 
         {/* Product Details */}
-        <div className="pt-6 border-t border-gray-200">
+        <div className="pt-6 border-t border-border">
           <h3 className="text-lg font-semibold mb-3">Product Details</h3>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="text-gray-500">SKU:</span>
-              <span className="ml-2 text-gray-900">{product.sku || 'N/A'}</span>
+              <span className="text-gray-500 dark:text-gray-400">SKU:</span>
+              <span className="ml-2 text-foreground">{product.sku || 'N/A'}</span>
             </div>
-                         <div>
-               <span className="text-gray-500">Category:</span>
-               <span className="ml-2 text-gray-900">{product.category?.name || 'Uncategorized'}</span>
-             </div>
-             {product.weight_kg && (
-               <div>
-                 <span className="text-gray-500">Weight:</span>
-                 <span className="ml-2 text-gray-900">{getNumericValue(product.weight_kg)} kg</span>
-               </div>
-             )}
-             {product.dimensions_cm && (
-               <div>
-                 <span className="text-gray-500">Dimensions:</span>
-                 <span className="ml-2 text-gray-900">{getNumericValue(product.dimensions_cm)}</span>
-               </div>
-             )}
+            <div>
+              <span className="text-gray-500 dark:text-gray-400">Category:</span>
+              <span className="ml-2 text-foreground">{product.category?.name || 'Uncategorized'}</span>
+            </div>
+            {product.weight_kg && (
+              <div>
+                <span className="text-gray-500 dark:text-gray-400">Weight:</span>
+                <span className="ml-2 text-foreground">{getNumericValue(product.weight_kg)} kg</span>
+              </div>
+            )}
+            {product.dimensions_cm && (
+              <div>
+                <span className="text-gray-500 dark:text-gray-400">Dimensions:</span>
+                <span className="ml-2 text-foreground">{getNumericValue(product.dimensions_cm)}</span>
+              </div>
+            )}
           </div>
         </div>
 
