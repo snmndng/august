@@ -91,9 +91,16 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       if (profile) {
         setUser(profile);
         setUserRole(profile.role);
+      } else {
+        console.warn('No profile found for user:', userId);
+        // Still set loading to false even if profile is not found
+        setUser(null);
+        setUserRole(null);
       }
     } catch (error) {
       console.error('Error loading user profile:', error);
+      setUser(null);
+      setUserRole(null);
     }
   };
 
@@ -134,6 +141,8 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
             router.push('/dashboard');
           }, 100);
           return { success: true };
+        } finally {
+          setIsLoading(false);
         }
       }
 

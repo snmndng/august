@@ -5,9 +5,18 @@ import { demoCategories } from '@/lib/demo-data';
 export async function GET() {
   try {
     const categories = await ProductsService.getAllCategories();
-    return NextResponse.json(categories);
+
+    return NextResponse.json({
+      categories: categories || [],
+      total: categories ? categories.length : 0
+    });
   } catch (error) {
-    console.warn('Database not available, using demo data:', error);
-    return NextResponse.json(demoCategories);
+    console.error('Error fetching categories:', error);
+    // Return empty array as fallback instead of error
+    return NextResponse.json({
+      categories: [],
+      total: 0,
+      error: 'Failed to fetch categories'
+    });
   }
 }

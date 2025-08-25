@@ -80,7 +80,15 @@ export const getUserProfile = async (userId: string) => {
       .eq('id', userId)
       .single();
 
-    if (error) throw error;
+    if (error) {
+      // Handle specific error cases
+      if (error.code === 'PGRST116') {
+        console.warn('User profile not found for userId:', userId);
+        return null;
+      }
+      console.error('Supabase error getting user profile:', error);
+      throw error;
+    }
     return data;
   } catch (error) {
     console.error('Error getting user profile:', error);

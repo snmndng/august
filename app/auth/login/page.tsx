@@ -74,8 +74,7 @@ export default function LoginPage() {
       if (result.success) {
         // Success message - redirect is handled by AuthContext
         setError(null);
-        // Reset loading state even on success to prevent infinite spinner
-        setIsLoading(false);
+        // Don't reset loading here, let the redirect happen
       } else {
         setError(result.error || 'Login failed. Please try again.');
         setIsLoading(false);

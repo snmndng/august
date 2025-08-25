@@ -17,15 +17,22 @@ const categoryIcons: Record<string, any> = {
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await fetch('/api/categories');
+        if (!response.ok) {
+          throw new Error('Failed to fetch categories');
+        }
         const data = await response.json();
-        setCategories(data.categories);
+        setCategories(data.categories || []);
+        setError(null);
       } catch (error) {
         console.error('Error fetching categories:', error);
+        setError('Failed to load categories');
+        setCategories([]); // Ensure categories is always an array
       } finally {
         setLoading(false);
       }
@@ -38,6 +45,22 @@ export default function CategoriesPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-luxior-deep-orange"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 text-lg mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="btn-primary"
+          >
+            Try Again
+          </button>
+        </div>
       </div>
     );
   }
@@ -60,7 +83,7 @@ export default function CategoriesPage() {
       <section className="section-padding">
         <div className="container-max">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {categories.map((category) => {
+            {categories && categories.length > 0 ? categories.map((category) => {
               const IconComponent = categoryIcons[category.slug] || ShoppingBag;
               return (
                 <Link
@@ -97,7 +120,11 @@ export default function CategoriesPage() {
                   </div>
                 </Link>
               );
-            })}
+            }) : (
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-600 text-lg">No categories available at the moment.</p>
+              </div>
+            )}
           </div>
         </div>
       </section>
