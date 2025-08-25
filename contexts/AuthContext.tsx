@@ -110,9 +110,10 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
               last_name: authUser.user_metadata?.last_name || '',
               phone: authUser.user_metadata?.phone || null,
               role: 'customer' as const,
-              is_verified: false,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString(),
+              avatar_url: authUser.user_metadata?.avatar_url || null,
+              is_verified: authUser.email_confirmed_at ? true : false,
+              created_at: authUser.created_at!,
+              updated_at: authUser.updated_at!,
             };
             console.log('Using basic profile:', basicProfile);
             setUser(basicProfile);
