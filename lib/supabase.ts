@@ -68,6 +68,11 @@ export const getCurrentUser = async () => {
 
 // Helper function to get user profile
 export const getUserProfile = async (userId: string): Promise<AppUser | null> => {
+  if (!supabase) {
+    console.warn('Supabase client not initialized - cannot get user profile');
+    return null;
+  }
+
   try {
     const { data, error } = await supabase
       .from('users')
@@ -134,6 +139,11 @@ export const getUserProfile = async (userId: string): Promise<AppUser | null> =>
 
 // Helper function to check if user is admin
 export const isAdmin = async (userId: string): Promise<boolean> => {
+  if (!supabase) {
+    console.warn('Supabase client not initialized - cannot check admin status');
+    return false;
+  }
+
   try {
     const profile = await getUserProfile(userId);
     return profile?.role === 'admin';
@@ -145,6 +155,11 @@ export const isAdmin = async (userId: string): Promise<boolean> => {
 
 // Helper function to check if user is seller
 export const isSeller = async (userId: string): Promise<boolean> => {
+  if (!supabase) {
+    console.warn('Supabase client not initialized - cannot check seller status');
+    return false;
+  }
+
   try {
     const profile = await getUserProfile(userId);
     return profile?.role === 'seller';
@@ -156,6 +171,11 @@ export const isSeller = async (userId: string): Promise<boolean> => {
 
 // Helper function to get user role
 export const getUserRole = async (userId: string): Promise<string | null> => {
+  if (!supabase) {
+    console.warn('Supabase client not initialized - cannot get user role');
+    return null;
+  }
+
   try {
     const profile = await getUserProfile(userId);
     return profile?.role || null;
