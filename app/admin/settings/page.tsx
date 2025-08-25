@@ -10,10 +10,7 @@ import {
   Globe, 
   DollarSign, 
   Shield, 
-  Bell,
-  Key,
-  Users,
-  Package
+  Bell
 } from 'lucide-react';
 
 export default function AdminSettingsPage() {
