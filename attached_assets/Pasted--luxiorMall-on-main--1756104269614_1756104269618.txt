@@ -1,0 +1,42 @@
+
+╭─ ~/luxiorMall  on main ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── ✔  at 09:41:20 ─╮
+╰─ npm run build                                                                                                                                                                 ─╯
+
+> luxiormall@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.0
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: /home/portgas/luxiorMall/node_modules/next-pwa/register.js
+> [PWA] Service worker: /home/portgas/luxiorMall/public/sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+ ✓ Compiled successfully in 7.6s
+   Linting and checking validity of types  ...Failed to compile.
+
+./app/admin/settings/page.tsx:96:12
+Type error: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ general: { site_name: string; site_description: string; contact_email: string; support_phone: string; currency: string; timezone: string; }; payments: { mpesa_shortcode: string; mpesa_passkey: string; commission_rate: number; minimum_payout: number; }; notifications: { ...; }; security: { ...; }; }'.
+  No index signature with a parameter of type 'string' was found on type '{ general: { site_name: string; site_description: string; contact_email: string; support_phone: string; currency: string; timezone: string; }; payments: { mpesa_shortcode: string; mpesa_passkey: string; commission_rate: number; minimum_payout: number; }; notifications: { ...; }; security: { ...; }; }'.
+
+  94 |       ...prev,
+  95 |       [category]: {
+> 96 |         ...prev[category],
+     |            ^
+  97 |         [key]: value
+  98 |       }
+  99 |     }));
+Next.js build worker exited with code: 1 and signal: null
+
+╭─ ~/luxiorMall  on main ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 1 ✘  took 19s  at 09:41:47 ─╮
+╰─ git pull origin main                                                                                                                                                          ─╯
+From https://github.com/snmndng/august
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+╭─ ~/luxiorMall  on main ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── ✔  at 09:43:52 ─╮
+╰─                                                  
