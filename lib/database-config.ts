@@ -1,4 +1,3 @@
-
 import { PrismaClient } from '@prisma/client'
 
 // Database connection configuration
@@ -27,9 +26,15 @@ export const prismaAdmin = new PrismaClient({
   },
 })
 
-// Helper function to get the right Prisma client based on context
-export function getPrismaClient(context: 'app' | 'admin' = 'app') {
-  return context === 'admin' ? prismaAdmin : prisma
+// Context-based client selection
+export function getPrismaClient(context: 'app' | 'admin' | 'migration' = 'app') {
+  switch (context) {
+    case 'admin':
+    case 'migration':
+      return prismaAdmin // Direct connection for admin/migration tasks
+    default:
+      return prisma // Pooled connection for regular app operations
+  }
 }
 
 // Log which connections are being used
