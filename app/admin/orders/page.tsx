@@ -75,6 +75,9 @@ export default function AdminOrdersPage() {
       
       return () => clearTimeout(timeoutId);
     }
+    
+    // Return empty cleanup function when conditions aren't met
+    return () => {};
   }, [searchTerm, statusFilter, pagination.page]);
 
   const loadOrders = async () => {
