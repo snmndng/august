@@ -1,0 +1,138 @@
+
+╭─ ~/luxiorMall  on main ─────────────────────────────────────────────────────────── ✔  took 36s  at 18:12:55 ─╮
+╰─ npm start                                                                                                         ─╯
+
+> luxiormall@0.1.0 start
+> next start
+
+   ▲ Next.js 15.5.0
+   - Local:        http://localhost:3000
+   - Network:      http://10.255.255.254:3000
+
+ ✓ Starting...
+ ✓ Ready in 1130ms
+Supabase client initialized successfully
+prisma:error
+Invalid `prisma.order.findMany()` invocation:
+
+
+Error occurred during query execution:
+ConnectorError(ConnectorError { user_facing_error: None, kind: QueryError(PostgresError { code: "26000", message: "prepared statement \"s33\" does not exist", severity: "ERROR", detail: None, column: None, hint: None }), transient: false })
+Error fetching admin orders: Error [PrismaClientUnknownRequestError]:
+Invalid `prisma.order.findMany()` invocation:
+
+
+Error occurred during query execution:
+ConnectorError(ConnectorError { user_facing_error: None, kind: QueryError(PostgresError { code: "26000", message: "prepared statement \"s33\" does not exist", severity: "ERROR", detail: None, column: None, hint: None }), transient: false })
+    at async w (.next/server/app/api/admin/orders/route.js:1:1356)
+    at async k (.next/server/app/api/admin/orders/route.js:1:5338) {
+  clientVersion: '6.14.0'
+}
+prisma:error
+Invalid `prisma.order.count()` invocation:
+
+
+Error occurred during query execution:
+ConnectorError(ConnectorError { user_facing_error: None, kind: QueryError(PostgresError { code: "26000", message: "prepared statement \"s32\" does not exist", severity: "ERROR", detail: None, column: None, hint: None }), transient: false })
+
+╭─ ~/luxiorMall  on main ────────────────────────────────────────────────────── 1 ✘  took 7m 58s  at 18:20:57 ─╮
+╰─ git pull origin main                                                                                              ─╯
+remote: Enumerating objects: 24, done.
+remote: Counting objects: 100% (24/24), done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 14 (delta 7), reused 14 (delta 7), pack-reused 0 (from 0)
+Unpacking objects: 100% (14/14), 7.70 KiB | 254.00 KiB/s, done.
+From https://github.com/snmndng/august
+ * branch            main       -> FETCH_HEAD
+   64f989d..84e31cd  main       -> origin/main
+Updating 64f989d..84e31cd
+Fast-forward
+ app/admin/layout.tsx               | 149 ++++++++++++---------------
+ app/admin/page.tsx                 | 398 ++++++++++++++++++++++++++++++++++++++++++++---------------------------
+ app/admin/products/create/page.tsx | 432 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ app/admin/products/page.tsx        |   8 +-
+ app/api/admin/products/route.ts    |  82 +++++++++++++++
+ 5 files changed, 834 insertions(+), 235 deletions(-)
+ create mode 100644 app/admin/products/create/page.tsx
+
+╭─ ~/luxiorMall  on main ────────────────────────────────────────────────────────────────────── ✔  at 18:21:02 ─╮
+╰─ npm run build                                                                                                     ─╯
+
+> luxiormall@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.0
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: /home/portgas/luxiorMall/node_modules/next-pwa/register.js
+> [PWA] Service worker: /home/portgas/luxiorMall/public/sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+ ✓ Compiled successfully in 11.6s
+   Linting and checking validity of types  ...Failed to compile.
+
+./app/admin/page.tsx:17:3
+Type error: 'Settings' is declared but its value is never read.
+
+  15 |   Plus,
+  16 |   BarChart3,
+> 17 |   Settings,
+     |   ^
+  18 |   Eye
+  19 | } from 'lucide-react';
+  20 |
+Next.js build worker exited with code: 1 and signal: null
+
+╭─ ~/luxiorMall  on main ───────────────────────────────────────────────────────── 1 ✘  took 24s  at 18:21:27 ─╮
+╰─ git pull origin main                                                                                              ─╯
+remote: Enumerating objects: 9, done.
+remote: Counting objects: 100% (9/9), done.
+remote: Compressing objects: 100% (1/1), done.
+remote: Total 5 (delta 4), reused 5 (delta 4), pack-reused 0 (from 0)
+Unpacking objects: 100% (5/5), 1.05 KiB | 82.00 KiB/s, done.
+From https://github.com/snmndng/august
+ * branch            main       -> FETCH_HEAD
+   84e31cd..44799ac  main       -> origin/main
+Updating 84e31cd..44799ac
+Fast-forward
+ app/admin/page.tsx | 1 -
+ 1 file changed, 1 deletion(-)
+
+╭─ ~/luxiorMall  on main ────────────────────────────────────────────────────────────────────── ✔  at 18:22:32 ─╮
+╰─ npm run build                                                                                                     ─╯
+
+> luxiormall@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.0
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: /home/portgas/luxiorMall/node_modules/next-pwa/register.js
+> [PWA] Service worker: /home/portgas/luxiorMall/public/sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+ ✓ Compiled successfully in 8.2s
+   Linting and checking validity of types  .Failed to compile.
+
+./app/admin/products/create/page.tsx:9:3
+Type error: 'Upload' is declared but its value is never read.
+
+   7 | import {
+   8 |   Package,
+>  9 |   Upload,
+     |   ^
+  10 |   Save,
+  11 |   ArrowLeft,
+  12 |   DollarSign,
+Next.js build worker exited with code: 1 and signal: null
+
+╭─ ~/luxiorMall  on main ───────────────────────────────────────────────────────── 1 ✘  took 20s  at 18:22:56 ─╮
+╰─                                   
