@@ -69,6 +69,9 @@ export default function AdminProductsPage() {
       
       return () => clearTimeout(timeoutId);
     }
+    
+    // Return empty cleanup function for other code paths
+    return () => {};
   }, [searchTerm, statusFilter, categoryFilter, pagination.page]);
 
   const loadProducts = async () => {
