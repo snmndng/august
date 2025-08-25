@@ -158,8 +158,19 @@ CREATE POLICY "Users can view their own orders" ON public.orders
         is_admin()
     );
 
+-- Allow authenticated users and guest users to create orders
 CREATE POLICY "Users can create orders" ON public.orders
-    FOR INSERT WITH CHECK (auth.uid()::text = user_id);
+    FOR INSERT WITH CHECK (
+        auth.uid() = user_id::uuid OR 
+        (user_id IS NULL AND guest_email IS NOT NULL)
+    );
+
+-- Allow access to guest orders via email lookup (for order tracking)
+CREATE POLICY "Guest users can view their orders" ON public.orders
+    FOR SELECT USING (
+        auth.uid() = user_id::uuid OR 
+        (user_id IS NULL AND guest_email IS NOT NULL)
+    );
 
 CREATE POLICY "Sellers and admins can update orders" ON public.orders
     FOR UPDATE USING (

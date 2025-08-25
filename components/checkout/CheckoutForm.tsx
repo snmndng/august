@@ -3,11 +3,14 @@
 
 import { useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
-import { Phone, MapPin, Lock, Shield, Package, CheckCircle } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { Phone, MapPin, Lock, Shield, Package, CheckCircle, User, UserPlus } from 'lucide-react';
 
 export function CheckoutForm(): JSX.Element {
   const { state, clearCart } = useCart();
+  const { user } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [checkoutType, setCheckoutType] = useState<'guest' | 'login' | 'register'>('guest');
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -16,6 +19,9 @@ export function CheckoutForm(): JSX.Element {
     address: '',
     city: '',
     postalCode: '',
+    // Auth fields for registration
+    password: '',
+    confirmPassword: '',
   });
 
   // Helper function to safely get product price
@@ -67,17 +73,67 @@ export function CheckoutForm(): JSX.Element {
       return;
     }
 
+    // Validate form data
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.address || !formData.city) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    // Validate password fields for registration
+    if (checkoutType === 'register') {
+      if (!formData.password || formData.password !== formData.confirmPassword) {
+        alert('Passwords do not match');
+        return;
+      }
+      if (formData.password.length < 6) {
+        alert('Password must be at least 6 characters long');
+        return;
+      }
+    }
+
     setIsProcessing(true);
     try {
-      // TODO: Implement M-Pesa payment integration
-      console.log('Processing checkout:', { formData, cart: state.items });
+      const orderData = {
+        customerInfo: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          address: formData.address,
+          city: formData.city,
+          postalCode: formData.postalCode,
+        },
+        items: state.items,
+        totalAmount: state.totalPrice,
+        checkoutType,
+        userId: user?.id || null,
+        createAccount: checkoutType === 'register' ? {
+          password: formData.password
+        } : null
+      };
+
+      // Process the order
+      const response = await fetch('/api/orders/guest', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to process order');
+      }
       
-      // Simulate payment processing
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      alert(result.message || 'Order processed successfully!');
       
-      // TODO: Redirect to success page or handle payment response
-      alert('Payment processed successfully! (This is a demo)');
       clearCart();
+      
+      // TODO: Redirect to order confirmation page
+      // window.location.href = '/order-confirmation';
+      
     } catch (error) {
       console.error('Checkout error:', error);
       alert('Payment failed. Please try again.');
@@ -121,12 +177,70 @@ export function CheckoutForm(): JSX.Element {
                 <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
                   <MapPin size={20} className="text-white" />
                 </div>
-                <h2 className="text-2xl font-bold text-white">Shipping Information</h2>
+                <h2 className="text-2xl font-bold text-white">
+                  {user ? 'Shipping Information' : 'Checkout Options'}
+                </h2>
               </div>
             </div>
 
             {/* Form Content */}
             <div className="p-8">
+              {/* Checkout Type Selector - Only show if not logged in */}
+              {!user && (
+                <div className="mb-8">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">How would you like to checkout?</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <button
+                      type="button"
+                      onClick={() => setCheckoutType('guest')}
+                      className={`p-4 rounded-xl border-2 transition-all duration-200 ${
+                        checkoutType === 'guest'
+                          ? 'border-luxior-orange bg-luxior-orange/10 text-luxior-deep-orange'
+                          : 'border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-luxior-orange/50'
+                      }`}
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        <Package size={24} />
+                        <span className="font-semibold">Guest Checkout</span>
+                        <span className="text-xs opacity-75">Quick & Easy</span>
+                      </div>
+                    </button>
+                    
+                    <button
+                      type="button"
+                      onClick={() => setCheckoutType('login')}
+                      className={`p-4 rounded-xl border-2 transition-all duration-200 ${
+                        checkoutType === 'login'
+                          ? 'border-luxior-orange bg-luxior-orange/10 text-luxior-deep-orange'
+                          : 'border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-luxior-orange/50'
+                      }`}
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        <User size={24} />
+                        <span className="font-semibold">Login</span>
+                        <span className="text-xs opacity-75">Existing Account</span>
+                      </div>
+                    </button>
+                    
+                    <button
+                      type="button"
+                      onClick={() => setCheckoutType('register')}
+                      className={`p-4 rounded-xl border-2 transition-all duration-200 ${
+                        checkoutType === 'register'
+                          ? 'border-luxior-orange bg-luxior-orange/10 text-luxior-deep-orange'
+                          : 'border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-luxior-orange/50'
+                      }`}
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        <UserPlus size={24} />
+                        <span className="font-semibold">Create Account</span>
+                        <span className="text-xs opacity-75">Save for Later</span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Personal Information */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -206,6 +320,64 @@ export function CheckoutForm(): JSX.Element {
                   </div>
                 </div>
 
+                {/* Password Fields for Registration */}
+                {!user && checkoutType === 'register' && (
+                  <div className="space-y-6 pt-4 border-t border-gray-200 dark:border-gray-600">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                      <Lock size={20} className="text-luxior-orange" />
+                      Create Your Account
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label htmlFor="password" className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                          Password *
+                        </label>
+                        <input
+                          type="password"
+                          id="password"
+                          name="password"
+                          value={formData.password}
+                          onChange={handleInputChange}
+                          required={checkoutType === 'register'}
+                          className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-luxior-orange focus:border-luxior-orange bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all duration-200"
+                          placeholder="Enter a secure password"
+                          minLength={6}
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                          Confirm Password *
+                        </label>
+                        <input
+                          type="password"
+                          id="confirmPassword"
+                          name="confirmPassword"
+                          value={formData.confirmPassword}
+                          onChange={handleInputChange}
+                          required={checkoutType === 'register'}
+                          className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-luxior-orange focus:border-luxior-orange bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all duration-200"
+                          placeholder="Confirm your password"
+                          minLength={6}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-200 dark:border-blue-800">
+                      <p className="text-sm text-blue-700 dark:text-blue-200">
+                        <strong>Creating an account will:</strong>
+                      </p>
+                      <ul className="text-sm text-blue-600 dark:text-blue-300 mt-2 space-y-1">
+                        <li>• Save your information for faster future checkouts</li>
+                        <li>• Allow you to track your orders</li>
+                        <li>• Give you access to order history</li>
+                        <li>• Enable wishlist and cart sync across devices</li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
+
                 {/* Shipping Address */}
                 <div className="space-y-6 pt-4 border-t border-gray-200 dark:border-gray-600">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
@@ -278,7 +450,12 @@ export function CheckoutForm(): JSX.Element {
                     ) : (
                       <>
                         <Lock size={22} />
-                        Complete Order with M-Pesa
+                        {checkoutType === 'register' 
+                          ? 'Create Account & Pay with M-Pesa'
+                          : checkoutType === 'login'
+                          ? 'Login & Pay with M-Pesa'
+                          : 'Complete Order with M-Pesa'
+                        }
                       </>
                     )}
                   </button>
@@ -356,6 +533,21 @@ export function CheckoutForm(): JSX.Element {
                   </div>
                 </div>
               </div>
+
+              {/* Guest Checkout Info */}
+              {!user && checkoutType === 'guest' && (
+                <div className="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle size={20} className="text-green-600 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h3 className="font-semibold text-green-900 dark:text-green-100 mb-1 text-sm">Guest Checkout</h3>
+                      <p className="text-xs text-green-700 dark:text-green-200">
+                        No account required! You'll receive order updates via email and can track your order using your email address.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Trust Badges */}
               <div className="mt-6 flex items-center justify-center gap-4 pt-4 border-t border-gray-100 dark:border-gray-600">
