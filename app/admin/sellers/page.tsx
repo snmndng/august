@@ -21,11 +21,30 @@ import {
   MapPin
 } from 'lucide-react';
 
+interface SellerOwner {
+  name: string;
+  email: string;
+  phone: string;
+}
+
+interface AdminSeller {
+  id: string;
+  business_name: string;
+  owner: SellerOwner;
+  status: string;
+  products_count: number;
+  total_sales: number;
+  commission_rate: number;
+  location: string;
+  joined_date: string;
+  last_active: string;
+}
+
 export default function AdminSellersPage() {
   const { isAuthenticated, isLoading } = useAuth();
   const isAdmin = useIsAdmin();
   const router = useRouter();
-  const [sellers, setSellers] = useState([]);
+  const [sellers, setSellers] = useState<AdminSeller[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
