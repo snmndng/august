@@ -27,6 +27,7 @@ interface OrderCustomer {
 
 interface Order {
   id: string;
+  orderNumber: string;
   customer: OrderCustomer;
   total: number;
   status: string;
@@ -314,7 +315,7 @@ export default function AdminOrdersPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
                         <div className="text-sm font-medium text-gray-900">
-                          {order.orderNumber}
+                          {order.id}
                         </div>
                         <div className="text-sm text-gray-500">
                           {order.items_count} item(s)

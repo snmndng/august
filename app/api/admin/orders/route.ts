@@ -1,4 +1,3 @@
-
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
@@ -20,7 +19,7 @@ export async function GET(request: NextRequest) {
 
     // Build where clause
     const where: any = {};
-    
+
     if (search) {
       where.OR = [
         { orderNumber: { contains: search, mode: 'insensitive' } },
@@ -41,7 +40,9 @@ export async function GET(request: NextRequest) {
     const [orders, total] = await Promise.all([
       prisma.order.findMany({
         where,
-        include: {
+        select: {
+          id: true,
+          orderNumber: true,
           user: {
             select: {
               firstName: true,
@@ -49,6 +50,9 @@ export async function GET(request: NextRequest) {
               email: true
             }
           },
+          totalAmount: true,
+          status: true,
+          createdAt: true,
           items: {
             select: {
               quantity: true,
@@ -102,31 +106,37 @@ export async function GET(request: NextRequest) {
       totalRevenue: stats.reduce((sum, s) => sum + Number(s._sum.totalAmount || 0), 0)
     };
 
-    return NextResponse.json({
-      orders: orders.map(order => ({
-        id: order.id,
-        orderNumber: order.orderNumber,
-        customer: {
-          name: `${order.user.firstName} ${order.user.lastName}`,
-          email: order.user.email
-        },
-        total: Number(order.totalAmount),
-        status: order.status,
-        payment_status: order.payments[0]?.status || 'pending',
-        payment_method: order.payments[0]?.method || null,
-        items_count: order.items.reduce((sum, item) => sum + item.quantity, 0),
-        created_at: order.createdAt.toISOString(),
-        shipping_address: order.shipping[0]?.address 
-          ? `${order.shipping[0].address.city}, ${order.shipping[0].address.state}`
-          : 'Not provided'
-      })),
-      pagination: {
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit)
+    const formattedOrders = orders.map(order => ({
+      id: order.id,
+      orderNumber: order.orderNumber,
+      customer: {
+        name: `${order.user.firstName} ${order.user.lastName}`,
+        email: order.user.email
       },
-      stats: statsObj
+      total: Number(order.totalAmount),
+      status: order.status,
+      payment_status: order.payments[0]?.status || 'pending',
+      payment_method: order.payments[0]?.method || null,
+      items_count: order.items.reduce((sum, item) => sum + item.quantity, 0),
+      created_at: order.createdAt.toISOString(),
+      shipping_address: order.shipping[0]?.address 
+        ? `${order.shipping[0].address.city}, ${order.shipping[0].address.state}`
+        : 'Not provided'
+    }));
+
+
+    return NextResponse.json({
+      orders: formattedOrders,
+      stats: {
+        total,
+        pending: stats.find(s => s.status === 'pending')?._count || 0,
+        shipped: stats.find(s => s.status === 'shipped')?._count || 0,
+        totalRevenue: stats.reduce((sum, s) => sum + Number(s._sum.totalAmount || 0), 0)
+      },
+      pagination: {
+        page,
+        totalPages: Math.ceil(total / limit)
+      }
     });
 
   } catch (error) {
