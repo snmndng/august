@@ -1,0 +1,35 @@
+in ────────────────────────────────────────────────────────────────────── ✔  at 05:46:17 ─╮
+╰─ npm run build                                                                                                     ─╯
+
+> luxiormall@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.0
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: /home/portgas/luxiorMall/node_modules/next-pwa/register.js
+> [PWA] Service worker: /home/portgas/luxiorMall/public/sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+ ✓ Compiled successfully in 8.4s
+   Linting and checking validity of types  ...Failed to compile.
+
+./contexts/AuthContext.tsx:118:21
+Type error: Argument of type '{ id: string; email: string; first_name: any; last_name: any; phone: any; role: "customer"; is_verified: boolean; created_at: string; updated_at: string; }' is not assignable to parameter of type 'SetStateAction<{ id: string; email: string; phone: string | null; first_name: string; last_name: string; role: "customer" | "seller" | "admin"; avatar_url: string | null; is_verified: boolean; created_at: string; updated_at: string; } | null>'.
+  Property 'avatar_url' is missing in type '{ id: string; email: string; first_name: any; last_name: any; phone: any; role: "customer"; is_verified: boolean; created_at: string; updated_at: string; }' but required in type '{ id: string; email: string; phone: string | null; first_name: string; last_name: string; role: "customer" | "seller" | "admin"; avatar_url: string | null; is_verified: boolean; created_at: string; updated_at: string; }'.
+
+  116 |             };
+  117 |             console.log('Using basic profile:', basicProfile);
+> 118 |             setUser(basicProfile);
+      |                     ^
+  119 |             setUserRole(basicProfile.role);
+  120 |           } else {
+  121 |             setUser(null);
+Next.js build worker exited with code: 1 and signal: null
+
+╭─ ~/luxiorMall  on main ───────────────────────────────────────────────────────── 1 ✘  took 19s  at 05:╭─ ~/luxiorMall  on main ─────────────────────────────────────────────── 1 ✘  took 19s  at 05:46:39 ─╮
+╰─                                                                                                         ─╯ 
