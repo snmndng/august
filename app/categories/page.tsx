@@ -1,53 +1,35 @@
-'use client';
+import type { Metadata } from 'next';
+import { Suspense } from 'react';
+import { CategoriesContent } from '@/components/categories/CategoriesContent';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { ShoppingBag, Smartphone, Laptop, Shirt, Watch, Headphones } from 'lucide-react';
-import type { Category } from '@prisma/client';
-
-const categoryIcons: Record<string, any> = {
-  'shoes': ShoppingBag,
-  'fashion': Shirt,
-  'laptops': Laptop,
-  'electronics': Smartphone,
-  'watches': Watch,
-  'audio': Headphones,
+export const metadata: Metadata = {
+  title: 'All Categories - LuxiorMall',
+  description: 'Browse all product categories at LuxiorMall. From shoes and fashion to electronics and laptops, find everything you need.',
+  keywords: ['categories', 'shopping', 'fashion', 'electronics', 'shoes', 'laptops', 'Kenya'],
+  openGraph: {
+    title: 'All Categories - LuxiorMall',
+    description: 'Browse all product categories at LuxiorMall.',
+    type: 'website',
+    url: '/categories',
+  },
+  alternates: {
+    canonical: '/categories',
+  },
 };
 
 export default function CategoriesPage() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch('/api/categories');
-        if (!response.ok) {
-          throw new Error('Failed to fetch categories');
-        }
-        const data = await response.json();
-        setCategories(data.categories || []);
-        setError(null);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-        setError('Failed to load categories');
-        setCategories([]); // Ensure categories is always an array
-      } finally {
-        setLoading(false);
+  return (
+    <Suspense 
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-luxior-deep-orange"></div>
+        </div>
       }
-    };
-
-    fetchCategories();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-luxior-deep-orange"></div>
-      </div>
-    );
-  }
+    >
+      <CategoriesContent />
+    </Suspense>
+  );
+}
 
   if (error) {
     return (

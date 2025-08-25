@@ -6,6 +6,7 @@ import { RelatedProducts } from '@/components/products/RelatedProducts';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { ProductsService } from '@/lib/services/products';
 import { serializeProduct } from '@/lib/serializers';
+import { SEOGenerator } from '@/lib/seo/generator';
 
 interface ProductPageProps {
   params: {
@@ -25,28 +26,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       };
     }
 
-    return {
-      title: `${product.name} - LuxiorMall`,
-      description: product.shortDescription || product.description || `Shop ${product.name} at LuxiorMall`,
-      keywords: [product.name, 'shopping', 'ecommerce', 'Kenya'],
-      openGraph: {
-        title: product.name,
-        description: product.shortDescription || product.description || `Shop ${product.name} at LuxiorMall`,
-        type: 'website',
-        url: `/products/${product.slug}`,
-        images: [
-          {
-            url: '/og-product-image.jpg', // TODO: Use actual product image
-            width: 1200,
-            height: 630,
-            alt: product.name,
-          },
-        ],
-      },
-      alternates: {
-        canonical: `/products/${product.slug}`,
-      },
-    };
+    return SEOGenerator.generateProductSEO(product);
   } catch (error) {
     console.error('Error generating metadata:', error);
     return {
@@ -66,34 +46,15 @@ export default async function ProductPage({ params }: ProductPageProps): Promise
     }
 
     // Generate structured data for SEO
-    const structuredData = {
-      '@context': 'https://schema.org',
-      '@type': 'Product',
-      name: product.name,
-      description: product.description,
-      sku: product.sku,
-      brand: {
-        '@type': 'Brand',
-        name: 'LuxiorMall',
-      },
-      offers: {
-        '@type': 'Offer',
-        price: parseFloat(product.price.toString()), // Ensure price is a number
-        priceCurrency: 'KES',
-        availability: product.stockQuantity > 0 
-          ? 'https://schema.org/InStock' 
-          : 'https://schema.org/OutOfStock',
-        seller: {
-          '@type': 'Organization',
-          name: 'LuxiorMall',
-        },
-      },
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: '4.5', // Placeholder, ideally from product data
-        reviewCount: '127', // Placeholder, ideally from product data
-      },
-    };
+    const structuredData = SEOGenerator.generateStructuredData(product);
+    
+    // Generate breadcrumb structured data
+    const breadcrumbData = SEOGenerator.generateBreadcrumbStructuredData([
+      { name: 'Home', url: '/' },
+      { name: 'Products', url: '/products' },
+      { name: product.category?.name || 'Category', url: `/categories/${product.category?.slug || ''}` },
+      { name: product.name, url: `/products/${product.slug}` },
+    ]);
     
     const serializedProduct = serializeProduct(product);
 
@@ -103,6 +64,10 @@ export default async function ProductPage({ params }: ProductPageProps): Promise
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
         />
 
         <div className="min-h-screen bg-gray-50">
