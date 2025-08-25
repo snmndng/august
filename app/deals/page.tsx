@@ -14,10 +14,21 @@ export default function DealsPage() {
       try {
         // Fetch featured products as deals for now
         const response = await fetch('/api/products?featured=true&limit=12');
+        if (!response.ok) {
+          throw new Error('Failed to fetch deals');
+        }
         const data = await response.json();
-        setProducts(data.products);
+        // Handle both direct array response and object with products property
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else if (data.products && Array.isArray(data.products)) {
+          setProducts(data.products);
+        } else {
+          setProducts([]);
+        }
       } catch (error) {
         console.error('Error fetching deals:', error);
+        setProducts([]); // Set empty array on error
       } finally {
         setLoading(false);
       }
@@ -58,7 +69,7 @@ export default function DealsPage() {
             </p>
           </div>
 
-          {products.length > 0 ? (
+          {products && products.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {products.map((product) => (
                 <ProductCard key={product.id} product={product} />
