@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      orderId: order.id,
+      orderId: (order as any).id,
       message: createAccount
         ? 'Account created and order placed successfully!'
         : 'Order placed successfully!',
