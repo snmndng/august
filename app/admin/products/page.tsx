@@ -17,11 +17,24 @@ import {
   CheckCircle
 } from 'lucide-react';
 
+interface AdminProduct {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  category: string;
+  status: string;
+  seller: string;
+  created_at: string;
+  image_url: string;
+}
+
 export default function AdminProductsPage() {
   const { isAuthenticated, isLoading } = useAuth();
   const isAdmin = useIsAdmin();
   const router = useRouter();
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<AdminProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
