@@ -256,5 +256,6 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
         <div className="w-full h-full bg-white dark:bg-gray-900 rounded-3xl"></div>
       </div>
     </div>
+    </div>
   );
 }
