@@ -9,7 +9,7 @@ const isValidUrl = (url: string | undefined): boolean => {
   if (!url) return false;
   try {
     new URL(url);
-    return url.includes('supabase.co') && 
+    return url.includes('supabase.co') &&
            !url.includes('your_supabase_project_url_here') &&
            !url.includes('placeholder');
   } catch {
@@ -17,8 +17,8 @@ const isValidUrl = (url: string | undefined): boolean => {
   }
 };
 
-const hasValidEnvVars = supabaseUrl && 
-  supabaseAnonKey && 
+const hasValidEnvVars = supabaseUrl &&
+  supabaseAnonKey &&
   isValidUrl(supabaseUrl) &&
   !supabaseAnonKey.includes('your_actual');
 
@@ -27,7 +27,7 @@ if (!hasValidEnvVars) {
 }
 
 // Create Supabase client
-export const supabase = supabaseUrl && supabaseAnonKey 
+export const supabase = supabaseUrl && supabaseAnonKey
   ? createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         persistSession: true,
@@ -67,12 +67,7 @@ export const getCurrentUser = async () => {
 };
 
 // Helper function to get user profile
-export const getUserProfile = async (userId: string) => {
-  if (!supabase) {
-    console.warn('Supabase client not initialized - cannot get user profile');
-    return null;
-  }
-
+export const getUserProfile = async (userId: string): Promise<AppUser | null> => {
   try {
     const { data, error } = await supabase
       .from('users')
@@ -98,10 +93,12 @@ export const getUserProfile = async (userId: string) => {
                 phone: user.user_metadata?.phone || null,
                 role: 'customer',
                 is_verified: false,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
               })
               .select()
               .single();
-            
+
             if (createError) {
               console.error('Error creating user profile:', createError.message || createError);
               // Return a minimal profile even if DB insert fails
@@ -113,6 +110,7 @@ export const getUserProfile = async (userId: string) => {
                 phone: user.user_metadata?.phone || null,
                 role: 'customer' as const,
                 is_verified: false,
+                avatar_url: null,
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString(),
               };

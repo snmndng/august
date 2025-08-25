@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { UserRole } from '@/types';
 import type { Database } from '@/types/supabase';
 import { supabase, getCurrentUser, getUserProfile } from '@/lib/supabase';
+import { syncUserFromAuth } from '@/lib/utils/userSync';
 import { useRouter } from 'next/navigation';
 
 type AppUser = Database['public']['Tables']['users']['Row'];
@@ -194,45 +195,43 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           data: {
             first_name: firstName,
             last_name: lastName,
-            phone,
-          },
-        },
+            phone: phone,
+          }
+        }
       });
 
       if (error) {
-        throw error;
+        console.error('Supabase auth error:', error);
+        return {
+          success: false,
+          error: error.message || 'Registration failed'
+        };
       }
 
       if (data.user) {
-        // Create user profile in database
-        const { error: profileError } = await supabase
-          .from('users')
-          .insert({
-            id: data.user.id,
-            email: data.user.email!,
-            first_name: firstName,
-            last_name: lastName,
-            phone: phone || null,
-            role: 'customer',
-            is_verified: false,
-          });
+        // Sync user profile to users table
+        try {
+          const syncResult = await syncUserFromAuth(data.user);
+          if (!syncResult.success) {
+            console.warn('Profile sync warning:', syncResult.error);
+          }
 
-        if (profileError) {
-          console.error('Error creating user profile:', profileError);
-          // Still return success as user was created in auth
+          // Load the user profile
+          await loadUserProfile(data.user.id);
+          return { success: true };
+        } catch (profileError) {
+          console.error('Profile sync error:', profileError);
+          // Still consider registration successful as auth user was created
+          return { success: true };
         }
-
-        // Load user profile
-        await loadUserProfile(data.user.id);
-        return { success: true };
       }
 
-      return { success: false, error: 'Sign up failed' };
+      return { success: false, error: 'Registration failed - no user data received' };
     } catch (error) {
       console.error('Sign up error:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Sign up failed'
+        error: error instanceof Error ? error.message : 'Registration failed'
       };
     }
   };

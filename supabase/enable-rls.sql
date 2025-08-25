@@ -1,4 +1,3 @@
-
 -- Enable RLS on all tables
 ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.user_addresses ENABLE ROW LEVEL SECURITY;
