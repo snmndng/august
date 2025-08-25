@@ -191,7 +191,7 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
                   In Stock {product.stock_quantity <= (product.low_stock_threshold || 5) && `(${product.stock_quantity} left)`}
                 </span>
               </>
-            ) : product.allow_preorder ? (
+            ) : (product.allow_preorder ?? false) ? (
               <>
                 <div className="w-2 h-2 bg-luxior-orange rounded-full"></div>
                 <span className="text-sm text-luxior-orange font-medium">Preorder Available</span>

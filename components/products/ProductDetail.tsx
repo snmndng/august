@@ -170,8 +170,8 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
           stockQuantity={product.stock_quantity}
           lowStockThreshold={product.low_stock_threshold || 5}
           allowPreorder={product.allow_preorder ?? false}
-          preorderLimit={product.preorder_limit || undefined}
-          estimatedRestockDate={product.estimated_restock_date || undefined}
+          {...(product.preorder_limit && { preorderLimit: product.preorder_limit })}
+          {...(product.estimated_restock_date && { estimatedRestockDate: product.estimated_restock_date })}
         />
 
         {/* Quantity Selector */}
