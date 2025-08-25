@@ -90,13 +90,16 @@ export default function AdminSettingsPage() {
   };
 
   const updateSetting = (category: keyof typeof settings, key: string, value: any) => {
-    setSettings(prev => ({
-      ...prev,
-      [category]: {
-        ...prev[category] as any,
-        [key]: value
-      }
-    }));
+    setSettings(prev => {
+      const currentCategory = prev[category];
+      return {
+        ...prev,
+        [category]: {
+          ...currentCategory,
+          [key]: value
+        }
+      };
+    });
   };
 
   const tabs = [
