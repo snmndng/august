@@ -13,7 +13,6 @@ import {
   Trash2, 
   Eye,
   DollarSign,
-  TrendingUp,
   AlertTriangle,
   CheckCircle
 } from 'lucide-react';
