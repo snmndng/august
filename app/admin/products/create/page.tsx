@@ -1,13 +1,11 @@
-
 'use client';
 
 import { useState } from 'react';
 import { useAuth, useIsAdmin } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { 
-  Package, 
-  Upload, 
-  Save, 
+import {
+  Package,
+  Save,
   ArrowLeft,
   DollarSign,
   Hash,
@@ -50,7 +48,7 @@ export default function CreateProductPage() {
   const { isAuthenticated, isLoading } = useAuth();
   const isAdmin = useIsAdmin();
   const router = useRouter();
-  
+
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [sellers, setSellers] = useState<User[]>([]);
@@ -89,13 +87,13 @@ export default function CreateProductPage() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    
+
     if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked;
       setFormData(prev => ({ ...prev, [name]: checked }));
     } else {
       setFormData(prev => ({ ...prev, [name]: value }));
-      
+
       // Auto-generate slug when name changes
       if (name === 'name') {
         setFormData(prev => ({ ...prev, slug: generateSlug(value) }));
@@ -170,7 +168,7 @@ export default function CreateProductPage() {
             <FileText className="w-5 h-5" />
             Basic Information
           </h2>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -185,7 +183,7 @@ export default function CreateProductPage() {
                 required
               />
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 URL Slug
@@ -236,7 +234,7 @@ export default function CreateProductPage() {
             <DollarSign className="w-5 h-5" />
             Pricing & Inventory
           </h2>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -253,7 +251,7 @@ export default function CreateProductPage() {
                 required
               />
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Compare Price (KES)
@@ -268,7 +266,7 @@ export default function CreateProductPage() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-luxior-deep-orange focus:border-transparent"
               />
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Stock Quantity *
@@ -306,7 +304,7 @@ export default function CreateProductPage() {
             <Tag className="w-5 h-5" />
             Organization
           </h2>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -325,7 +323,7 @@ export default function CreateProductPage() {
                 <option value="laptops">Laptops</option>
               </select>
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Seller
@@ -362,7 +360,7 @@ export default function CreateProductPage() {
         {/* Status & Features */}
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Status & Features</h2>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -379,7 +377,7 @@ export default function CreateProductPage() {
                 <option value="inactive">Inactive</option>
               </select>
             </div>
-            
+
             <div className="flex items-center">
               <input
                 type="checkbox"
@@ -392,7 +390,7 @@ export default function CreateProductPage() {
                 Featured Product
               </label>
             </div>
-            
+
             <div className="flex items-center">
               <input
                 type="checkbox"
