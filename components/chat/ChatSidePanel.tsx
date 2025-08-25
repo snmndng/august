@@ -37,6 +37,9 @@ export default function ChatSidePanel() {
       const interval = setInterval(checkUnreadMessages, 30000);
       return () => clearInterval(interval);
     }
+    
+    // Return empty cleanup function when conditions aren't met
+    return () => {};
   }, [user, isOpen, chatRoom]);
 
   const handleToggleChat = async () => {
