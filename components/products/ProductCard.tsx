@@ -56,10 +56,6 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
     // TODO: Implement wishlist functionality
   };
 
-  const discountPercentage = product.compare_price && product.compare_price > product.price
-    ? Math.round(((parseFloat(product.compare_price.toString()) - parseFloat(product.price.toString())) / parseFloat(product.compare_price.toString())) * 100)
-    : 0;
-
   return (
     <div 
       className="group relative bg-white dark:bg-gray-900 rounded-3xl shadow-soft hover:shadow-strong transition-all duration-500 overflow-hidden border border-gray-100 dark:border-gray-800 hover:border-luxior-orange/20 dark:hover:border-luxior-orange/30"
