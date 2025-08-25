@@ -1,6 +1,12 @@
 import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL_DIRECT || process.env.DATABASE_URL,
+    },
+  },
+})
 
 async function main() {
   console.log('🌱 Starting database seeding...')
@@ -284,11 +290,11 @@ async function main() {
 
   // Create product variants for some products
   console.log('🔧 Creating/updating product variants...')
-  
+
   // Get product IDs
   const sneakersProduct = products.find(p => p.slug === 'premium-leather-sneakers')
   const jacketProduct = products.find(p => p.slug === 'classic-denim-jacket')
-  
+
   // Delete existing variants for these products to avoid duplicates
   await prisma.productVariant.deleteMany({
     where: {
@@ -298,7 +304,7 @@ async function main() {
       ]
     }
   })
-  
+
   const variants = await Promise.all([
     // Sneaker sizes
     prisma.productVariant.create({
