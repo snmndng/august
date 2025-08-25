@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Heart, ShoppingCart, Eye, Star, ArrowRight } from 'lucide-react';
 import type { ProductWithDetails } from '@/lib/services/products';
 import { useCart } from '@/contexts/CartContext';
+import { PriceDropBadge, PriceHistoryIndicator } from '@/components/products/PriceDropBadge';
 
 interface ProductCardProps {
   product: ProductWithDetails;
@@ -112,11 +113,7 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
 
         {/* Badges */}
         <div className="absolute top-4 left-4 flex flex-col gap-2">
-          {discountPercentage > 0 && (
-            <span className="px-3 py-1 bg-luxior-error text-white text-xs font-bold rounded-full shadow-lg">
-              -{discountPercentage}%
-            </span>
-          )}
+          <PriceDropBadge product={product} variant="small" showAmount={false} />
           {product.is_featured && (
             <span className="px-3 py-1 bg-luxior-info text-white text-xs font-medium rounded-full shadow-lg">
               Featured
@@ -177,7 +174,9 @@ export function ProductCard({ product }: ProductCardProps): JSX.Element {
                 {formatPrice(product.compare_price)}
               </span>
             )}
+            <PriceHistoryIndicator product={product} />
           </div>
+          <PriceDropBadge product={product} variant="small" /></div>
           
           {/* Stock Status */}
           <div className="flex items-center gap-2">

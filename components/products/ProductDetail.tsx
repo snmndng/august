@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { Heart, ShoppingCart, Share2, MessageCircle, Truck, Shield, RotateCcw } from 'lucide-react';
 import type { ProductWithDetails } from '@/lib/services/products';
 import { useCart } from '@/contexts/CartContext';
+import { PriceDropBadge, PriceHistoryIndicator } from '@/components/products/PriceDropBadge';
+import { PriceAlertForm } from '@/components/products/PriceAlertForm';
 
 interface ProductDetailProps {
   product: ProductWithDetails;
@@ -156,6 +158,11 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
               </span>
             </>
           )}
+          {/* Price History Indicator */}
+          <PriceHistoryIndicator 
+            priceHistory={product.price_history} 
+            currentPrice={getProductPrice(product.price)}
+          />
         </div>
 
         {/* Stock Status */}
@@ -250,18 +257,18 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
         </button>
 
         {/* Product Features */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-gray-200">
-          <div className="flex items-center gap-2 text-sm text-luxior-info">
-            <Truck size={16} />
-            <span>Free Delivery</span>
+        <div className="space-y-4 pt-6 border-t border-border">
+          <div className="flex items-center gap-3">
+            <Truck className="text-luxior-success" size={20} />
+            <span className="text-foreground">Free shipping on orders over KES 5,000</span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-luxior-success">
-            <Shield size={16} />
-            <span>Secure Payment</span>
+          <div className="flex items-center gap-3">
+            <Shield className="text-luxior-info" size={20} />
+            <span className="text-foreground">2-year warranty included</span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-luxior-warning">
-            <RotateCcw size={16} />
-            <span>Easy Returns</span>
+          <div className="flex items-center gap-3">
+            <RotateCcw className="text-luxior-warning" size={20} />
+            <span className="text-foreground">30-day easy returns</span>
           </div>
         </div>
 
@@ -300,6 +307,15 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
                </div>
              )}
           </div>
+        </div>
+
+        {/* Price Alert */}
+        <div className="pt-6 border-t border-border">
+          <PriceAlertForm 
+            productId={product.id} 
+            currentPrice={getProductPrice(product.price)}
+            productName={product.name}
+          />
         </div>
       </div>
     </div>
