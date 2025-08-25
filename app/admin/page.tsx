@@ -5,6 +5,13 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import UserRoleManager from '@/components/admin/UserRoleManager';
+import Link from 'next/link';
+import { 
+  Package, 
+  ShoppingCart, 
+  Users, 
+  BarChart3 
+} from 'lucide-react';
 
 export default function AdminPage() {
   const { user, userRole, isLoading } = useAuth();
