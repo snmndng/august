@@ -8,7 +8,6 @@ import {
   Save,
   ArrowLeft,
   DollarSign,
-  Hash,
   Tag,
   FileText,
   Image as ImageIcon
