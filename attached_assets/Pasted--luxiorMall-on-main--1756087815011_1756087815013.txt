@@ -1,0 +1,39 @@
+
+╭─ ~/luxiorMall  on main ────────────────────────────────────────────────────────────────────── ✔  at 05:09:44 ─╮
+╰─ npm run build                                                                                                     ─╯
+
+> luxiormall@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.0
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: /home/portgas/luxiorMall/node_modules/next-pwa/register.js
+> [PWA] Service worker: /home/portgas/luxiorMall/public/sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+ ✓ Compiled successfully in 8.3s
+   Linting and checking validity of types  ...Failed to compile.
+
+./app/api/orders/guest/route.ts:58:8
+Type error: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "orders", never, "POST">', gave the following error.
+    Argument of type '{ user_id: string | null | undefined; guest_email: any; guest_name: string | null; guest_phone: any; shipping_address: { firstName: any; lastName: any; address: any; city: any; postalCode: any; phone: any; }; total_amount: any; status: "pending"; payment_status: "pending"; }[]' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "orders", never, "POST">', gave the following error.
+    Type '{ user_id: string | null | undefined; guest_email: any; guest_name: string | null; guest_phone: any; shipping_address: { firstName: any; lastName: any; address: any; city: any; postalCode: any; phone: any; }; total_amount: any; status: "pending"; payment_status: "pending"; }' is not assignable to type 'never'.
+
+  56 |     const { data: order, error: orderError } = await supabase
+  57 |       .from('orders')
+> 58 |       .insert([orderData])
+     |        ^
+  59 |       .select()
+  60 |       .single();
+  61 |
+Next.js build worker exited with code: 1 and signal: null
+
+╭─ ~/luxiorMall  on main ───────────────────────────────────────────────────────── 1 ✘  took 19s  at 05:10:05 ─╮
+╰─                                    
