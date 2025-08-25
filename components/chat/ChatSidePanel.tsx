@@ -18,28 +18,27 @@ export default function ChatSidePanel() {
 
   // Check for unread messages when user is authenticated
   useEffect(() => {
-    if (user && isOpen && chatRoom) {
-      const checkUnreadMessages = async () => {
-        try {
-          const messages = await chatService.getRoomMessages(chatRoom.id);
-          const unread = messages.filter(msg => 
-            !msg.is_read && msg.sender_id !== user.id
-          ).length;
-          setUnreadCount(unread);
-        } catch (error) {
-          console.error('Error checking unread messages:', error);
-        }
-      };
-
-      checkUnreadMessages();
-      
-      // Check periodically for new messages
-      const interval = setInterval(checkUnreadMessages, 30000);
-      return () => clearInterval(interval);
+    if (!user || !isOpen || !chatRoom) {
+      return;
     }
+
+    const checkUnreadMessages = async () => {
+      try {
+        const messages = await chatService.getRoomMessages(chatRoom.id);
+        const unread = messages.filter(msg => 
+          !msg.is_read && msg.sender_id !== user.id
+        ).length;
+        setUnreadCount(unread);
+      } catch (error) {
+        console.error('Error checking unread messages:', error);
+      }
+    };
+
+    checkUnreadMessages();
     
-    // Return empty cleanup function when conditions aren't met
-    return () => {};
+    // Check periodically for new messages
+    const interval = setInterval(checkUnreadMessages, 30000);
+    return () => clearInterval(interval);
   }, [user, isOpen, chatRoom]);
 
   const handleToggleChat = async () => {
