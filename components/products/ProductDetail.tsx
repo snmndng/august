@@ -161,8 +161,7 @@ export function ProductDetail({ product }: ProductDetailProps): JSX.Element {
           )}
           {/* Price History Indicator */}
           <PriceHistoryIndicator 
-            priceHistory={product.price_history} 
-            currentPrice={getProductPrice(product.price)}
+            product={product}
           />
         </div>
 
