@@ -89,11 +89,11 @@ export default function AdminSettingsPage() {
     }
   };
 
-  const updateSetting = (category: string, key: string, value: any) => {
+  const updateSetting = (category: keyof typeof settings, key: string, value: any) => {
     setSettings(prev => ({
       ...prev,
       [category]: {
-        ...prev[category],
+        ...prev[category] as any,
         [key]: value
       }
     }));
