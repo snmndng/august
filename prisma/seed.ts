@@ -284,35 +284,44 @@ async function main() {
 
   // Create product variants for some products
   console.log('🔧 Creating/updating product variants...')
+  
+  // Get product IDs
+  const sneakersProduct = products.find(p => p.slug === 'premium-leather-sneakers')
+  const jacketProduct = products.find(p => p.slug === 'classic-denim-jacket')
+  
+  // Delete existing variants for these products to avoid duplicates
+  await prisma.productVariant.deleteMany({
+    where: {
+      OR: [
+        { productId: sneakersProduct?.id },
+        { productId: jacketProduct?.id }
+      ]
+    }
+  })
+  
   const variants = await Promise.all([
     // Sneaker sizes
-    prisma.productVariant.upsert({
-      where: { sku: 'PLS-42' },
-      update: {},
-      create: {
-        productId: products.find(p => p.slug === 'premium-leather-sneakers')?.id!,
+    prisma.productVariant.create({
+      data: {
+        productId: sneakersProduct?.id!,
         name: 'Size',
         value: '42',
         stockQuantity: 10,
         sku: 'PLS-42',
       },
     }),
-    prisma.productVariant.upsert({
-      where: { sku: 'PLS-43' },
-      update: {},
-      create: {
-        productId: products.find(p => p.slug === 'premium-leather-sneakers')?.id!,
+    prisma.productVariant.create({
+      data: {
+        productId: sneakersProduct?.id!,
         name: 'Size',
         value: '43',
         stockQuantity: 15,
         sku: 'PLS-43',
       },
     }),
-    prisma.productVariant.upsert({
-      where: { sku: 'PLS-44' },
-      update: {},
-      create: {
-        productId: products.find(p => p.slug === 'premium-leather-sneakers')?.id!,
+    prisma.productVariant.create({
+      data: {
+        productId: sneakersProduct?.id!,
         name: 'Size',
         value: '44',
         stockQuantity: 20,
@@ -321,33 +330,27 @@ async function main() {
     }),
 
     // Jacket sizes
-    prisma.productVariant.upsert({
-      where: { sku: 'CDJ-M' },
-      update: {},
-      create: {
-        productId: products.find(p => p.slug === 'classic-denim-jacket')?.id!,
+    prisma.productVariant.create({
+      data: {
+        productId: jacketProduct?.id!,
         name: 'Size',
         value: 'M',
         stockQuantity: 8,
         sku: 'CDJ-M',
       },
     }),
-    prisma.productVariant.upsert({
-      where: { sku: 'CDJ-L' },
-      update: {},
-      create: {
-        productId: products.find(p => p.slug === 'classic-denim-jacket')?.id!,
+    prisma.productVariant.create({
+      data: {
+        productId: jacketProduct?.id!,
         name: 'Size',
         value: 'L',
         stockQuantity: 12,
         sku: 'CDJ-L',
       },
     }),
-    prisma.productVariant.upsert({
-      where: { sku: 'CDJ-XL' },
-      update: {},
-      create: {
-        productId: products.find(p => p.slug === 'classic-denim-jacket')?.id!,
+    prisma.productVariant.create({
+      data: {
+        productId: jacketProduct?.id!,
         name: 'Size',
         value: 'XL',
         stockQuantity: 5,
