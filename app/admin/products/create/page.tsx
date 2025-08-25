@@ -53,6 +53,31 @@ interface ProductFormData {
   size: string;
   material: string;
   weight: string;
+  // New fields
+  lowStockThreshold: number;
+  trackStock: boolean;
+  allowBackorders: boolean;
+  requiresShipping: boolean;
+  shippingClass: string;
+  metaTitle: string;
+  metaDescription: string;
+  metaKeywords: string;
+  customFields: Record<string, string>;
+  availableFrom: string;
+  availableTo: string;
+  maxQuantityPerOrder: number;
+  minimumAge: number;
+  requiresPrescription: boolean;
+  hazardousMaterial: boolean;
+  fragile: boolean;
+  perishable: boolean;
+  digitalProduct: boolean;
+  downloadUrl: string;
+  licenseKey: string;
+  validityPeriod: number;
+  preorderEnabled: boolean;
+  preorderDate: string;
+  preorderPrice: number;
 }
 
 interface Category {
@@ -104,7 +129,32 @@ export default function CreateProductPage() {
     color: '',
     size: '',
     material: '',
-    weight: ''
+    weight: '',
+    // New field defaults
+    lowStockThreshold: 10,
+    trackStock: true,
+    allowBackorders: false,
+    requiresShipping: true,
+    shippingClass: 'standard',
+    metaTitle: '',
+    metaDescription: '',
+    metaKeywords: '',
+    customFields: {},
+    availableFrom: '',
+    availableTo: '',
+    maxQuantityPerOrder: 100,
+    minimumAge: 0,
+    requiresPrescription: false,
+    hazardousMaterial: false,
+    fragile: false,
+    perishable: false,
+    digitalProduct: false,
+    downloadUrl: '',
+    licenseKey: '',
+    validityPeriod: 0,
+    preorderEnabled: false,
+    preorderDate: '',
+    preorderPrice: 0
   });
 
   // Category-specific field configurations
@@ -368,8 +418,10 @@ export default function CreateProductPage() {
     { id: 1, name: 'Basic Info', icon: FileText },
     { id: 2, name: 'Images', icon: Camera },
     { id: 3, name: 'Category & Specs', icon: Package },
-    { id: 4, name: 'Pricing', icon: DollarSign },
-    { id: 5, name: 'Publishing', icon: Star }
+    { id: 4, name: 'Pricing & Stock', icon: DollarSign },
+    { id: 5, name: 'Shipping & Digital', icon: Package },
+    { id: 6, name: 'SEO & Advanced', icon: Star },
+    { id: 7, name: 'Publishing', icon: Star }
   ];
 
   if (loading) {
@@ -909,86 +961,622 @@ export default function CreateProductPage() {
             </div>
           )}
 
-          {/* Step 4: Pricing & Inventory */}
+          {/* Step 4: Pricing & Stock */}
           {activeStep === 4 && (
-            <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50 shadow-2xl">
-              <div className="flex items-center gap-3 mb-6">
-                <DollarSign className="w-6 h-6 text-green-400" />
-                <h2 className="text-2xl font-semibold">Pricing & Inventory</h2>
+            <div className="space-y-6">
+              <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50 shadow-2xl">
+                <div className="flex items-center gap-3 mb-6">
+                  <DollarSign className="w-6 h-6 text-green-400" />
+                  <h2 className="text-2xl font-semibold">Pricing & Stock Management</h2>
+                </div>
+
+                {/* Pricing */}
+                <div className="mb-8">
+                  <h3 className="text-lg font-medium text-gray-300 mb-4">💰 Pricing</h3>
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-300">
+                        Price (KES) *
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-green-400 font-semibold">KES</span>
+                        <input
+                          type="number"
+                          name="price"
+                          value={formData.price}
+                          onChange={handleInputChange}
+                          min="0"
+                          step="0.01"
+                          className="w-full pl-14 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                          placeholder="0.00"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-300">
+                        Compare Price (KES)
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">KES</span>
+                        <input
+                          type="number"
+                          name="comparePrice"
+                          value={formData.comparePrice}
+                          onChange={handleInputChange}
+                          min="0"
+                          step="0.01"
+                          className="w-full pl-14 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                          placeholder="0.00"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-300">
+                        Max Qty Per Order
+                      </label>
+                      <input
+                        type="number"
+                        name="maxQuantityPerOrder"
+                        value={formData.maxQuantityPerOrder}
+                        onChange={handleInputChange}
+                        min="1"
+                        className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                        placeholder="100"
+                      />
+                    </div>
+                  </div>
+
+                  {formData.comparePrice > formData.price && formData.price > 0 && (
+                    <div className="mt-6 p-4 bg-green-500/10 border border-green-500/20 rounded-xl">
+                      <div className="flex items-center gap-2 text-green-400">
+                        <Zap className="w-5 h-5" />
+                        <span className="font-medium">
+                          {Math.round(((formData.comparePrice - formData.price) / formData.comparePrice) * 100)}% OFF
+                        </span>
+                      </div>
+                      <p className="text-sm text-green-300 mt-1">
+                        Customers will save KES {formData.comparePrice - formData.price}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Stock Management */}
+                <div className="mb-8">
+                  <h3 className="text-lg font-medium text-gray-300 mb-4">📦 Stock Management</h3>
+                  
+                  <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-xl border border-slate-600/50 mb-4">
+                    <div className="flex items-center gap-3">
+                      <Package className="w-5 h-5 text-blue-400" />
+                      <span className="text-white">Track Stock</span>
+                      <span className="text-sm text-gray-400">Monitor inventory levels</span>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="trackStock"
+                        checked={formData.trackStock}
+                        onChange={handleInputChange}
+                        className="sr-only peer"
+                      />
+                      <div className="relative w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+
+                  {formData.trackStock && (
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-300">
+                          Stock Quantity *
+                        </label>
+                        <input
+                          type="number"
+                          name="stockQuantity"
+                          value={formData.stockQuantity}
+                          onChange={handleInputChange}
+                          min="0"
+                          className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                          placeholder="100"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-300">
+                          Low Stock Threshold
+                        </label>
+                        <input
+                          type="number"
+                          name="lowStockThreshold"
+                          value={formData.lowStockThreshold}
+                          onChange={handleInputChange}
+                          min="0"
+                          className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                          placeholder="10"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-300">
+                          Allow Backorders
+                        </label>
+                        <select
+                          name="allowBackorders"
+                          value={formData.allowBackorders ? 'true' : 'false'}
+                          onChange={(e) => setFormData(prev => ({ ...prev, allowBackorders: e.target.value === 'true' }))}
+                          className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white"
+                        >
+                          <option value="false">❌ No Backorders</option>
+                          <option value="true">✅ Allow Backorders</option>
+                        </select>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Preorder Settings */}
+                <div>
+                  <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-xl border border-slate-600/50 mb-4">
+                    <div className="flex items-center gap-3">
+                      <Star className="w-5 h-5 text-purple-400" />
+                      <span className="text-white">Enable Preorders</span>
+                      <span className="text-sm text-gray-400">Allow customers to preorder</span>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="preorderEnabled"
+                        checked={formData.preorderEnabled}
+                        onChange={handleInputChange}
+                        className="sr-only peer"
+                      />
+                      <div className="relative w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                    </label>
+                  </div>
+
+                  {formData.preorderEnabled && (
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-300">
+                          Preorder Release Date
+                        </label>
+                        <input
+                          type="date"
+                          name="preorderDate"
+                          value={formData.preorderDate}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-300">
+                          Preorder Price (KES)
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-400 font-semibold">KES</span>
+                          <input
+                            type="number"
+                            name="preorderPrice"
+                            value={formData.preorderPrice}
+                            onChange={handleInputChange}
+                            min="0"
+                            step="0.01"
+                            className="w-full pl-14 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                            placeholder="0.00"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-300">
-                    Price (KES) *
-                  </label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-green-400 font-semibold">KES</span>
-                    <input
-                      type="number"
-                      name="price"
-                      value={formData.price}
-                      onChange={handleInputChange}
-                      min="0"
-                      step="0.01"
-                      className="w-full pl-14 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
-                      placeholder="0.00"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-300">
-                    Compare Price (KES)
-                  </label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">KES</span>
-                    <input
-                      type="number"
-                      name="comparePrice"
-                      value={formData.comparePrice}
-                      onChange={handleInputChange}
-                      min="0"
-                      step="0.01"
-                      className="w-full pl-14 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
-                      placeholder="0.00"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-300">
-                    Stock Quantity *
-                  </label>
-                  <input
-                    type="number"
-                    name="stockQuantity"
-                    value={formData.stockQuantity}
-                    onChange={handleInputChange}
-                    min="0"
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
-                    placeholder="100"
-                    required
-                  />
-                </div>
-              </div>
-
-              {formData.comparePrice > formData.price && formData.price > 0 && (
-                <div className="mt-6 p-4 bg-green-500/10 border border-green-500/20 rounded-xl">
-                  <div className="flex items-center gap-2 text-green-400">
-                    <Zap className="w-5 h-5" />
-                    <span className="font-medium">
-                      {Math.round(((formData.comparePrice - formData.price) / formData.comparePrice) * 100)}% OFF
-                    </span>
-                  </div>
-                  <p className="text-sm text-green-300 mt-1">
-                    Customers will save KES {formData.comparePrice - formData.price}
-                  </p>
-                </div>
-              )}
             </div>
           )}
+
+          {/* Step 5: Shipping & Digital */}
+          {activeStep === 5 && (
+            <div className="space-y-6">
+              {/* Shipping Settings */}
+              <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50 shadow-2xl">
+                <div className="flex items-center gap-3 mb-6">
+                  <Package className="w-6 h-6 text-blue-400" />
+                  <h2 className="text-2xl font-semibold">Shipping & Product Type</h2>
+                </div>
+
+                {/* Digital Product Toggle */}
+                <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-xl border border-slate-600/50 mb-6">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">💾</span>
+                    <span className="text-white">Digital Product</span>
+                    <span className="text-sm text-gray-400">No physical shipping required</span>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="digitalProduct"
+                      checked={formData.digitalProduct}
+                      onChange={handleInputChange}
+                      className="sr-only peer"
+                    />
+                    <div className="relative w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-300/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600"></div>
+                  </label>
+                </div>
+
+                {formData.digitalProduct ? (
+                  /* Digital Product Fields */
+                  <div className="space-y-6">
+                    <h3 className="text-lg font-medium text-gray-300">💾 Digital Product Settings</h3>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-300">
+                          Download URL
+                        </label>
+                        <input
+                          type="url"
+                          name="downloadUrl"
+                          value={formData.downloadUrl}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                          placeholder="https://example.com/download/file.zip"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-300">
+                          License Key
+                        </label>
+                        <input
+                          type="text"
+                          name="licenseKey"
+                          value={formData.licenseKey}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                          placeholder="XXXX-XXXX-XXXX-XXXX"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-300">
+                          Validity Period (days)
+                        </label>
+                        <input
+                          type="number"
+                          name="validityPeriod"
+                          value={formData.validityPeriod}
+                          onChange={handleInputChange}
+                          min="0"
+                          className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                          placeholder="365"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  /* Physical Product Shipping */
+                  <div className="space-y-6">
+                    <h3 className="text-lg font-medium text-gray-300">🚚 Shipping Settings</h3>
+                    
+                    <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-xl border border-slate-600/50 mb-4">
+                      <div className="flex items-center gap-3">
+                        <Package className="w-5 h-5 text-green-400" />
+                        <span className="text-white">Requires Shipping</span>
+                        <span className="text-sm text-gray-400">Product needs to be shipped</span>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          name="requiresShipping"
+                          checked={formData.requiresShipping}
+                          onChange={handleInputChange}
+                          className="sr-only peer"
+                        />
+                        <div className="relative w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                      </label>
+                    </div>
+
+                    {formData.requiresShipping && (
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium text-gray-300">
+                            Shipping Class
+                          </label>
+                          <select
+                            name="shippingClass"
+                            value={formData.shippingClass}
+                            onChange={handleInputChange}
+                            className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white"
+                          >
+                            <option value="standard">📦 Standard Shipping</option>
+                            <option value="express">⚡ Express Shipping</option>
+                            <option value="overnight">🚀 Overnight Delivery</option>
+                            <option value="free">🎁 Free Shipping</option>
+                            <option value="heavy">📏 Heavy/Large Items</option>
+                            <option value="fragile">🔒 Fragile Items</option>
+                          </select>
+                        </div>
+
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium text-gray-300">
+                            Weight (kg)
+                          </label>
+                          <input
+                            type="number"
+                            name="weight"
+                            value={formData.weight}
+                            onChange={handleInputChange}
+                            min="0"
+                            step="0.01"
+                            className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                            placeholder="0.5"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Product Handling Flags */}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
+                      <div className="flex items-center justify-between p-3 bg-slate-700/20 rounded-xl border border-slate-600/30">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">🧊</span>
+                          <span className="text-white text-sm">Fragile</span>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            name="fragile"
+                            checked={formData.fragile}
+                            onChange={handleInputChange}
+                            className="sr-only peer"
+                          />
+                          <div className="relative w-8 h-5 bg-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-red-500"></div>
+                        </label>
+                      </div>
+
+                      <div className="flex items-center justify-between p-3 bg-slate-700/20 rounded-xl border border-slate-600/30">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">⚠️</span>
+                          <span className="text-white text-sm">Hazardous</span>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            name="hazardousMaterial"
+                            checked={formData.hazardousMaterial}
+                            onChange={handleInputChange}
+                            className="sr-only peer"
+                          />
+                          <div className="relative w-8 h-5 bg-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-orange-500"></div>
+                        </label>
+                      </div>
+
+                      <div className="flex items-center justify-between p-3 bg-slate-700/20 rounded-xl border border-slate-600/30">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">🍎</span>
+                          <span className="text-white text-sm">Perishable</span>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            name="perishable"
+                            checked={formData.perishable}
+                            onChange={handleInputChange}
+                            className="sr-only peer"
+                          />
+                          <div className="relative w-8 h-5 bg-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-yellow-500"></div>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Product Restrictions */}
+                <div className="mt-8 space-y-4">
+                  <h3 className="text-lg font-medium text-gray-300">🔒 Product Restrictions</h3>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-300">
+                        Minimum Age Requirement
+                      </label>
+                      <select
+                        name="minimumAge"
+                        value={formData.minimumAge}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white"
+                      >
+                        <option value="0">No Age Restriction</option>
+                        <option value="13">13+ Years</option>
+                        <option value="16">16+ Years</option>
+                        <option value="18">18+ Years (Adult Only)</option>
+                        <option value="21">21+ Years</option>
+                      </select>
+                    </div>
+
+                    <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-xl border border-slate-600/50">
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg">💊</span>
+                        <span className="text-white text-sm">Requires Prescription</span>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          name="requiresPrescription"
+                          checked={formData.requiresPrescription}
+                          onChange={handleInputChange}
+                          className="sr-only peer"
+                        />
+                        <div className="relative w-8 h-5 bg-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-red-500"></div>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Availability Period */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-300">
+                        Available From
+                      </label>
+                      <input
+                        type="datetime-local"
+                        name="availableFrom"
+                        value={formData.availableFrom}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-300">
+                        Available Until
+                      </label>
+                      <input
+                        type="datetime-local"
+                        name="availableTo"
+                        value={formData.availableTo}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Step 6: SEO & Advanced */}
+          {activeStep === 6 && (
+            <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50 shadow-2xl">
+              <div className="flex items-center gap-3 mb-6">
+                <Star className="w-6 h-6 text-indigo-400" />
+                <h2 className="text-2xl font-semibold">SEO & Advanced Settings</h2>
+              </div>
+
+              {/* SEO Settings */}
+              <div className="mb-8">
+                <h3 className="text-lg font-medium text-gray-300 mb-4">🔍 Search Engine Optimization</h3>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-300">
+                      Meta Title
+                    </label>
+                    <input
+                      type="text"
+                      name="metaTitle"
+                      value={formData.metaTitle}
+                      onChange={handleInputChange}
+                      maxLength={60}
+                      className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                      placeholder="SEO title for search engines (60 chars max)"
+                    />
+                    <p className="text-xs text-gray-400">
+                      {formData.metaTitle.length}/60 characters
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-300">
+                      Meta Description
+                    </label>
+                    <textarea
+                      name="metaDescription"
+                      value={formData.metaDescription}
+                      onChange={handleInputChange}
+                      maxLength={160}
+                      rows={3}
+                      className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                      placeholder="Brief description for search results (160 chars max)"
+                    />
+                    <p className="text-xs text-gray-400">
+                      {formData.metaDescription.length}/160 characters
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-300">
+                      Meta Keywords
+                    </label>
+                    <input
+                      type="text"
+                      name="metaKeywords"
+                      value={formData.metaKeywords}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                      placeholder="keyword1, keyword2, keyword3..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Custom Fields */}
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-medium text-gray-300">⚙️ Custom Fields</h3>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const key = prompt('Enter field name:');
+                      if (key) {
+                        setFormData(prev => ({
+                          ...prev,
+                          customFields: { ...prev.customFields, [key]: '' }
+                        }));
+                      }
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-colors duration-200"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Field
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {Object.entries(formData.customFields).map(([key, value]) => (
+                    <div key={key} className="flex items-center gap-3">
+                      <div className="flex-1 grid grid-cols-2 gap-3">
+                        <input
+                          type="text"
+                          value={key}
+                          readOnly
+                          className="px-4 py-2 bg-slate-700/30 border border-slate-600/50 rounded-xl text-gray-300"
+                        />
+                        <input
+                          type="text"
+                          value={value}
+                          onChange={(e) => {
+                            setFormData(prev => ({
+                              ...prev,
+                              customFields: { ...prev.customFields, [key]: e.target.value }
+                            }));
+                          }}
+                          className="px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                          placeholder="Enter value..."
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const { [key]: removed, ...rest } = formData.customFields;
+                          setFormData(prev => ({ ...prev, customFields: rest }));
+                        }}
+                        className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all duration-200"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                  {Object.keys(formData.customFields).length === 0 && (
+                    <p className="text-gray-400 text-center py-4">No custom fields added yet</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Step 7: Publishing Options */}
+          {activeStep === 7 && (
 
           {/* Step 5: Publishing Options */}
           {activeStep === 5 && (
@@ -1103,7 +1691,7 @@ export default function CreateProductPage() {
                 Cancel
               </button>
               
-              {activeStep < 5 ? (
+              {activeStep < 7 ? (
                 <button
                   type="button"
                   onClick={() => setActiveStep(activeStep + 1)}
